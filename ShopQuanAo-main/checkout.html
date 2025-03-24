@@ -252,127 +252,88 @@
 
               <div class="col-lg-4 col-md-6">
                 <div class="checkout__order">
-                  <h4 class="order__title">Your order</h4>
-                  <div class="checkout__order__products">
-                    Product <span>Total</span>
-                  </div>
-                  <ul class="checkout__total__products">
-                    <!-- Product details will be dynamically added here -->
-                  </ul>
-                  <ul class="checkout__total__all">
-                    <li>Subtotal <span id="subtotal">$0.00</span></li>
-                    <li>Total <span id="total">$0.00</span></li>
-                  </ul>
-              
-                  <!-- Ghi chú cho đơn hàng -->
-                  <div class="checkout__input">
-                    <p>Ghi chú cho đơn hàng (Nếu có)</p>
-                    <textarea id="order-note" placeholder="Nhập ghi chú của bạn tại đây" rows="1" class="form-control"></textarea>
-                  </div>
-              
-                  <!-- Payment Methods -->
-                  <div class="checkout__payment">
-                    <h4>Payment Methods</h4>
-                    <div class="checkout__input__checkbox">
-                      <label for="payment-method-cash">
-                        Cash Payment
-                        <input
-                          type="radio"
-                          name="payment-method"
-                          value="Cash"
-                          id="payment-method-cash"
-                          checked
-                        />
-                        <span class="checkmark"></span>
-                      </label>
+                    <h4 class="order__title">Your order</h4>
+                    <div class="checkout__order__products">
+                        Product <span>Total</span>
                     </div>
-                    <div class="checkout__input__checkbox">
-                      <label for="payment-method-transfer">
-                        Bank Transfer
-                        <input
-                          type="radio"
-                          name="payment-method"
-                          value="transfer"
-                          id="payment-method-transfer"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
+                    <ul class="checkout__total__products">
+                        <!-- Product details will be dynamically added here -->
+                    </ul>
+                    <ul class="checkout__total__all">
+                        <li>Subtotal <span id="subtotal">$0.00</span></li>
+                        <li>Total <span id="total">$0.00</span></li>
+                    </ul>
+            
+                    <!-- Ghi chú cho đơn hàng -->
+                    <div class="checkout__input">
+                        <p>Ghi chú cho đơn hàng (Nếu có)</p>
+                        <textarea id="order-note" placeholder="Nhập ghi chú của bạn tại đây" rows="1" class="form-control"></textarea>
                     </div>
-                    <div class="bank-transfer-form" style="display: none">
-                      <h5>Bank Details</h5>
-                      <p>Bank Name: XYZ Bank</p>
-                      <p>Account Number: 123456789</p>
-                      <p>SWIFT Code: XYZ123</p>
-                      <input
-                        type="text"
-                        id="bank-reference"
-                        placeholder="Reference Number"
-                      />
-                    </div>
-                    <div class="checkout__input__checkbox">
-                      <label for="payment-method-card">
-                        Credit/Debit Card
-                        <input
-                          type="radio"
-                          name="payment-method"
-                          value="card"
-                          id="payment-method-card"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                    </div>
-                    <div class="card-payment-form" style="display: none">
-                      <h5>Card Payment</h5>
-                      <div class="form-group">
-                        <label for="card-number">Card Number</label>
-                        <input
-                          type="text"
-                          id="card-number"
-                          class="form-control"
-                          placeholder="1234 5678 9012 3456"
-                          maxlength="19"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label for="card-holder">Card Holder Name</label>
-                        <input
-                          type="text"
-                          id="card-holder"
-                          class="form-control"
-                          placeholder="John Doe"
-                        />
-                      </div>
-                      <div class="form-row">
-                        <div class="form-group">
-                          <label for="expiry-date">Expiry Date</label>
-                          <input
-                            type="text"
-                            id="expiry-date"
-                            class="form-control"
-                            placeholder="MM/YY"
-                            maxlength="5"
-                          />
+            
+                    <!-- Payment Methods -->
+                    <div class="checkout__payment">
+                        <h4>Payment Methods</h4>
+                        <div class="checkout__input__checkbox">
+                            <label for="payment-method-cash">
+                                Cash Payment
+                                <input type="radio" name="payment-method" value="Cash" id="payment-method-cash" checked />
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
-                        <div class="form-group">
-                          <label for="cvv">CVV</label>
-                          <input
-                            type="text"
-                            id="cvv"
-                            class="form-control"
-                            placeholder="123"
-                            maxlength="3"
-                          />
+                        <div class="checkout__input__checkbox">
+                            <label for="payment-method-transfer">
+                                Bank Transfer
+                                <input type="radio" name="payment-method" value="transfer" id="payment-method-transfer" />
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
-                      </div>
+                        <div class="bank-transfer-form" style="display: none">
+                            <h5>Bank Details</h5>
+                            <p>Bank Name: XYZ Bank</p>
+                            <p>Account Number: 123456789</p>
+                            <p>SWIFT Code: XYZ123</p>
+                            <input type="text" id="bank-reference" placeholder="Reference Number" />
+                        </div>
+                        <div class="checkout__input__checkbox">
+                            <label for="payment-method-card">
+                                Credit/Debit Card
+                                <input type="radio" name="payment-method" value="card" id="payment-method-card" />
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="card-payment-form" style="display: none">
+                            <h5>Card Payment</h5>
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" />
+                            </div>
+                            <div class="form-group">
+                                <label for="card-holder">Card Holder Name</label>
+                                <input type="text" id="card-holder" class="form-control" placeholder="John Doe" />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiry-date">Expiry Date</label>
+                                    <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" maxlength="5" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" class="form-control" placeholder="123" maxlength="3" />
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Di chuyển nút PLACE ORDER xuống đây -->
+                        <button type="button" class="site-btn place-order-btn">
+                            PLACE ORDER
+                        </button>
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
+            
               
 
-                  <button type="button" class="site-btn place-order-btn">
-                    PLACE ORDER
-                  </button>
+                
                 </div>
               </div>
             </div>

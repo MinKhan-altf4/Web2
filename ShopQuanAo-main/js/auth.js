@@ -85,7 +85,7 @@ function checkLoginStatus() {
               <span>${loggedInUser}</span>
               <ul class="user-options">
                   <li><a href="profile.html">Profile</a></li>
-                  <li><a href="yourcart.html">Your cart</a></li>
+                  <li><a href="history.html">History</a></li>
                   <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
               </ul>
           </div>

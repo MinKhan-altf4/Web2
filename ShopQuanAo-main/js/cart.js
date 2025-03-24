@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <td colspan="4" class="text-center">Your cart is empty!</td>
         </tr>`;
       if (cartTotal) cartTotal.textContent = "$0.00";
+      if(cartSubtotal)cartSubtotal.textContent="$0.00";
 
       return;
     }
@@ -258,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Xóa giỏ hàng
     localStorage.removeItem("cart");
-    window.location.href = "yourcart.html"; // Chuyển đến trang lịch sử đơn hàng
+    window.location.href = "history.html"; // Chuyển đến trang lịch sử đơn hàng
   });
 
   if (window.location.pathname.includes("checkout.html")) {
