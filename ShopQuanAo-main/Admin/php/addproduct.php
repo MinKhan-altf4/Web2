@@ -11,31 +11,31 @@
     
       <ul class="menu">
         <li class="active">
-         <a href="" >
+         <a href="dashboard.php" >
           <i class='bx bx-grid-alt'></i>
             <span>Dashboard</span>
          </a>
         </li>
         <li>
-         <a href="">
+         <a href="user.php">
           <i class='bx bx-user'></i>
             <span>User</span>
         </a>
       </li>
-        <li><a href="addproducts.html">
+        <li><a href="addproduct.php">
           <i class='bx bx-box'></i>
         <span>Product</span>
         </a></li>
-        <li><a href="">
+        <li><a href="analytics.php">
         <i class='bx bx-pie-chart-alt'></i>
         <span>Analytics</span>
         </a></li>
-        <li><a href="">
+        <li><a href="order.php">
         <i class='bx bx-cart' ></i>
         <span>Order</span>
         </a></li>
        
-        <li class="logout"><a href="">
+        <li class="logout"><a href="logout.php">
           <i class='bx bx-log-out' id="log_out"></i>
           <span>Logout</span>
           </a></li>
@@ -79,7 +79,7 @@
        <label for="image">Image Product:</label>
        <input type="file" class="product_enter" name="image" accept="image/*" required >
 
-       <div class="submit-btn">Lưu sản phẩm</div>
+       <div class="submit-btn">ADD PRODUCT</div>
        
       </div>
     </div>

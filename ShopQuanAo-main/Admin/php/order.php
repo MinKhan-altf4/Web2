@@ -26,7 +26,7 @@
           <i class='bx bx-box'></i>
         <span>Product</span>
         </a></li>
-        <li><a href="">
+        <li><a href="analytics.php">
         <i class='bx bx-pie-chart-alt'></i>
         <span>Analytics</span>
         </a></li>

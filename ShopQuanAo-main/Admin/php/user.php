@@ -17,7 +17,7 @@
          </a>
         </li>
         <li>
-         <a href="">
+         <a href="user.php">
           <i class='bx bx-user'></i>
             <span>User</span>
         </a>
@@ -26,11 +26,11 @@
           <i class='bx bx-box'></i>
         <span>Product</span>
         </a></li>
-        <li><a href="">
+        <li><a href="analytics.php">
         <i class='bx bx-pie-chart-alt'></i>
         <span>Analytics</span>
         </a></li>
-        <li><a href="user.php">
+        <li><a href="order.php">
         <i class='bx bx-cart' ></i>
         <span>Order</span>
         </a></li>
@@ -49,7 +49,7 @@
     
       <div class="add_user">
         <h3>ADD/ EDIT USER</h3>
-        <form action="user.php" method="post">
+        <form action="save_user.php" method="post">
           <div class="form_group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>

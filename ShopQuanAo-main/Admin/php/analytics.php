@@ -17,7 +17,7 @@
          </a>
         </li>
         <li>
-         <a href="">
+         <a href="user.php">
           <i class='bx bx-user'></i>
             <span>User</span>
         </a>
@@ -30,7 +30,7 @@
         <i class='bx bx-pie-chart-alt'></i>
         <span>Analytics</span>
         </a></li>
-        <li><a href="user.php">
+        <li><a href="order.php">
         <i class='bx bx-cart' ></i>
         <span>Order</span>
         </a></li>
