@@ -201,3 +201,23 @@ document.addEventListener("DOMContentLoaded", function () {
     )
     .join("");
 });
+// Đặt đoạn này sau khi load trang (cuối body hoặc trong $(document).ready)
+document.addEventListener("DOMContentLoaded", function () {
+  const offcanvasLinks = document.getElementById("offcanvasLinks");
+  const user = localStorage.getItem("user"); // Hoặc sessionStorage.getItem()
+
+  if (user) {
+    // Nếu đã đăng nhập thì hiển thị nút Profile
+    offcanvasLinks.innerHTML = `
+      <a href="profile.html">Profile</a>
+      <a href="logout.html">Logout</a>
+      <a href="contact.html">SPT</a>
+    `;
+  } else {
+    // Nếu chưa đăng nhập
+    offcanvasLinks.innerHTML = `
+      <a href="login.html">Sign in</a>
+      <a href="contact.html">SPT</a>
+    `;
+  }
+});
