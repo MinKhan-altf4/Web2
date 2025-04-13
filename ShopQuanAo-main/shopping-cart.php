@@ -52,7 +52,7 @@
         </div>
         <div class="offcanvas__nav__option">
 
-            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span class="cart-count">0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">

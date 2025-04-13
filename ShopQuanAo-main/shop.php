@@ -54,7 +54,7 @@
         </div>
         <div class="offcanvas__nav__option">
             <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchProducts()" />
-            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span class="cart-count">0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -372,30 +372,27 @@ products.forEach((product) => {
 
     // Nội dung HTML cho mỗi sản phẩm
     productItem.innerHTML = `
-      <div class="product__item">
-        <div
-          class="product__item__pic set-bg"
-          data-setbg="${product.image}"
-          style="background-image: url('${product.image}');"
-        >
-          <ul class="product__hover">
-          
-            <li>
-              <a href="${product.link}">
-                <img src="img/icon/search.png" alt="" />
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="product__item__text">
-          <h6>${product.name}</h6>
-          <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-         
-          <h5>${product.price}</h5>
-          
-        </div>
-      </div>
-    `;
+  <div class="product__item">
+    <div
+      class="product__item__pic set-bg"
+      data-setbg="${product.image}"
+      style="background-image: url('${product.image}');"
+    >
+      <ul class="product__hover">
+        <li>
+          <a href="${product.link}">
+            <img src="img/icon/search.png" alt="" />
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="product__item__text">
+      <h6>${product.name}</h6>
+      <a href="#" class="add-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price.replace('$', '')}" data-image="${product.image}">+ Add To Cart</a>
+      <h5>${product.price}</h5>
+    </div>
+  </div>
+`;
     // Chèn sản phẩm vào container
     productContainer.appendChild(productItem);
 });
@@ -427,7 +424,7 @@ function displayProducts(productsToDisplay) {
         </div>
         <div class="product__item__text">
           <h6>${product.name}</h6>
-          <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
+         <a href="#" class="add-cart">+ Add To Cart</a>
           
           <h5>${product.price}</h5>
           
