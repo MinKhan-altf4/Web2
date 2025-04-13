@@ -25,7 +25,7 @@ function registerUser() {
       localStorage.setItem("fullname", fullname.value);
 
       alert("Đăng ký thành công!");
-      window.location.href = "login.html";
+      window.location.href = "login.php";
     } else {
       alert("Vui lòng điền đầy đủ thông tin!");
     }
@@ -46,7 +46,7 @@ function loginUser() {
     alert("Đăng nhập thành công!");
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("loggedInUser", username); // Lưu tên người dùng
-    window.location.href = "index.html"; // Chuyển hướng về trang chính
+    window.location.href = "index.php"; // Chuyển hướng về trang chính
   } else {
     alert("Tên đăng nhập hoặc mật khẩu không đúng!");
   }
@@ -60,7 +60,7 @@ function addToCart() {
     alert("Sản phẩm đã được thêm vào giỏ hàng.");
   } else {
     alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
-    window.location.href = "login.html";
+    window.location.href = "login.php";
   }
 }
 
@@ -84,8 +84,8 @@ function checkLoginStatus() {
           <div class="user-menu">
               <span>${loggedInUser}</span>
               <ul class="user-options">
-                  <li><a href="profile.html">Profile</a></li>
-                  <li><a href="history.html">History</a></li>
+                  <li><a href="profile.php">Profile</a></li>
+                  <li><a href="history.php">History</a></li>
                   <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
               </ul>
           </div>
@@ -94,7 +94,7 @@ function checkLoginStatus() {
     // CSS để hỗ trợ dropdown
     addDropdownStyles();
   } else {
-    loginButton.innerHTML = `<a href="login.html">Sign in</a>`;
+    loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
   }
 }
 
@@ -149,7 +149,7 @@ function logout() {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("loggedInUser");
     alert("Đã đăng xuất thành công!");
-    window.location.href = "login.html";
+    window.location.href = "login.php";
   } else {
     alert("Hủy đăng xuất!");
   }
@@ -209,15 +209,15 @@ document.addEventListener("DOMContentLoaded", function () {
   if (user) {
     // Nếu đã đăng nhập thì hiển thị nút Profile
     offcanvasLinks.innerHTML = `
-      <a href="profile.html">Profile</a>
-      <a href="logout.html">Logout</a>
-      <a href="contact.html">SPT</a>
+      <a href="profile.php">Profile</a>
+      <a href="logout.php">Logout</a>
+      <a href="contact.php">SPT</a>
     `;
   } else {
     // Nếu chưa đăng nhập
     offcanvasLinks.innerHTML = `
-      <a href="login.html">Sign in</a>
-      <a href="contact.html">SPT</a>
+      <a href="login.php">Sign in</a>
+      <a href="contact.php">SPT</a>
     `;
   }
 });

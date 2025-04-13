@@ -1,5 +1,7 @@
 <?php
 // Nếu sau này cần xử lý PHP, thêm ở đây
+include 'db.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -39,9 +41,9 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvasLinks">
-                <a href="login.html">Sign in</a>
+                <a href="login.php">Sign in</a>
 
-                <a href="contact.html">SPT</a>
+                <a href="contact.php">SPT</a>
             </div>
             <div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -55,7 +57,7 @@
         <div class="offcanvas__nav__option">
 
 
-            <a href="./shopping-cart.html"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -77,9 +79,9 @@
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a href="login.html" id="userMenu">Sign in</a>
+                                <a href="login.php" id="userMenu">Sign in</a>
 
-                                <a href="contact.html">SPT</a>
+                                <a href="contact.php">SPT</a>
                             </div>
                             <div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -98,34 +100,34 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt="" /></a>
+                        <a href="./index.php"><img src="img/logo.png" alt="" /></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
+                            <li class="active"><a href="./index.php">Home</a></li>
 
-                            <li><a href="./shop.html">Shop</a></li>
+                            <li><a href="./shop.php">Shop</a></li>
                             <li>
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./about.php">About Us</a></li>
+                                    <li><a href="./shop-details.php">Shop Details</a></li>
+                                    <li><a href="./shopping-cart.php">Shopping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contacts</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
 
-                        <a href="./shopping-cart.html"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
                     </div>
                 </div>
             </div>
@@ -150,7 +152,7 @@
                                     quality.
                                 </p>
 
-                                <a href="shop.html" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                <a href="shop.php" class="primary-btn">Shop now <span class="arrow_right"></span></a>
                                 <div class="hero__social">
                                     <a href="#"><i class="fa fa-facebook"></i></a>
                                     <a href="#"><i class="fa fa-twitter"></i></a>
@@ -175,7 +177,7 @@
                                     quality.
                                 </p>
 
-                                <a href="shop.html" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                <a href="shop.php" class="primary-btn">Shop now <span class="arrow_right"></span></a>
                                 <div class="hero__social">
                                     <a href="#"><i class="fa fa-facebook"></i></a>
                                     <a href="#"><i class="fa fa-twitter"></i></a>
@@ -202,7 +204,7 @@
                         </div>
                         <div class="banner__item__text">
                             <h2>Clothing Collections 2030</h2>
-                            <a href="shop.html">Shop now</a>
+                            <a href="shop.php">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -213,7 +215,7 @@
                         </div>
                         <div class="banner__item__text">
                             <h2>Accessories</h2>
-                            <a href="shop.html">Shop now</a>
+                            <a href="shop.php">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -224,7 +226,7 @@
                         </div>
                         <div class="banner__item__text">
                             <h2>Shoes Spring 2030</h2>
-                            <a href="shop.html">Shop now</a>
+                            <a href="shop.php">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -448,7 +450,7 @@
                                 <p>Seconds</p>
                             </div>
                         </div>
-                        <a href="./shop.html" class="primary-btn">Shop now</a>
+                        <a href="./shop.php" class="primary-btn">Shop now</a>
                     </div>
                 </div>
             </div>

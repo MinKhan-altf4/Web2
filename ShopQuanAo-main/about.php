@@ -38,8 +38,8 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvaslinks">
-                <a href="login.html">Sign in</a>
-                <a href="contact.html">SPT</a>
+                <a href="login.php">Sign in</a>
+                <a href="contact.php">SPT</a>
             </div>
             <div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="offcanvas__nav__option">
-            <a href="shopping-cart.html"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -73,8 +73,8 @@
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a href="login.html" id="userMenu">Sign in</a>
-                                <a href="contact.html">SPT</a>
+                                <a href="login.php" id="userMenu">Sign in</a>
+                                <a href="contact.php">SPT</a>
                             </div>
                             <div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -93,32 +93,32 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt="" /></a>
+                        <a href="./index.php"><img src="img/logo.png" alt="" /></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li><a href="./shop.html">Shop</a></li>
+                            <li><a href="./index.php">Home</a></li>
+                            <li><a href="./shop.php">Shop</a></li>
                             <li>
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./about.php">About Us</a></li>
+                                    <li><a href="./shop-details.php">Shop Details</a></li>
+                                    <li><a href="./shopping-cart.php">Shopping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li class="active"><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
+                            <li class="active"><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contacts</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="./shopping-cart.html"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
                     </div>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                     <div class="breadcrumb__text">
                         <h4>About Us</h4>
                         <div class="breadcrumb__links">
-                            <a href="./index.html">Home</a>
+                            <a href="./index.php">Home</a>
                             <span>About Us</span>
                         </div>
                     </div>
