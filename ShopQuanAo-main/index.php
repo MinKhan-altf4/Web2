@@ -1,6 +1,6 @@
 <?php
 // Nếu sau này cần xử lý PHP, thêm ở đây
-include 'db.php';
+
 
 ?>
 <!DOCTYPE html>
@@ -236,6 +236,7 @@ include 'db.php';
     <!-- Banner Section End -->
 
     <!-- Product Section Begin -->
+
     <section class="product spad">
         <div class="container">
             <div class="row">
@@ -247,164 +248,151 @@ include 'db.php';
                     </ul>
                 </div>
             </div>
-            <div class="row product__filter">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <span class="label">New</span>
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$67.24</h5>
-
-                        </div>
+        <div class="row product__filter">
+            <!-- Sản phẩm 1 -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
+                        <span class="label">New</span>
+                        <ul class="product__hover"></ul>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$67.24</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Multi-pocket Chest Bag</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$43.48</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Diagonal Textured Cap</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$60.9</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-5.jpg">
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Lether Backpack</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$31.37</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-6.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Ankle Boots</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$98.49</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
-                            <ul class="product__hover">
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>T-shirt Contrast Pocket</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$49.66</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-8.jpg">
-                            <ul class="product__hover">
-
-
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Basic Flowing Scarf</h6>
-                            <div class="set-bg" data-setbg="index-image.jpg"></div>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$26.28</h5>
-
-                        </div>
+                    <div class="product__item__text">
+                        <h6>Piqué Biker Jacket</h6>
+                        <a href="#" class="add-cart" 
+                           data-id="product1"
+                           data-name="Piqué Biker Jacket"
+                           data-price="67.24"
+                           data-image="img/product/product-1.jpg">+ Add To Cart</a>
+                        <h5>$67.24</h5>
                     </div>
                 </div>
             </div>
+            
+            <!-- Sản phẩm 2 -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                        <ul class="product__hover"></ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Piqué Biker Jacket</h6>
+                        <a href="#" class="add-cart" 
+                           data-id="product2"
+                           data-name="Piqué Biker Jacket"
+                           data-price="67.24"
+                           data-image="img/product/product-2.jpg">+ Add To Cart</a>
+                        <h5>$67.24</h5>
+                    </div>
+                </div>
+            </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+            <div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>Multi-pocket Chest Bag </h6>
+         <a href="#" class="add-cart"
+           data-id="product3"
+           data-name="Multi-pocket Chest Bag"
+           data-price="43.48"
+           data-image="img/product/product-3.jpg">+ Add To Cart</a>
+          <h5>$43.48</h5>
+       </div>
+      </div>
+    </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+  <div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>Diagonal Textured Cap </h6>
+         <a href="#" class="add-cart"
+           data-id="product4"
+           data-name="Diagonal Textured Cap"
+           data-price="60.9"
+           data-image="img/product/product-4.jpg">+ Add To Cart</a>
+          <h5>$60.9</h5>
+       </div>
+      </div>
+    </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+<div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-5.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>Lether Backpack </h6>
+         <a href="#" class="add-cart"
+           data-id="product5"
+           data-name="Lether Backpack"
+           data-price="31.37"
+           data-image="img/product/product-5.jpg">+ Add To Cart</a>
+          <h5>$31.37</h5>
+       </div>
+      </div>
+    </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+<div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-6.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>Ankle Boots </h6>
+         <a href="#" class="add-cart"
+           data-id="product6"
+           data-name="Ankle Boots"
+           data-price="98.49"
+           data-image="img/product/product-6.jpg">+ Add To Cart</a>
+          <h5>$98.49</h5>
+       </div>
+      </div>
+    </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+<div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>T-shirt Contrast Pocket </h6>
+         <a href="#" class="add-cart"
+           data-id="product7"
+           data-name="T-shirt Contrast Pocket"
+           data-price="49.66"
+           data-image="img/product/product-7.jpg">+ Add To Cart</a>
+          <h5>$49.66</h5>
+       </div>
+      </div>
+    </div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+<div class="product__item">
+               <div class="product__item__pic set-bg" data-setbg="img/product/product-8.jpg">
+          <ul class="product__hover"></ul>
+         </div>
+        <div class="product__item__text">
+          <h6>Basic Flowing Scarf </h6>
+         <a href="#" class="add-cart"
+           data-id="product8"
+           data-name="Basic Flowing Scarf"
+           data-price="26.28"
+           data-image="img/product/product-8.jpg">+ Add To Cart</a>
+          <h5>$26.28</h5>
+       </div>
+      </div>
+    </div>
+
+            
         </div>
-    </section>
-    <!-- Product Section End -->
+    </div>
+</section>
+<!-- Product Section End -->
 
     <!-- Categories Section Begin -->
     <section class="categories spad">
