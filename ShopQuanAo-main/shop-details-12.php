@@ -68,7 +68,7 @@
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvaslinks">
                 <a href="#">Sign in</a>
-                <a href="contact.php">SPT</a>
+                <a href="contact.php">SUPPORT</a>
             </div>
             <div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -104,7 +104,7 @@
                         <div class="header__top__right">
                             <div class="header__top__links">
                                 <a href="#" id="userMenu">Sign in</a>
-                                <a href="contact.php">SPT</a>
+                                <a href="contact.php">SUPPORT</a>
                             </div>
                             <div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
