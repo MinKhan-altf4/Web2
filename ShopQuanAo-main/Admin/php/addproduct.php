@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $image_name = $_FILES['image']['name'];
     $image_tmp = $_FILES['image']['tmp_name'];
-    $upload_dir = "../uploads/";
+    $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
     $sql = "INSERT INTO products (name, size, price, category, tag, image)
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <td>{$row['price']}</td>
                 <td>{$row['category']}</td>
                 <td>{$row['tag']}</td>
-                <td><img src='../uploads/{$row['image']}' width='60'></td>
+                <td><img src='../img/{$row['image']}' width='60'></td>
                 <td>
                     <a href='editproduct.php?id={$row['id']}'>Edit</a> |
                     <a href='deleteproduct.php?id={$row['id']}' onclick=\"return confirm('Are you sure?')\">Delete</a>
