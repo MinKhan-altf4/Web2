@@ -207,3 +207,18 @@
     background: none;
     cursor: pointer;
   }
+
+
+
+
+  a.delete-btn {
+    color: red;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  a.delete-btn:hover {
+    color: darkred;
+    text-decoration: underline;
+  }
+  

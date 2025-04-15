@@ -4,19 +4,29 @@ include("db.php");
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Trước khi xóa, lấy tên file ảnh để xóa khỏi thư mục uploads (tùy chọn)
-    $query = mysqli_query($conn, "SELECT image FROM products WHERE id = $id");
-    $row = mysqli_fetch_assoc($query);
-    $image_path = "../uploads/" . $row['image'];
-    
-    if (file_exists($image_path)) {
-        unlink($image_path); // Xóa ảnh khỏi thư mục nếu tồn tại
+    // Kiểm tra sản phẩm đã được bán hay chưa (đảm bảo bảng và cột đúng)
+    $check_order = mysqli_query($conn, "SELECT * FROM orders WHERE product_id = $id");
+
+    if (!$check_order) {
+        die("Query failed: " . mysqli_error($conn)); // In lỗi rõ ràng
     }
 
-    // Thực hiện xóa sản phẩm khỏi database
-    $sql = "DELETE FROM products WHERE id = $id";
-    mysqli_query($conn, $sql);
+    if (mysqli_num_rows($check_order) > 0) {
+        // Nếu sản phẩm đã bán → ẩn sản phẩm
+        mysqli_query($conn, "UPDATE products SET is_deleted = 1 WHERE id = $id");
+    } else {
+        // Nếu chưa bán → xóa hoàn toàn
+        $query = mysqli_query($conn, "SELECT image FROM products WHERE id = $id");
+        $row = mysqli_fetch_assoc($query);
+        $image_path = "../img/" . $row['image'];
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
+
+        mysqli_query($conn, "DELETE FROM products WHERE id = $id");
+    }
 }
 
-header("Location: addproduct.php"); // Quay về trang chính
+header("Location: addproduct.php");
 exit();
+?>
