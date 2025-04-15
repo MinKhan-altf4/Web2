@@ -3,110 +3,104 @@ const products = [
     name: "Piqué Biker Jacket",
     price: "$67.24",
     image: "img/product/product-2.jpg",
-    link: "shop-details-1.html",
+    link: "shop-details-1.php",
     category: "clothing",
   },
   {
     name: "Black Sneaker",
     price: "$43.48",
     image: "img/product/product-3.jpg",
-    link: "shop-details-2.html",
+    link: "shop-details-2.php",
     category: "shoes",
   },
   {
     name: "Brown Hooded Shirt Jacket",
     price: "$60.9",
     image: "img/product/product-4.jpg",
-    link: "shop-details-3.html",
+    link: "shop-details-3.php",
     category: "clothing",
   },
   {
     name: "Gray Fringed Scarf",
     price: "$98.49",
     image: "img/product/product-6.jpg",
-    link: "shop-details-4.html",
+    link: "shop-details-4.php",
     category: "accessories",
   },
   {
     name: "Fringed Black Scarf",
     price: "$85.99",
     image: "img/product/product-7.jpg",
-    link: "shop-details-5.html",
+    link: "shop-details-5.php",
     category: "bags",
   },
   {
     name: "Black Floral Graphic T-shirt",
     price: "$67.24",
     image: "img/product/product-9.jpg",
-    link: "shop-details-7.html",
+    link: "shop-details-7.php",
     category: "clothing",
   },
   {
     name: "Perfume Set",
     price: "$43.48",
     image: "img/product/product-10.jpg",
-    link: "shop-details-8.html",
+    link: "shop-details-8.php",
     category: "accessories",
   },
   {
     name: "Navy Henley T-shirt",
     price: "$26.28",
     image: "img/product/product-8.jpg",
-    link: "shop-details-6.html",
+    link: "shop-details-6.php",
     category: "clothing",
   },
   {
     name: "White Utility Backpack",
     price: "$60.9",
     image: "img/product/product-11.jpg",
-    link: "shop-details-9.html",
+    link: "shop-details-9.php",
     category: "bags",
   },
   {
     name: "Camouflage Hooded Jacket",
     price: "$98.49",
     image: "img/product/product-12.jpg",
-    link: "shop-details-10.html",
+    link: "shop-details-10.php",
     category: "clothing",
   },
   {
     name: "Brown Leather Backpack",
     price: "$49.66",
     image: "img/product/product-13.jpg",
-    link: "shop-details-11.html",
+    link: "shop-details-11.php",
     category: "bags",
   },
   {
     name: "Gold Rectangular Cufflinks",
     price: "$26.28",
     image: "img/product/product-14.jpg",
-    link: "shop-details-12.html",
+    link: "shop-details-12.php",
     category: "accessories",
   },
-
-
-  
 ];
-
-
-
 
 function filterByPrice(min, max) {
   // Chuyển đổi giá thành số để so sánh
-  const filteredProducts = products.filter(product => {
-    const price = parseFloat(product.price.replace('$', ''));
+  const filteredProducts = products.filter((product) => {
+    const price = parseFloat(product.price.replace("$", ""));
     return price >= min && price <= max;
   });
-  
+
   // Hiển thị các sản phẩm lọc được
   displayProducts(filteredProducts);
 }
 
 function displayProducts(productsToDisplay) {
   const productListDiv = document.getElementById("product-list");
-  productListDiv.innerHTML = ''; // Xóa nội dung cũ trước khi hiển thị sản phẩm mới
+  productListDiv.innerHTML = ""; // Xóa nội dung cũ trước khi hiển thị sản phẩm mới
 
-  productsToDisplay.forEach(product => {
+  productsToDisplay.forEach((product) => {
     const productHTML = `
       <div class="product">
         <img src="${product.image}" alt="${product.name}">
@@ -117,10 +111,3 @@ function displayProducts(productsToDisplay) {
     productListDiv.innerHTML += productHTML;
   });
 }
-
-
-
-
-
-
-
