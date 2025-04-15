@@ -63,7 +63,8 @@
           <input type="text" name="name_product" id="name_product" placeholder="Enter name" class="product_enter" required>
 
           <label for="size_product">Size Product:</label>
-          <select name="size[]" id="size_product" class="product_enter" multiple required>
+          <select name="size[]" id="size_product" class="product_enter" required>
+            <option value="">-- Select Size --</option>
             <option value="S">S</option>
             <option value="M">M</option>
             <option value="L">L</option>
@@ -74,7 +75,13 @@
           <input type="number" name="price_product" id="price_product" placeholder="Enter price $" class="product_enter" required>
 
           <label for="category_product">Category Product:</label>
-          <input type="text" name="category_product" id="category_product" placeholder="Enter category" class="product_enter" required>
+          <select name="category_product" id="category_product" class="product_enter" required>
+            <option value="">-- Select Category --</option>
+            <option value="Bags">Bags</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Shoes">Shoes</option>
+            <option value="Accessories">Accessories</option>
+          </select>
 
           <label for="tag_product">Tag Product:</label>
           <input type="text" name="tag_product" id="tag_product" placeholder="Enter tag" class="product_enter" required>
@@ -91,13 +98,13 @@
 include("db.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_POST['size']) || count($_POST['size']) === 0) {
-        echo "<script>alert('Please select at least one size!'); window.history.back();</script>";
+    if (!isset($_POST['size']) || empty($_POST['size'])) {
+        echo "<script>alert('Please select a size!'); window.history.back();</script>";
         exit();
     }
 
     $name = $_POST['name_product'];
-    $size = implode(",", $_POST['size']);
+    $size = is_array($_POST['size']) ? implode(",", $_POST['size']) : $_POST['size'];
     $price = $_POST['price_product'];
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
