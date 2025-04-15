@@ -61,15 +61,16 @@ function checkLoginStatus() {
 
   if (isLoggedIn && user && loginButton) {
     loginButton.innerHTML = `
-      <div class="user-menu">
-        <span>${user}</span>
-        <ul class="user-options">
-          <li><a href="profile.php">Profile</a></li>
-          <li><a href="history.php">History</a></li>
-          <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
-        </ul>
-      </div>
-    `;
+    <div class="user-menu">
+      <span style="cursor: default;" onclick="event.preventDefault()">${user}</span>
+      <ul class="user-options">
+        <li><a href="profile.php">Profile</a></li>
+        <li><a href="history.php">History</a></li>
+        <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
+      </ul>
+    </div>
+  `;
+  
     addDropdownStyles();
   } else if (loginButton) {
     loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
@@ -181,12 +182,12 @@ document.addEventListener("DOMContentLoaded", function () {
       offcanvasLinks.innerHTML = `
         <a href="profile.php">Profile</a>
         <a href="logout.php">Logout</a>
-        <a href="contact.php">SUPPORT</a>
+        <a href="contact.php">SPT</a>
       `;
     } else {
       offcanvasLinks.innerHTML = `
         <a href="login.php">Sign in</a>
-        <a href="contact.php">SUPPORT</a>
+        <a href="contact.php">SPT</a>
       `;
     }
   }
