@@ -1,8 +1,13 @@
 // cart.js - Phiên bản đã sửa lỗi
+function isUserLoggedIn() {
+  return localStorage.getItem("isLoggedIn") === "true";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   // Khởi tạo giỏ hàng
+  
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
+ 
   // Thêm vào file cart.js
   function updateCartIcon() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -185,6 +190,11 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("add-cart")) {
       e.preventDefault();
+        // Kiểm tra đăng nhập
+    if (!isUserLoggedIn()) {
+      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      return;
+    }
       const productElement = e.target.closest(".product__item");
 
       const product = {
