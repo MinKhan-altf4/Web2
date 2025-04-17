@@ -1,3 +1,6 @@
+<?php
+
+ ?>
 <html !DOCTYPE>
 <head>
   <meta charset="UTF-8">
