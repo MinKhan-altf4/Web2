@@ -156,10 +156,13 @@
                 <div class="col-lg-3 col-md-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
-                            <form action="#">
-                                <input type="text" id="searchInputHome" placeholder="Search..."
-                                    onkeyup="searchProducts()" />
-                                <button type="button">
+                            <form action="#" onsubmit="return false;">
+                                <input type="text" 
+                                       id="searchInputHome" 
+                                       placeholder="Search..." 
+                                       autocomplete="off"
+                                />
+                                <button type="button" onclick="searchProducts()">
                                     <span class="icon_search"></span>
                                 </button>
                             </form>
@@ -175,28 +178,19 @@
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
                                                     <li>
-                                                    <li>
-                                                        <a href="#" data-category="all"
-                                                            onclick="displayProducts(products); highlightLink(this)">All(12)</a>
-                                                    </li>
-
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="#" data-category="bags"
-                                                            onclick="filterByCategory(event)">Bags (3)</a>
+                                                        <a href="#" data-category="all" onclick="filterByCategory('all')">All</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="clothing"
-                                                            onclick="filterByCategory(event)">Clothing (5)</a>
+                                                        <a href="#" data-category="Bags" onclick="filterByCategory('Bags')">Bags</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="shoes"
-                                                            onclick="filterByCategory(event)">Shoes (1)</a>
+                                                        <a href="#" data-category="Clothing" onclick="filterByCategory('Clothing')">Clothing</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="accessories"
-                                                            onclick="filterByCategory(event)">Accessories (3)</a>
+                                                        <a href="#" data-category="Shoes" onclick="filterByCategory('Shoes')">Shoes</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" data-category="Accessories" onclick="filterByCategory('Accessories')">Accessories</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -204,28 +198,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
-                                    </div>
-                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__price">
-                                                <ul>
-                                                    <li><a href="#"
-                                                            onclick="filterByPrice(0, 50); highlightLink(this)">$0.00 -
-                                                            $50.00</a></li>
-                                                    <li><a href="#"
-                                                            onclick="filterByPrice(50, 100); highlightLink(this)">$50.00
-                                                            - $100.00</a></li>
-                                                </ul>
-
-                                                <div id="product-list"></div> <!-- Khu vực để hiển thị các sản phẩm -->
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -353,46 +326,133 @@
     <script src="js/thanhtimkiemotren.js"></script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Fetch products from API
-    fetch('get-products.php')
+// Hàm tìm kiếm sản phẩm
+function searchProducts() {
+    const searchQuery = document.getElementById('searchInputHome').value;
+    
+    if (!searchQuery.trim()) {
+        filterByCategory('all');
+        return;
+    }
+
+    fetch(`search-products.php?query=${encodeURIComponent(searchQuery)}`)
         .then(response => response.json())
-        .then(data => {
-            window.products = data; // Save to global variable
-            displayProducts(data);
+        .then(products => {
+            const productContainer = document.getElementById("product-container");
+            productContainer.innerHTML = "";
+
+            if (products.length === 0) {
+                productContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p>No products found matching "${searchQuery}"</p>
+                    </div>`;
+                return;
+            }
+
+            products.forEach(product => {
+                const productHTML = `
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" 
+                                 style="background-image: url('${product.image}');">
+                                <ul class="product__hover">
+                                    <li><a href="${product.link}">
+                                        <img src="img/icon/search.png" alt="">
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>${product.name}</h6>
+                                <a href="#" class="add-cart" 
+                                   data-id="${product.id}"
+                                   data-name="${product.name}"
+                                   data-price="${product.price.replace('$', '')}"
+                                   data-image="${product.image}">
+                                   + Add To Cart
+                                </a>
+                                <h5>${product.price}</h5>
+                            </div>
+                        </div>
+                    </div>`;
+                productContainer.innerHTML += productHTML;
+            });
         })
         .catch(error => console.error('Error:', error));
+}
 
-    function displayProducts(products) {
-        const productContainer = document.getElementById("product-container");
-        productContainer.innerHTML = ""; // Clear existing products
+// Thêm debounce để tránh gọi API quá nhiều
+let searchTimeout;
+document.getElementById('searchInputHome').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(searchProducts, 300);
+});
 
-        products.forEach(product => {
-            const productItem = document.createElement("div");
-            productItem.classList.add("col-lg-4", "col-md-6", "col-sm-6");
-            
-            productItem.innerHTML = `
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" 
-                         style="background-image: url('${product.image}');">
-                        <ul class="product__hover">
-                            <li><a href="${product.link}"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>${product.name}</h6>
-                        <a href="#" class="add-cart" 
-                           data-id="${product.id}"
-                           data-name="${product.name}"
-                           data-price="${product.price.replace('$', '')}"
-                           data-image="${product.image}">+ Add To Cart</a>
-                        <h5>${product.price}</h5>
-                    </div>
-                </div>
-            `;
-            productContainer.appendChild(productItem);
-        });
+// Xử lý khi nhấn nút tìm kiếm
+document.querySelector('.shop__sidebar__search button').addEventListener('click', searchProducts);
+
+// Xử lý khi nhấn Enter trong ô tìm kiếm
+document.getElementById('searchInputHome').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        searchProducts();
     }
+});
+
+// Tự động hiện tất cả sản phẩm khi trang được load
+document.addEventListener('DOMContentLoaded', function() {
+    filterByCategory('all'); // Gọi hàm để hiển thị tất cả sản phẩm
+});
+
+function filterByCategory(category) {
+    // Fetch tất cả sản phẩm từ database
+    fetch(`get-products.php${category !== 'all' ? '?category=' + category : ''}`)
+        .then(response => response.json())
+        .then(products => {
+            const productContainer = document.getElementById("product-container");
+            productContainer.innerHTML = "";
+
+            if (products.length === 0) {
+                productContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p>No products found in this category.</p>
+                    </div>`;
+                return;
+            }
+
+            products.forEach(product => {
+                const productHTML = `
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" 
+                                 style="background-image: url('${product.image}');">
+                                <ul class="product__hover">
+                                    <li><a href="${product.link}">
+                                        <img src="img/icon/search.png" alt="">
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>${product.name}</h6>
+                                <a href="#" class="add-cart" 
+                                   data-id="${product.id}"
+                                   data-name="${product.name}"
+                                   data-price="${product.price.replace('$', '')}"
+                                   data-image="${product.image}">
+                                   + Add To Cart
+                                </a>
+                                <h5>${product.price}</h5>
+                            </div>
+                        </div>
+                    </div>`;
+                productContainer.innerHTML += productHTML;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Tự động load tất cả sản phẩm khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+    filterByCategory('all');
 });
 </script>
 

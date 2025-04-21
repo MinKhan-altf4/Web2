@@ -1,8 +1,17 @@
 <?php
 include("Admin/php/db.php");
 
-// Get products from database
-$result = mysqli_query($conn, "SELECT * FROM products WHERE is_deleted = 0");
+// Lấy category từ query parameter nếu có
+$category = isset($_GET['category']) ? $_GET['category'] : null;
+
+// Xây dựng câu query dựa trên category
+$sql = "SELECT * FROM products WHERE is_deleted = 0";
+if ($category && $category !== 'all') {
+    $category = mysqli_real_escape_string($conn, $category);
+    $sql .= " AND category = '$category'";
+}
+
+$result = mysqli_query($conn, $sql);
 $products = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
@@ -11,7 +20,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         'name' => $row['name'],
         'price' => '$' . $row['price'],
         'image' => 'Admin/img/' . $row['image'],
-        'category' => strtolower($row['category']),
+        'category' => $row['category'],
         'description' => $row['description'],
         'link' => 'shop-details.php?id=' . $row['id']
     ];

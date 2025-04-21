@@ -3992,3 +3992,13 @@ ol {
   border-color: #333 transparent transparent transparent;
   z-index: 10;
 }
+
+.shop__sidebar__categories a.active {
+  color: #e53637;
+  font-weight: bold;
+}
+
+.shop__sidebar__categories a:hover {
+  color: #e53637;
+}
+
