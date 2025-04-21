@@ -152,7 +152,8 @@
     <section class="shop spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                <!-- Sidebar -->
+                <div class="col-lg-3 col-md-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
                             <form action="#">
@@ -229,18 +230,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="shop__product__option">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6"></div>
-                            <div class="col-lg-6 col-md-6 col-sm-6"></div>
-                        </div>
-                    </div>
-
-                    <div id="product-container" class="row"></div>
-
-                    <div class="row">
-                        <div class="col-lg-12"></div>
+                
+                <!-- Product Grid -->
+                <div class="col-lg-9 col-md-9">
+                    <div class="row" id="product-container">
+                        <!-- Products will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -357,126 +351,50 @@
     <script src="js/cart.js"></script>
     <script src="js/searchbarbentrai.js"></script>
     <script src="js/thanhtimkiemotren.js"></script>
-</body>
 
-</html>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch products from API
+    fetch('get-products.php')
+        .then(response => response.json())
+        .then(data => {
+            window.products = data; // Save to global variable
+            displayProducts(data);
+        })
+        .catch(error => console.error('Error:', error));
 
-<script>
-const productContainer = document.getElementById("product-container");
+    function displayProducts(products) {
+        const productContainer = document.getElementById("product-container");
+        productContainer.innerHTML = ""; // Clear existing products
 
-// Lặp qua mảng products và tạo HTML
-products.forEach((product) => {
-    // Tạo div chứa sản phẩm
-    const productItem = document.createElement("div");
-    productItem.classList.add("col-lg-4", "col-md-6", "col-sm-6");
-
-    // Nội dung HTML cho mỗi sản phẩm
-    productItem.innerHTML = `
-  <div class="product__item">
-    <div
-      class="product__item__pic set-bg"
-      data-setbg="${product.image}"
-      style="background-image: url('${product.image}');"
-    >
-      <ul class="product__hover">
-        <li>
-          <a href="${product.link}">
-            <img src="img/icon/search.png" alt="" />
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="product__item__text">
-      <h6>${product.name}</h6>
-      <a href="#" class="add-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price.replace('$', '')}" data-image="${product.image}">+ Add To Cart</a>
-      <h5>${product.price}</h5>
-    </div>
-  </div>
-`;
-    // Chèn sản phẩm vào container
-    productContainer.appendChild(productItem);
-});
-
-// Lặp qua mảng sản phẩm và hiển thị sản phẩm
-function displayProducts(productsToDisplay) {
-    const productContainer = document.getElementById("product-container");
-    productContainer.innerHTML = ""; // Xóa các sản phẩm cũ
-
-    productsToDisplay.forEach((product) => {
-        const productItem = document.createElement("div");
-        productItem.classList.add("col-lg-4", "col-md-6", "col-sm-6");
-
-        productItem.innerHTML = `
-      <div class="product__item">
-        <div
-          class="product__item__pic set-bg"
-          data-setbg="${product.image}"
-          style="background-image: url('${product.image}');"
-        >
-          <ul class="product__hover">
-           
-            <li>
-              <a href="${product.link}">
-                <img src="img/icon/search.png" alt="" />
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="product__item__text">
-          <h6>${product.name}</h6>
-         <a href="#" class="add-cart">+ Add To Cart</a>
-          
-          <h5>${product.price}</h5>
-          
-        </div>
-      </div>
-    `;
-        productContainer.appendChild(productItem);
-    });
-}
-
-// Hiển thị toàn bộ sản phẩm ban đầu
-displayProducts(products);
-
-function filterByCategory(event) {
-    event.preventDefault();
-
-    // Xóa lớp 'active' khỏi tất cả các mục
-    document
-        .querySelectorAll(".shop__sidebar__categories a")
-        .forEach((item) => {
-            item.classList.remove("active");
+        products.forEach(product => {
+            const productItem = document.createElement("div");
+            productItem.classList.add("col-lg-4", "col-md-6", "col-sm-6");
+            
+            productItem.innerHTML = `
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" 
+                         style="background-image: url('${product.image}');">
+                        <ul class="product__hover">
+                            <li><a href="${product.link}"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>${product.name}</h6>
+                        <a href="#" class="add-cart" 
+                           data-id="${product.id}"
+                           data-name="${product.name}"
+                           data-price="${product.price.replace('$', '')}"
+                           data-image="${product.image}">+ Add To Cart</a>
+                        <h5>${product.price}</h5>
+                    </div>
+                </div>
+            `;
+            productContainer.appendChild(productItem);
         });
-
-    // Thêm lớp 'active' vào mục được chọn
-    event.target.classList.add("active");
-
-    const category = event.target.getAttribute("data-category");
-    const filteredProducts = products.filter(
-        (product) => product.category === category
-    );
-
-    displayProducts(filteredProducts);
-}
-
-// Tìm kiếm sản phẩm theo từ khóa
-function searchProducts() {
-    const searchInput = document
-        .getElementById("searchInputHome")
-        .value.toLowerCase();
-
-    const filteredProducts = products.filter((product) => {
-        const productName = product.name.toLowerCase();
-        const productPrice = parseFloat(product.price.replace("$", "")); // Lấy giá trị số từ chuỗi
-
-        // Kiểm tra nếu từ khóa khớp với tên sản phẩm hoặc giá
-        return (
-            productName.includes(searchInput) ||
-            productPrice.toString().includes(searchInput)
-        );
-    });
-
-    // Hiển thị lại danh sách sản phẩm đã lọc
-    displayProducts(filteredProducts);
-}
+    }
+});
 </script>
+
+</body>
+</html>
