@@ -1,4 +1,4 @@
-<html !DOCTYPE>
+<html html>
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="../css/addproduct.css">
@@ -59,8 +59,8 @@
       <h3>ADD A NEW PRODUCT</h3>
       <form action="addproduct.php" method="POST" enctype="multipart/form-data">
         <div class="product_info">
-          <label for="name_product">Name Product:</label>
-          <input type="text" name="name_product" id="name_product" placeholder="Enter name" class="product_enter" required>
+          <label for="name_product">Product Name:</label>
+          <input type="text" name="name_product" id="name_product" placeholder="Enter product name" class="product_enter" required>
 
           <label for="size_product">Size Product:</label>
           <select name="size[]" id="size_product" class="product_enter" required>
@@ -73,6 +73,10 @@
 
           <label for="price_product">Price Product:</label>
           <input type="number" name="price_product" id="price_product" placeholder="Enter price $" class="product_enter" required>
+
+          <label for="description">Product Description:</label>
+<textarea name="description" id="description" placeholder="Enter product description" class="product_enter" rows="4"></textarea>
+
 
           <label for="category_product">Category Product:</label>
           <select name="category_product" id="category_product" class="product_enter" required>
@@ -106,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name_product'];
     $size = is_array($_POST['size']) ? implode(",", $_POST['size']) : $_POST['size'];
     $price = $_POST['price_product'];
+    $description = $_POST['description']; // Add this line
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
 
@@ -114,8 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
-    $sql = "INSERT INTO products (name, size, price, category, tag, image)
-            VALUES ('$name', '$size', '$price', '$category', '$tag', '$image_name')";
+    $sql = "INSERT INTO products (name, size, price, description, category, tag, image)
+            VALUES ('$name', '$size', '$price', '$description', '$category', '$tag', '$image_name')";
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
     exit();

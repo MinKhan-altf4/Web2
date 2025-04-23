@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Thêm hiệu ứng nhấn
       e.target.style.transform = "scale(0.9)";
       setTimeout(() => {
-        e.target.style.transform = "scale(1)";
+        e.target.style.transform = "scale(1)");
       }, 100);
 
       if (action === "increase") {
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Thêm hiệu ứng khi nhấn
       button.style.transform = "scale(0.9)";
       setTimeout(() => {
-        button.style.transform = "scale(1)";
+        button.style.transform = "scale(1)");
       }, 100);
 
       if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
@@ -189,22 +189,22 @@ document.addEventListener("DOMContentLoaded", function () {
   // Xử lý sự kiện thêm vào giỏ hàng từ trang shop
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("add-cart")) {
-      e.preventDefault();
+        e.preventDefault();
+        
         // Kiểm tra đăng nhập
-    if (!isUserLoggedIn()) {
-      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-      return;
-    }
-      const productElement = e.target.closest(".product__item");
+        if (!isUserLoggedIn()) {
+            alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+            return;
+        }
 
-      const product = {
-        id: productElement.querySelector("h6").textContent.trim(),
-        name: productElement.querySelector("h6").textContent.trim(),
-        price: productElement.querySelector("h5").textContent,
-        image: productElement.querySelector(".set-bg").dataset.setbg,
-      };
+        const product = {
+            id: e.target.dataset.id,
+            name: e.target.dataset.name,
+            price: parseFloat(e.target.dataset.price),
+            image: e.target.dataset.image
+        };
 
-      addToCart(product);
+        addToCart(product);
     }
   });
 

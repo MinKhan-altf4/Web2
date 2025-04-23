@@ -8,19 +8,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name_product'];
     $size = implode(",", $_POST['size']);
     $price = $_POST['price_product'];
+    $description = $_POST['description'];
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
 
     if ($_FILES['image']['name']) {
         $image_name = $_FILES['image']['name'];
         $image_tmp = $_FILES['image']['tmp_name'];
-        move_uploaded_file($image_tmp, "../uploads/" . $image_name);
+        move_uploaded_file($image_tmp, "../img/" . $image_name);
     } else {
         $image_name = $product['image'];
     }
 
     $sql = "UPDATE products SET 
-            name='$name', size='$size', price='$price',
+            name='$name', size='$size', price='$price', description='$description',
             category='$category', tag='$tag', image='$image_name'
             WHERE id=$id";
     mysqli_query($conn, $sql);
@@ -86,11 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <h3>EDIT PRODUCT</h3>
       <form action="" method="POST" enctype="multipart/form-data">
         <div class="product_info">
-          <label for="name_product">Name Product:</label>
+          <label for="name_product">Product Name:</label>
           <input type="text" name="name_product" id="name_product" class="product_enter" value="<?= htmlspecialchars($product['name'] ?? '') ?>" required>
 
           <label for="size_product">Size Product:</label>
-          <select name="size[]" id="size_product" class="product_enter" multiple>
+          <select name="size[]" id="size_product" class="product_enter" required>
+            <option value="">-- Select Size --</option>
             <?php
             $sizes = isset($product['size']) ? explode(",", $product['size']) : [];
             $allSizes = ['S', 'M', 'L', 'XL'];
@@ -104,8 +106,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <label for="price_product">Price Product:</label>
           <input type="number" name="price_product" id="price_product" class="product_enter" value="<?= htmlspecialchars($product['price'] ?? '') ?>" required>
 
+          <label for="description">Product Description:</label>
+          <textarea name="description" id="description" class="product_enter" rows="4"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+
           <label for="category_product">Category Product:</label>
-          <input type="text" name="category_product" id="category_product" class="product_enter" value="<?= htmlspecialchars($product['category'] ?? '') ?>" required>
+          <select name="category_product" id="category_product" class="product_enter" required>
+            <option value="">-- Select Category --</option>
+            <?php
+            $categories = ['Bags', 'Clothing', 'Shoes', 'Accessories'];
+            foreach ($categories as $cat) {
+                $selected = ($product['category'] ?? '') === $cat ? 'selected' : '';
+                echo "<option value='$cat' $selected>$cat</option>";
+            }
+            ?>
+          </select>
 
           <label for="tag_product">Tag Product:</label>
           <input type="text" name="tag_product" id="tag_product" class="product_enter" value="<?= htmlspecialchars($product['tag'] ?? '') ?>" required>
@@ -113,7 +127,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <label for="image">Image Product:</label>
           <input type="file" name="image" id="image" class="product_enter" accept="image/*">
           <?php if (!empty($product['image'])): ?>
-            <img src="../uploads/<?= htmlspecialchars($product['image']) ?>" width="100" alt="Current Image">
+            <div class="current-image">
+              <p>Current Image:</p>
+              <img src="../img/<?= htmlspecialchars($product['image']) ?>" width="100" alt="Current Image">
+            </div>
           <?php endif; ?>
 
           <button type="submit" class="submit-btn">UPDATE PRODUCT</button>
