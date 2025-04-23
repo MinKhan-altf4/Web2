@@ -1,201 +1,276 @@
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 html, body {
-  min-height: 100vh;
-  height: auto;
-  background-color: #dfdfdf;
+    height: 100vh;
+    overflow-x: hidden;
+    background-color: #dfdfdf;
 }
 
 body {
-  display: flex;
+    display: flex;
+    background: #f1f1f1;
 }
 
 .sidebar {
-  position: relative;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 110px;
-  
-  height: 100%;
-  padding: 0 1.7rem;
-  overflow: hidden;
-  transition: all 0.5s linear;
-  background: #222;
+    position: fixed;  /* Thay đổi từ relative sang fixed */
+    top: 0;
+    left: 0;
+    height: 100vh;  /* Thay đổi từ 100% sang 100vh */
+    width: 110px;
+    padding: 0 1.7rem;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    background: #222;
+    z-index: 100;  /* Thêm z-index để sidebar luôn nổi lên trên */
 }
 
 .sidebar:hover {
-  width: 240px;
-  transition: 0.5s;
+    width: 240px;
+    transition: 0.5s;
 }
 
 .logo {
-  height: 80px;
-  padding: 16px;
+    height: 80px;
+    padding: 16px;
 }
 
 .menu {
-  height: 88%;
-  position: relative;
-  list-style: none;
-  padding: 0;
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
 }
 
 .menu li {
-  padding: 1rem;
-  margin: 8px 0;
-  border-radius: 8px;
-  transition: all 0.5s ease-in-out;
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: all 0.5s ease-in-out;
 }
 
 .menu li:hover {
-  background-color: #e0e0e058;
+    background-color: #e0e0e058;
 }
 
 .menu a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .menu a span {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .menu a i {
-  font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 
 .logout {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 .main_content {
-  position: relative;
-  background: #dfdfdf;
-  width: 100%;
-  padding: 1rem;
+    flex: 1;
+    margin-left: 110px;  /* Thêm margin-left bằng với width của sidebar */
+    padding: 20px;
+    transition: all 0.5s linear;
+    background: #dfdfdf;
 }
 
 .header_wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  background: #fff;
-  border-radius: 10px;
-  padding: 10px 2rem;
-  margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
 }
 
 .header_title,.add_user h3,label {
-  color: #555;
+    color: #555;
 }
 
 .add_user, .user_list {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  margin-bottom: 2rem;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
 }
 .form_group {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 .form_group label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
 }
 .form_group input, .form_group select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 .user_list table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 .user_list th, .user_list td {
-  padding: 12px;
-  border: 1px solid #ccc;
-  text-align: left;
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
 }
 .user_list th {
-  background-color: #222;
-  color: white;
+    background-color: #222;
+    color: white;
 }
 .user_list tr:nth-child(even) {
-  background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 .submit-btn {
-  display: inline-block;
-  padding: 12px 24px;
-  background-color: #555;
-  color: white;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-align: center;
-  border: none;
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #555;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    border: none;
 }
 
 .submit-btn:hover {
-  background-color: #222; /* darker on hover */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* optional shadow */
+    background-color: #222; /* darker on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* optional shadow */
 
 }
 .action-btn {
-  padding: 10px 16px;
-  font-size: 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 5px;
-  transition: background-color 0.3s ease;
-  color: white;
+    padding: 10px 16px;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+    color: white;
+    text-decoration: none; /* Thêm dòng này để bỏ gạch chân */
+    display: inline-block; /* Thêm để đảm bảo nút hiển thị đúng */
+}
+.edit,.delete{
+  text-decoration: none; /* Thêm dòng này để bỏ gạch chân */
+    display: inline-block; /* Thêm để đảm bảo nút hiển thị đúng */
 }
 
 /* Nút Sửa */
 .action-btn.edit {
-  background-color:  #03a9f4;
+    background-color:  #03a9f4;
 }
 .action-btn.edit:hover {
-  background-color:  #0288d1;
+    background-color:  #0288d1;
 }
 
 /* Nút Khoá */
 .action-btn.lock {
-  background-color:  #9c27b0;
+    background-color:  #9c27b0;
 }
 .action-btn.lock:hover {
-  background-color:  #7b1fa2;
+    background-color:  #7b1fa2;
 }
 
 /* Nút Mở Khoá */
 .action-btn.unlock {
-  background-color:  #4CAF50;
+    background-color:  #4CAF50;
 }
 .action-btn.unlock:hover {
-  background-color:  #388e3c;
+    background-color:  #388e3c;
 }
 
 /* Nút Xoá */
 .action-btn.delete {
-  background-color:  #f44336;
+    background-color:  #f44336;
 }
 .action-btn.delete:hover {
-  background-color:  #d32f2f;
+    background-color:  #d32f2f;
+}
+
+/* Khi hover sidebar, điều chỉnh margin cho main content */
+.sidebar:hover + .main_content {
+    margin-left: 240px;
+}
+
+.search_box {
+    display: flex;
+    align-items: center;
+}
+
+.search_box form {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.search_box form:hover,
+.search_box form:focus-within {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    border-color: #03a9f4;
+}
+
+.search_box input {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 8px 12px;
+    width: 250px;
+    font-size: 14px;
+    color: #333;
+    transition: width 0.3s ease;
+}
+
+.search_box input:focus {
+    width: 300px;
+}
+
+.search_box input::placeholder {
+    color: #999;
+}
+
+.search_box button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.search_box button:hover {
+    background: #f0f0f0;
+    color: #03a9f4;
+}
+
+.search_box i {
+    font-size: 1.2rem;
 }

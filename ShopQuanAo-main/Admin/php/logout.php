@@ -1,6 +1,7 @@
 <?php
 session_start();
-if(isset($_SESSION['email'])){
-    unset($_SESSION['email']);
-}
-header('location:login.php') ?>
+session_destroy();
+setcookie('remember_user', '', time() - 3600, '/');
+header('Location: login.php');
+exit();
+?>

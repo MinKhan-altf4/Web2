@@ -1,5 +1,42 @@
 <?php
-// Nếu sau này cần xử lý PHP, thêm ở đây
+require_once 'Admin/php/db.php'; // Sử dụng db.php từ thư mục Admin
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $remember = isset($_POST['remember-me']) ? true : false;
+
+    $sql = "SELECT * FROM user WHERE username=? AND status='1'";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        if(password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+            
+            if($remember) {
+                setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
+            }
+
+            if($user['role'] == 'admin') {
+                header("Location: Admin/php/dashboard.php");
+            } else {
+                header("Location: index.php");
+            }
+            exit();
+        } else {
+            $error = "Sai mật khẩu!";
+        }
+    } else {
+        $error = "Tài khoản không tồn tại!";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -162,20 +199,28 @@
     <div class="row">
         <div class="wrapper" style="align-items: center">
             <div class="title">Login Form</div>
-            <form action="#">
+            <?php if(isset($error)): ?>
+            <div class="error"><?php echo $error; ?></div>
+            <?php endif; ?>
+
+            <?php if(isset($_GET['message']) && $_GET['message'] == 'register_success'): ?>
+            <div class="success">Đăng ký thành công! Vui lòng đăng nhập.</div>
+            <?php endif; ?>
+
+            <form method="POST" action="">
                 <div class="field">
-                    <input type="text" id="loginUsername" required />
+                    <input type="text" id="loginUsername" name="username" required />
                     <label>Username</label>
                 </div>
                 <div class="field">
-                    <input type="password" id="password" required style="width: 95%" />
+                    <input type="password" id="password" name="password" required style="width: 95%" />
                     <label>Password</label>
                     <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
                 </div>
 
                 <div class="content">
                     <div class="checkbox">
-                        <input type="checkbox" id="remember-me" />
+                        <input type="checkbox" id="remember-me" name="remember-me" />
                         <label for="remember-me">Remember me</label>
                     </div>
                     <div class="pass-link">
@@ -183,7 +228,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <input type="button" value="Login" onclick="loginUser()" />
+                    <input type="submit" value="Login" />
                 </div>
                 <div class="signup-link">
                     Not a member? <a href="register.php">Sign up now</a>

@@ -1,56 +1,52 @@
 // Hàm đăng ký người dùng
 function registerUser() {
-  const username = document.getElementById("registerUsername");
-  const password = document.getElementById("registerPassword");
-  const email = document.getElementById("registerEmail");
-  const phone = document.getElementById("registerPhone");
-  const address = document.getElementById("registerAddress");
-  const fullname = document.getElementById("registerFullname");
+    const formData = new FormData();
+    formData.append('username', document.getElementById('registerUsername').value);
+    formData.append('email', document.getElementById('registerEmail').value);
+    formData.append('password', document.getElementById('registerPassword').value);
+    formData.append('fullname', document.getElementById('registerFullname').value);
+    formData.append('phone', document.getElementById('registerPhone').value);
+    formData.append('address', document.getElementById('registerAddress').value);
+    formData.append('gender', document.querySelector('input[name="gender"]:checked').value);
 
-  if (username && password && email && phone && address && fullname) {
-    if (
-      username.value &&
-      password.value &&
-      email.value &&
-      phone.value &&
-      address.value &&
-      fullname.value
-    ) {
-      localStorage.setItem("username", username.value);
-      localStorage.setItem("password", password.value);
-      localStorage.setItem("email", email.value);
-      localStorage.setItem("phone", phone.value);
-      localStorage.setItem("address", address.value);
-      localStorage.setItem("fullname", fullname.value);
-      localStorage.setItem("loggedInUser", username.value);
-      localStorage.setItem("isLoggedIn", "true");
-
-      alert("Đăng ký thành công!");
-      window.location.href = "login.php";
-    } else {
-      alert("Vui lòng điền đầy đủ thông tin!");
-    }
-  } else {
-    console.error("Không tìm thấy trường dữ liệu!");
-  }
+    fetch('php/register_process.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = 'login.php';
+        } else {
+            alert(data.message);
+        }
+    });
 }
 
 // Xử lý đăng nhập
 function loginUser() {
-  const username = document.getElementById("loginUsername").value;
-  const password = document.getElementById("password").value;
+    const formData = new FormData();
+    formData.append('username', document.getElementById('loginUsername').value);
+    formData.append('password', document.getElementById('password').value);
+    formData.append('remember', document.getElementById('remember-me').checked);
 
-  const storedUsername = localStorage.getItem("username");
-  const storedPassword = localStorage.getItem("password");
-
-  if (username === storedUsername && password === storedPassword) {
-    alert("Đăng nhập thành công!");
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("loggedInUser", username);
-    window.location.href = "index.php";
-  } else {
-    alert("Tên đăng nhập hoặc mật khẩu không đúng!");
-  }
+    fetch('php/login_process.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            if(data.role === 'admin') {
+                window.location.href = 'Admin/php/dashboard.php';
+            } else {
+                window.location.href = 'index.php';
+            }
+        } else {
+            alert(data.message);
+        }
+    });
 }
 
 // Cập nhật trạng thái giao diện người dùng
@@ -191,4 +187,19 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
   }
+});
+
+// Add auto-hide for success messages
+document.addEventListener('DOMContentLoaded', function() {
+    const messages = document.querySelectorAll('.message');
+    messages.forEach(function(message) {
+        if (message.classList.contains('success-message')) {
+            setTimeout(function() {
+                message.style.opacity = '0';
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 500);
+            }, 5000);
+        }
+    });
 });

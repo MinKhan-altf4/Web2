@@ -1,3 +1,6 @@
+<?php
+require_once 'auth.php';
+?>
 <html html>
 <head>
   <meta charset="UTF-8">

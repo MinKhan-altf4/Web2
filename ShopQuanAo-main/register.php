@@ -1,5 +1,116 @@
 <?php
-// Nếu sau này cần xử lý PHP, thêm ở đây
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once 'Admin/php/db.php'; // Correct path to db.php in Admin folder
+
+// Create user table if not exists
+$create_table_sql = "CREATE TABLE IF NOT EXISTS user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fullname VARCHAR(100),
+    phone VARCHAR(20),
+    address TEXT,
+    gender VARCHAR(20),
+    role ENUM('admin', 'staff', 'customer') DEFAULT 'customer',
+    status TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$conn->query($create_table_sql);
+
+// Alter user table to add new columns if not exists
+$alter_table_sql = "ALTER TABLE user 
+ADD COLUMN fullname VARCHAR(100) AFTER password,
+ADD COLUMN phone VARCHAR(20) AFTER fullname,
+ADD COLUMN address TEXT AFTER phone,
+ADD COLUMN gender VARCHAR(20) AFTER address";
+$conn->query($alter_table_sql);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Debug: Print POST data
+    // error_log(print_r($_POST, true));
+    
+    // Sanitize input data
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone_number']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']); // thay vì registerAddress
+    $gender = isset($_POST['gender']) ? mysqli_real_escape_string($conn, $_POST['gender']) : '';
+
+    // Validate required fields
+    if(empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+        $error = "Vui lòng điền đầy đủ thông tin!";
+    }
+    // Kiểm tra password khớp nhau
+    else if($password !== $confirm_password) {
+        $error = "Mật khẩu không khớp!";
+    } 
+    else {
+        // Kiểm tra username/email đã tồn tại
+        $check_sql = "SELECT * FROM user WHERE username = ? OR email = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        
+        if($check_stmt === false) {
+            $error = "Lỗi prepare statement check: " . $conn->error;
+        } else {
+            $check_stmt->bind_param("ss", $username, $email);
+            $check_stmt->execute();
+            $result = $check_stmt->get_result();
+
+            if($result->num_rows > 0) {
+                $error = "Username hoặc email đã tồn tại!";
+            } else {
+                // Hash password và lưu user mới
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                
+                // Debug: Print SQL query
+                // error_log("INSERT INTO user (username, email, password, fullname, phone, address, gender, role, status) VALUES ('$username', '$email', '[HASHED]', '$fullname', '$phone', '$address', '$gender', 'customer', '1')");
+                
+                $sql = "INSERT INTO user (username, email, password, fullname, phone, address, gender, role, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 'customer', '1')";
+                $stmt = $conn->prepare($sql);
+                
+                if($stmt === false) {
+                    $error = "Lỗi prepare statement insert: " . $conn->error;
+                } else {
+                    $stmt->bind_param("sssssss", 
+                        $username, 
+                        $email, 
+                        $hashed_password, 
+                        $fullname, 
+                        $phone, 
+                        $address, 
+                        $gender
+                    );
+                    
+                    if($stmt->execute()) {
+                        echo "<script>
+                            alert('Đăng ký thành công!');
+                            window.location.href = 'login.php';
+                        </script>";
+                        exit();
+                    } else {
+                        echo "<script>
+                            alert('Đăng ký thất bại: " . addslashes($stmt->error) . "');
+                        </script>";
+                    }
+                }
+            }
+            $check_stmt->close();
+        }
+    }
+}
+
+// Display error message in form
+if(isset($error)) {
+    echo "<script>
+        alert('" . addslashes($error) . "');
+    </script>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -140,47 +251,41 @@
             <div class="title">Registration</div>
             <div class="content">
                 <!-- Registration form -->
-                <form action="javascript:void(0);" method="POST">
+                <form method="POST" action="">
                     <div class="user-details">
                         <div class="input-box">
                             <span class="details">Full Name</span>
-                            <input type="text" name="fullname" id="registerFullname" placeholder="Enter your name"
-                                required />
+                            <input type="text" name="fullname" placeholder="Enter your name" required />
                         </div>
                         <div class="input-box">
                             <span class="details">Username</span>
-                            <input type="text" id="registerUsername" name="username" placeholder="Enter your username"
-                                required />
+                            <input type="text" name="username" placeholder="Enter your username" required />
                         </div>
                         <div class="input-box">
                             <span class="details">Email</span>
-                            <input type="email" name="email" id="registerEmail" placeholder="Enter your email"
-                                required />
+                            <input type="email" name="email" placeholder="Enter your email" required />
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="text" id="registerPhone" name="phone_number" placeholder="Enter your number"
-                                required />
+                            <input type="text" name="phone_number" placeholder="Enter your number" required />
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
-                            <input type="password" id="registerPassword" name="password"
-                                placeholder="Enter your password" required />
+                            <input type="password" name="password" placeholder="Enter your password" required style="width: 95%" />
+                            <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
                         </div>
                         <div class="input-box">
                             <span class="details">Confirm Password</span>
-                            <input type="password" name="confirm_password" placeholder="Confirm your password"
-                                required />
+                            <input type="password" name="confirm_password" placeholder="Confirm your password" required style="width: 95%" />
+                            <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer"></i>
                         </div>
-                        <!-- Added Address field -->
                         <div class="input-box">
                             <span class="details">Address</span>
-                            <input type="text" name="registerAddress" id="registerAddress"
-                                placeholder="Enter your address" required />
+                            <input type="text" name="address" placeholder="Enter your address" required />
                         </div>
                     </div>
                     <div class="gender-details">
-                        <input type="radio" name="gender" value="Male" id="dot-1" />
+                        <input type="radio" name="gender" value="Male" id="dot-1" required />
                         <input type="radio" name="gender" value="Female" id="dot-2" />
                         <input type="radio" name="gender" value="Prefer not to say" id="dot-3" />
                         <span class="gender-title">Gender</span>
@@ -200,10 +305,20 @@
                         </div>
                     </div>
                     <div class="button">
-                        <input type="button" value="Register" onclick="registerUser()" />
+                        <input type="submit" value="Register" />
                     </div>
                 </form>
+                <?php if(isset($error)): ?>
+                    <div class="message error-message">
+                        <?php echo $error; ?>
+                    </div>
+                <?php endif; ?>
 
+                <?php if(isset($_GET['message']) && $_GET['message'] == 'register_success'): ?>
+                    <div class="message success-message">
+                        Đăng ký thành công! Vui lòng đăng nhập.
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -311,6 +426,24 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("input[name='password']");
+    const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
+    const confirmPassword = document.querySelector("input[name='confirm_password']");
+
+    togglePassword.addEventListener("click", function() {
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+        this.classList.toggle("fa-eye-slash");
+    });
+
+    toggleConfirmPassword.addEventListener("click", function() {
+        const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
+        confirmPassword.setAttribute("type", type);
+        this.classList.toggle("fa-eye-slash");
+    });
+    </script>
 </body>
 
 </html>
