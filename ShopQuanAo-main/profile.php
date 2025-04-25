@@ -1,9 +1,31 @@
 <?php
-// Nếu sau này cần xử lý PHP, thêm ở đây
+require_once 'Admin/php/db.php'; // Kết nối database
+session_start();
+
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Lấy thông tin người dùng từ database
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM user WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+} else {
+    // Nếu không tìm thấy user, chuyển hướng về trang đăng nhập
+    header("Location: login.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Male_Fashion Template" />
@@ -233,9 +255,17 @@
     <section class="profile">
         <div class="container">
             <h1>Your Profile</h1>
-            <div id="userInfo">
-                <!-- Thông tin người dùng sẽ được hiển thị tại đây -->
-            </div>
+            <div id="userInfo" class="profile-card">
+                <!-- Hiển thị thông tin người dùng từ database -->
+                <div class="profile-info">
+                    <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+                    <p><strong>Full name:</strong> <?php echo htmlspecialchars($user['fullname'] ?? 'Not set'); ?></p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                    <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone'] ?? 'Not set'); ?></p>
+                    <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address'] ?? 'Not set'); ?></p>
+                    <p><strong>Gender:</strong> <?php echo htmlspecialchars($user['gender'] ?? 'Not set'); ?></p>
+                </div>
+             
         </div>
     </section>
 
@@ -346,37 +376,7 @@
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
 
-    <script>
-    // Hiển thị thông tin người dùng
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lấy thông tin từ localStorage
-        const username = localStorage.getItem("username");
-        const email = localStorage.getItem("email");
-        const phoneNumber = localStorage.getItem("phone");
-        const address = localStorage.getItem("address");
-        const fullName = localStorage.getItem("fullname");
 
-
-        // Tìm phần tử HTML để hiển thị thông tin
-        const userInfo = document.getElementById("userInfo");
-
-        if (username && email && phoneNumber && address && fullName) {
-            // Hiển thị thông tin người dùng
-            userInfo.innerHTML = `
-      <p><strong>Username:</strong> ${username}</p>
-      <p><strong>Full name:</strong> ${fullName}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phoneNumber}</p>
-      <p><strong>Address:</strong> ${address}</p>
-
-
-    `;
-        } else {
-            // Thông báo nếu chưa đăng nhập
-            userInfo.innerHTML = "<p>Please log in to view your profile.</p>";
-        }
-    });
-    </script>
 </body>
 
 </html>

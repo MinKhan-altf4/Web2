@@ -242,33 +242,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="success">Đăng ký thành công! Vui lòng đăng nhập.</div>
             <?php endif; ?>
 
-            <form method="POST" action="">
-                <div class="field">
-                    <input type="text" id="loginUsername" name="username" required />
-                    <label>Username</label>
-                </div>
-                <div class="field">
-                    <input type="password" id="password" name="password" required style="width: 95%" />
-                    <label>Password</label>
-                    <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
-                </div>
+            <form id="loginForm">
+    <div class="field">
+        <input type="text" id="loginUsername" name="username" required />
+        <label>Username</label>
+    </div>
+    <div class="field">
+        <input type="password" id="password" name="password" required style="width: 95%" />
+        <label>Password</label>
+        <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
+    </div>
 
-                <div class="content">
-                    <div class="checkbox">
-                        <input type="checkbox" id="remember-me" name="remember-me" />
-                        <label for="remember-me">Remember me</label>
-                    </div>
-                    <div class="pass-link">
-                        <a href="#">Forgot password?</a>
-                    </div>
-                </div>
-                <div class="field">
-                    <input type="submit" value="Login" />
-                </div>
-                <div class="signup-link">
-                    Not a member? <a href="register.php">Sign up now</a>
-                </div>
-            </form>
+    <div class="content">
+        <div class="checkbox">
+            <input type="checkbox" id="remember-me" name="remember-me" />
+            <label for="remember-me">Remember me</label>
+        </div>
+        <div class="pass-link">
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+    <div class="field">
+        <input type="button" onclick="loginUser()" value="Login" />
+    </div>
+    <div class="signup-link">
+        Not a member? <a href="register.php">Sign up now</a>
+    </div>
+</form>
         </div>
     </div>
     <!-- About Section Begin -->

@@ -19,13 +19,7 @@ $create_table_sql = "CREATE TABLE IF NOT EXISTS user (
 )";
 $conn->query($create_table_sql);
 
-// Alter user table to add new columns if not exists
-$alter_table_sql = "ALTER TABLE user 
-ADD COLUMN fullname VARCHAR(100) AFTER password,
-ADD COLUMN phone VARCHAR(20) AFTER fullname,
-ADD COLUMN address TEXT AFTER phone,
-ADD COLUMN gender VARCHAR(20) AFTER address";
-$conn->query($alter_table_sql);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debug: Print POST data

@@ -25,28 +25,34 @@ function registerUser() {
 }
 
 // Xử lý đăng nhập
+// Xử lý đăng nhập
 function loginUser() {
-    const formData = new FormData();
-    formData.append('username', document.getElementById('loginUsername').value);
-    formData.append('password', document.getElementById('password').value);
-    formData.append('remember', document.getElementById('remember-me').checked);
+  const formData = new FormData();
+  formData.append('username', document.getElementById('loginUsername').value);
+  formData.append('password', document.getElementById('password').value);
+  formData.append('remember', document.getElementById('remember-me').checked);
 
-    fetch('php/login_process.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.status === 'success') {
-            if(data.role === 'admin') {
-                window.location.href = 'Admin/php/dashboard.php';
-            } else {
-                window.location.href = 'index.php';
-            }
-        } else {
-            alert(data.message);
-        }
-    });
+  fetch('php/login_process.php', {
+      method: 'POST',
+      body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+      if(data.status === 'success') {
+          // Lưu thông tin đăng nhập vào localStorage
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('loggedInUser', data.username);
+          
+          // Chuyển hướng dựa trên vai trò
+          if(data.role === 'admin') {
+              window.location.href = 'Admin/php/dashboard.php';
+          } else {
+              window.location.href = 'index.php';
+          }
+      } else {
+          alert(data.message);
+      }
+  });
 }
 
 // Cập nhật trạng thái giao diện người dùng
