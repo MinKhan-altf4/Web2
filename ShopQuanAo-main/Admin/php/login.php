@@ -13,9 +13,6 @@ if(isset($_POST['signin'])){
     $email = $conn->real_escape_string($_POST['email']);
     $password = $_POST['password'];
 
-    // Thêm debug để kiểm tra
-    error_log("Thử đăng nhập với email: " . $email);
-
     if(empty($email) || empty($password)) {
         $error = 'Vui lòng điền đầy đủ thông tin';
     } else {
@@ -28,11 +25,8 @@ if(isset($_POST['signin'])){
         if($result->num_rows > 0){
             $user = $result->fetch_assoc();
             
-            error_log("Mật khẩu nhập vào: " . $password);
-            error_log("Mật khẩu trong DB: " . $user['password']);
-
-            // Kiểm tra trực tiếp với mật khẩu đã mã hóa
-            if($user['password'] === $password){
+            // Kiểm tra mật khẩu đã mã hóa
+            if(password_verify($password, $user['password'])){
                 if($user['role'] == 'admin'){
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['email'] = $user['email'];

@@ -110,7 +110,8 @@ body {
     margin-bottom: 2rem;
 }
 .form_group {
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
+    position: relative;
     display: flex;
     flex-direction: column;
 }
@@ -273,4 +274,11 @@ body {
 
 .search_box i {
     font-size: 1.2rem;
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
 }

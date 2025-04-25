@@ -106,8 +106,11 @@ if(isset($_GET['edit'])) {
                 <div class="form_group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" 
-                           value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['username']) : ''; ?>" 
+                           value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['username']) : ''; ?>"
+                           maxlength="25" 
+                           oninput="checkUsername(this)"
                            required>
+                    <span id="username-message" class="error-message"></span>
                 </div>
                 
                 <div class="form_group">
@@ -180,5 +183,18 @@ if(isset($_GET['edit'])) {
             </table>
         </div>
     </div>
+    <script>
+    function checkUsername(input) {
+        const messageElement = document.getElementById('username-message');
+        if (input.value.length > 25) {
+            input.value = input.value.slice(0, 25); // Cắt bớt nếu dài quá 12 ký tự
+            messageElement.textContent = 'Username không được vượt quá 25 ký tự!';
+        } else if (input.value.length === 25) {
+            messageElement.textContent = 'Username đã đạt độ dài tối đa!';
+        } else {
+            messageElement.textContent = '';
+        }
+    }
+    </script>
 </body>
 </html>
