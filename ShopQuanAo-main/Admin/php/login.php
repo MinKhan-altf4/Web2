@@ -2,58 +2,60 @@
 session_start();
 require_once 'db.php';
 
-// Check if already logged in
-if(isset($_SESSION['user_id'])){
+// Kiểm tra đăng nhập
+if(isset($_SESSION['user_id']) && $_SESSION['role'] == 'admin'){
     header('Location: dashboard.php');
     exit();
 }
 
-// Check remember me cookie
-if(isset($_COOKIE['remember_user'])) {
-    $user_id = $_COOKIE['remember_user'];
-    $sql = "SELECT * FROM user WHERE id = ? AND status = '1'";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['role'] = $user['role'];
-        header('Location: dashboard.php');
-        exit();
-    }
-}
-
-// Handle login
+// Xử lý đăng nhập
 if(isset($_POST['signin'])){
     $email = $conn->real_escape_string($_POST['email']);
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM user WHERE email = ? AND status = '1'";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Thêm debug để kiểm tra
+    error_log("Thử đăng nhập với email: " . $email);
 
-    if($result->num_rows > 0){
-        $user = $result->fetch_assoc();
-        if(password_verify($password, $user['password']) && $user['role'] == 'admin'){
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['role'] = $user['role'];
+    if(empty($email) || empty($password)) {
+        $error = 'Vui lòng điền đầy đủ thông tin';
+    } else {
+        $sql = "SELECT * FROM user WHERE email = ? AND status = '1'";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if($result->num_rows > 0){
+            $user = $result->fetch_assoc();
             
-            if(isset($_POST['remember'])){
-                setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
+            error_log("Mật khẩu nhập vào: " . $password);
+            error_log("Mật khẩu trong DB: " . $user['password']);
+
+            // Kiểm tra trực tiếp với mật khẩu đã mã hóa
+            if($user['password'] === $password){
+                if($user['role'] == 'admin'){
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['email'] = $user['email'];
+                    $_SESSION['role'] = $user['role'];
+                    $_SESSION['username'] = $user['username'];
+
+                    if(isset($_POST['remember'])){
+                        setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
+                    }
+
+                    header('Location: dashboard.php');
+                    exit();
+                } else {
+                    $error = "Bạn không có quyền truy cập trang admin";
+                }
+            } else {
+                $error = 'Sai mật khẩu';
             }
-            
-            header('Location: dashboard.php');
-            exit();
+        } else {
+            $error = 'Email không tồn tại hoặc tài khoản bị khóa';
         }
+        $stmt->close();
     }
-    $error = 'Invalid email or password';
 }
 ?>
 
