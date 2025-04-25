@@ -2,7 +2,7 @@
 require_once 'auth.php';
 
 // Thay thế đoạn code fetch users cũ bằng:
-$sql = "SELECT * FROM user WHERE 1=1";
+$sql = "SELECT * FROM user WHERE role != 'admin'";
 $params = array();
 $types = "";
 
@@ -23,10 +23,10 @@ if(!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Get user by ID for editing
+// Get user by ID for editing 
 if(isset($_GET['edit'])) {
     $edit_id = (int)$_GET['edit'];
-    $edit_sql = "SELECT * FROM user WHERE id = ?";
+    $edit_sql = "SELECT * FROM user WHERE id = ? AND role != 'admin'";
     $stmt = $conn->prepare($edit_sql);
     $stmt->bind_param("i", $edit_id);
     $stmt->execute();
