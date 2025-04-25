@@ -140,145 +140,112 @@ body {
 .user_list tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-.submit-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #555;
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
+
+/* Style cho các nút thao tác */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 8px 16px;
     border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Nút Edit */
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Nút Delete */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Icon trong nút */
+.btn i {
+    font-size: 1.1rem;
+}
+
+/* Disabled state */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Animation khi hover */
+.btn:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Style cho submit button trong form */
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
 }
 
 .submit-btn:hover {
-    background-color: #222; /* darker on hover */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* optional shadow */
-
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-.action-btn {
-    padding: 10px 16px;
-    font-size: 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    margin-right: 5px;
-    transition: background-color 0.3s ease;
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+}
+
+/* Style cho admin badge */
+.admin-badge {
+    background-color: #6c757d;
     color: white;
-    text-decoration: none; /* Thêm dòng này để bỏ gạch chân */
-    display: inline-block; /* Thêm để đảm bảo nút hiển thị đúng */
-}
-.edit,.delete{
-  text-decoration: none; /* Thêm dòng này để bỏ gạch chân */
-    display: inline-block; /* Thêm để đảm bảo nút hiển thị đúng */
-}
-
-/* Nút Sửa */
-.action-btn.edit {
-    background-color:  #03a9f4;
-}
-.action-btn.edit:hover {
-    background-color:  #0288d1;
-}
-
-/* Nút Khoá */
-.action-btn.lock {
-    background-color:  #9c27b0;
-}
-.action-btn.lock:hover {
-    background-color:  #7b1fa2;
-}
-
-/* Nút Mở Khoá */
-.action-btn.unlock {
-    background-color:  #4CAF50;
-}
-.action-btn.unlock:hover {
-    background-color:  #388e3c;
-}
-
-/* Nút Xoá */
-.action-btn.delete {
-    background-color:  #f44336;
-}
-.action-btn.delete:hover {
-    background-color:  #d32f2f;
-}
-
-/* Khi hover sidebar, điều chỉnh margin cho main content */
-.sidebar:hover + .main_content {
-    margin-left: 240px;
-}
-
-.search_box {
-    display: flex;
-    align-items: center;
-}
-
-.search_box form {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    padding: 8px 16px;
-    border-radius: 50px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border: 1px solid #eee;
-    transition: all 0.3s ease;
-}
-
-.search_box form:hover,
-.search_box form:focus-within {
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    border-color: #03a9f4;
-}
-
-.search_box input {
-    border: none;
-    background: none;
-    outline: none;
-    padding: 8px 12px;
-    width: 250px;
-    font-size: 14px;
-    color: #333;
-    transition: width 0.3s ease;
-}
-
-.search_box input:focus {
-    width: 300px;
-}
-
-.search_box input::placeholder {
-    color: #999;
-}
-
-.search_box button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 8px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.search_box button:hover {
-    background: #f0f0f0;
-    color: #03a9f4;
-}
-
-.search_box i {
-    font-size: 1.2rem;
-}
-
-.error-message {
-    color: #ff4444;
+    padding: 5px 10px;
+    border-radius: 4px;
     font-size: 12px;
-    margin-top: 5px;
-    display: block;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+/* Style cho các hàng admin */
+.user_list tr.admin-row {
+    background-color: #f8f9fa !important;
+    font-weight: 500;
 }

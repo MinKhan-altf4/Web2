@@ -1,45 +1,26 @@
 <?php
 require_once 'auth.php';
-
-if($user['role'] !== 'admin') {
-    header('Location: dashboard.php');
-    exit();
-}
+require_once 'db.php';
 
 if(isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
+    $user_id = (int)$_GET['id'];
     
-    // Không cho phép xóa tài khoản đang đăng nhập
-    if($id == $_SESSION['user_id']) {
-        $_SESSION['error'] = "Không thể xóa tài khoản đang sử dụng!";
-        header('Location: user.php');
+    // Không cho phép xóa chính mình
+    if($user_id == $_SESSION['user_id']) {
+        header("Location: user.php?error=cannot_delete_self");
         exit();
     }
-
-    // Không cho phép xóa tài khoản admin khác
-    $check_sql = "SELECT role FROM user WHERE id = ?";
-    $check_stmt = $conn->prepare($check_sql);
-    $check_stmt->bind_param("i", $id);
-    $check_stmt->execute();
-    $user_role = $check_stmt->get_result()->fetch_assoc()['role'];
-
-    if($user_role == 'admin') {
-        $_SESSION['error'] = "Không thể xóa tài khoản admin khác!";
-        header('Location: user.php');
-        exit();
-    }
-
-    // Thực hiện xóa
+    
     $sql = "DELETE FROM user WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("i", $user_id);
     
     if($stmt->execute()) {
-        $_SESSION['success'] = "Xóa người dùng thành công!";
+        header("Location: user.php?success=user_deleted");
     } else {
-        $_SESSION['error'] = "Có lỗi xảy ra: " . $conn->error;
+        header("Location: user.php?error=delete_failed");
     }
+} else {
+    header("Location: user.php?error=invalid_id");
 }
-
-header('Location: user.php');
 exit();

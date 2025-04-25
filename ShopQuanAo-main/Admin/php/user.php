@@ -112,7 +112,37 @@ if(isset($_GET['edit'])) {
                            required>
                     <span id="username-message" class="error-message"></span>
                 </div>
-                
+
+                <div class="form_group">
+                    <label for="fullname">Full Name:</label>
+                    <input type="text" id="fullname" name="fullname" 
+                           value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['fullname']) : ''; ?>"
+                           required>
+                </div>
+
+                <div class="form_group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" name="phone" 
+                           value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['phone']) : ''; ?>"
+                           pattern="[0-9]{10}" 
+                           title="Please enter a valid 10-digit phone number"
+                           required>
+                </div>
+
+                <div class="form_group">
+                    <label for="address">Address:</label>
+                    <textarea id="address" name="address" rows="3"><?php echo isset($edit_user) ? htmlspecialchars($edit_user['address']) : ''; ?></textarea>
+                </div>
+
+                <div class="form_group">
+                    <label for="gender">Gender:</label>
+                    <select name="gender" id="gender">
+                        <option value="male" <?php echo (isset($edit_user) && $edit_user['gender'] == 'male') ? 'selected' : ''; ?>>Male</option>
+                        <option value="female" <?php echo (isset($edit_user) && $edit_user['gender'] == 'female') ? 'selected' : ''; ?>>Female</option>
+                        <option value="other" <?php echo (isset($edit_user) && $edit_user['gender'] == 'other') ? 'selected' : ''; ?>>Other</option>
+                    </select>
+                </div>
+
                 <div class="form_group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" 
@@ -165,17 +195,29 @@ if(isset($_GET['edit'])) {
                 </thead>
                 <tbody>
                     <?php while($row = $result->fetch_assoc()): ?>
-                    <tr>
+                    <tr data-role="<?php echo $row['role']; ?>">
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo htmlspecialchars($row['username']); ?></td>
                         <td><?php echo htmlspecialchars($row['email']); ?></td>
-                        <td><?php echo htmlspecialchars($row['role']); ?></td>
-                        <td><?php echo $row['status'] == '1' ? 'Active' : 'Locked'; ?></td>
-                        <td>
-                            <a href="?edit=<?php echo $row['id']; ?>" class="action-btn edit">Edit</a>
-                            <a href="delete_user.php?id=<?php echo $row['id']; ?>" 
-                               onclick="return confirm('Are you sure you want to delete this user?')" 
-                               class="action-btn delete">Delete</a>
+                        <td><?php echo $row['role']; ?></td>
+                        <td><?php echo $row['status'] == 1 ? 'Active' : 'Locked'; ?></td>
+                        <td class="action-buttons">
+                            <?php if($row['role'] != 'admin'): ?>
+                                <a href="user.php?edit=<?php echo $row['id']; ?>" class="btn btn-edit">
+                                    <i class='bx bx-edit-alt'></i>
+                                    Edit
+                                </a>
+                                <?php if($row['id'] != $_SESSION['user_id'] && $row['role'] != 'admin'): ?>
+                                    <a href="delete_user.php?id=<?php echo $row['id']; ?>" 
+                                       class="btn btn-delete"
+                                       onclick="return confirm('Are you sure you want to delete this user?');">
+                                        <i class='bx bx-trash'></i>
+                                        Delete
+                                    </a>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <span class="admin-badge">Admin account</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endwhile; ?>

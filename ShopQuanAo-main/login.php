@@ -87,6 +87,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         color: #fff;
         /* Đảm bảo chữ vẫn màu trắng */
     }
+
+    /* CSS cho thông báo lỗi */
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    /* CSS cho thông báo thành công */
+    .success {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    /* Hiệu ứng rung khi sai mật khẩu */
+    .error {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
     </style>
 </head>
 
