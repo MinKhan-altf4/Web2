@@ -261,7 +261,13 @@ if(isset($error)) {
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="text" name="phone_number" placeholder="Enter your number" required />
+                            <input type="text" name="phone_number" id="phone_number" 
+                                   placeholder="Enter your number" 
+                                   maxlength="10" 
+                                   pattern="[0-9]{10}"
+                                   oninput="checkPhoneNumber(this)"
+                                   required />
+                            <span id="phone-message" class="message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
@@ -421,22 +427,30 @@ if(isset($error)) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script>
-    const togglePassword = document.querySelector("#togglePassword");
-    const password = document.querySelector("input[name='password']");
-    const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
-    const confirmPassword = document.querySelector("input[name='confirm_password']");
+function checkPhoneNumber(input) {
+    const messageElement = document.getElementById('phone-message');
+    // Remove any non-numeric characters
+    input.value = input.value.replace(/[^0-9]/g, '');
+    
+    if (input.value.length > 10) {
+        input.value = input.value.slice(0, 10); // Cut off after 10 digits
+        messageElement.textContent = 'Số điện thoại không được vượt quá 10 số!';
+        messageElement.style.color = 'red';
+    } else if (input.value.length === 10) {
+        messageElement.textContent = 'Số điện thoại đạt giới hạn';
+        messageElement.style.color = 'red';
+    } else {
+        messageElement.textContent = '';
+    }
+}
 
-    togglePassword.addEventListener("click", function() {
-        const type = password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
-        this.classList.toggle("fa-eye-slash");
-    });
-
-    toggleConfirmPassword.addEventListener("click", function() {
-        const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
-        confirmPassword.setAttribute("type", type);
-        this.classList.toggle("fa-eye-slash");
-    });
+// Add this to your existing script section
+const phoneInput = document.getElementById('phone_number');
+phoneInput.addEventListener('keypress', function(e) {
+    if (this.value.length >= 10) {
+        e.preventDefault(); // Prevent typing more than 10 digits
+    }
+});
     </script>
 </body>
 

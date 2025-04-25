@@ -2,53 +2,40 @@
 session_start();
 require_once 'db.php';
 
-// Kiểm tra đăng nhập
-if(isset($_SESSION['user_id']) && $_SESSION['role'] == 'admin'){
-    header('Location: dashboard.php');
-    exit();
-}
-
-// Xử lý đăng nhập
-if(isset($_POST['signin'])){
+if(isset($_POST['signin'])) {
     $email = $conn->real_escape_string($_POST['email']);
     $password = $_POST['password'];
 
     if(empty($email) || empty($password)) {
         $error = 'Vui lòng điền đầy đủ thông tin';
     } else {
-        $sql = "SELECT * FROM user WHERE email = ? AND status = '1'";
+        // Kiểm tra email có phải admin không trước
+        $sql = "SELECT * FROM user WHERE email = ? AND role = 'admin'";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if($result->num_rows > 0){
+        if($result->num_rows > 0) {
             $user = $result->fetch_assoc();
-            
-            // Kiểm tra mật khẩu đã mã hóa
-            if(password_verify($password, $user['password'])){
-                if($user['role'] == 'admin'){
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['email'] = $user['email'];
-                    $_SESSION['role'] = $user['role'];
-                    $_SESSION['username'] = $user['username'];
-
-                    if(isset($_POST['remember'])){
-                        setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
-                    }
-
+            if(password_verify($password, $user['password'])) {
+                // Kiểm tra trạng thái tài khoản
+                if($user['status'] == 1) {
+                    $_SESSION['admin_id'] = $user['id'];
+                    $_SESSION['admin_username'] = $user['username'];
+                    $_SESSION['admin_role'] = $user['role'];
+                    
                     header('Location: dashboard.php');
                     exit();
                 } else {
-                    $error = "Bạn không có quyền truy cập trang admin";
+                    $error = 'Tài khoản đã bị khóa';
                 }
             } else {
                 $error = 'Sai mật khẩu';
             }
         } else {
-            $error = 'Email không tồn tại hoặc tài khoản bị khóa';
+            $error = 'Email này không có quyền truy cập trang admin';
         }
-        $stmt->close();
     }
 }
 ?>

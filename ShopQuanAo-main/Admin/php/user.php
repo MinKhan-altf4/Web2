@@ -202,22 +202,16 @@ if(isset($_GET['edit'])) {
                         <td><?php echo $row['role']; ?></td>
                         <td><?php echo $row['status'] == 1 ? 'Active' : 'Locked'; ?></td>
                         <td class="action-buttons">
-                            <?php if($row['role'] != 'admin'): ?>
-                                <a href="user.php?edit=<?php echo $row['id']; ?>" class="btn btn-edit">
-                                    <i class='bx bx-edit-alt'></i>
-                                    Edit
-                                </a>
-                                <?php if($row['id'] != $_SESSION['user_id'] && $row['role'] != 'admin'): ?>
-                                    <a href="delete_user.php?id=<?php echo $row['id']; ?>" 
-                                       class="btn btn-delete"
-                                       onclick="return confirm('Are you sure you want to delete this user?');">
-                                        <i class='bx bx-trash'></i>
-                                        Delete
-                                    </a>
-                                <?php endif; ?>
-                            <?php else: ?>
-                                <span class="admin-badge">Admin account</span>
-                            <?php endif; ?>
+                            <a href="user.php?edit=<?php echo $row['id']; ?>" class="btn btn-edit">
+                                <i class='bx bx-edit-alt'></i>
+                                Edit
+                            </a>
+                            <a href="delete_user.php?id=<?php echo $row['id']; ?>" 
+                               class="btn btn-delete"
+                               onclick="return confirm('Are you sure you want to delete this user?');">
+                                <i class='bx bx-trash'></i>
+                                Delete
+                            </a>
                         </td>
                     </tr>
                     <?php endwhile; ?>
