@@ -24,11 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
             }
 
-            if($user['role'] == 'admin') {
-                header("Location: Admin/php/dashboard.php");
-            } else {
-                header("Location: index.php");
-            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Đăng nhập thành công!',
+                'username' => $user['username'],
+                'role' => $user['role']
+            ]);
             exit();
         } else {
             $error = "Sai mật khẩu!";

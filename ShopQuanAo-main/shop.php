@@ -363,13 +363,13 @@ function searchProducts() {
                             </div>
                             <div class="product__item__text">
                                 <h6>${product.name}</h6>
-                                <a href="#" class="add-cart" 
-                                   data-id="${product.id}"
-                                   data-name="${product.name}"
-                                   data-price="${product.price.replace('$', '')}"
-                                   data-image="${product.image}">
-                                   + Add To Cart
-                                </a>
+                                <button class="add-cart" 
+                                    data-id="${product.id}"
+                                    data-name="${product.name}"
+                                    data-price="${product.price}"
+                                    data-image="${product.image}">
+                                   + Add to Cart
+                                </button>
                                 <h5>${product.price}</h5>
                             </div>
                         </div>
@@ -433,13 +433,13 @@ function filterByCategory(category) {
                             </div>
                             <div class="product__item__text">
                                 <h6>${product.name}</h6>
-                                <a href="#" class="add-cart" 
-                                   data-id="${product.id}"
-                                   data-name="${product.name}"
-                                   data-price="${product.price.replace('$', '')}"
-                                   data-image="${product.image}">
-                                   + Add To Cart
-                                </a>
+                                <button class="add-cart" 
+                                    data-id="${product.id}"
+                                    data-name="${product.name}"
+                                    data-price="${product.price}"
+                                    data-image="${product.image}">
+                                    Add to Cart
+                                </button>
                                 <h5>${product.price}</h5>
                             </div>
                         </div>
