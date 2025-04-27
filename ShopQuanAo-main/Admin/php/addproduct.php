@@ -12,42 +12,42 @@ require_once 'auth.php';
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menu">
-      <li class="active">
-        <a href="dashboard.php">
-          <i class='bx bx-grid-alt'></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a href="user.php">
-          <i class='bx bx-user'></i>
-          <span>User</span>
-        </a>
-      </li>
-      <li>
-        <a href="addproduct.php">
-          <i class='bx bx-box'></i>
-          <span>Product</span>
-        </a>
-      </li>
-      <li>
-        <a href="analytics.php">
-          <i class='bx bx-pie-chart-alt'></i>
-          <span>Analytics</span>
-        </a>
-      </li>
-      <li>
-        <a href="order.php">
-          <i class='bx bx-cart'></i>
-          <span>Order</span>
-        </a>
-      </li>
-      <li class="logout">
-        <a href="logout.php">
-          <i class='bx bx-log-out' id="log_out"></i>
-          <span>Logout</span>
-        </a>
-      </li>
+        <li>
+            <a href="dashboard.php">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="user.php">
+                <i class='bx bx-user'></i>
+                <span>User</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="addproduct.php">
+                <i class='bx bx-box'></i>
+                <span>Product</span>
+            </a>
+        </li>
+        <li>
+            <a href="analytics.php">
+                <i class='bx bx-pie-chart-alt'></i>
+                <span>Analytics</span>
+            </a>
+        </li>
+        <li>
+            <a href="order.php">
+                <i class='bx bx-cart'></i>
+                <span>Order</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="logout.php">
+                <i class='bx bx-log-out'></i>
+                <span>Logout</span>
+            </a>
+        </li>
     </ul>
   </div>
 

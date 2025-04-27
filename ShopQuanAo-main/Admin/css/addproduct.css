@@ -16,17 +16,16 @@
   }
 
   .sidebar {
-    position: relative;
+    position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
+    height: 100vh;
     width: 110px;
-    
-    height: 100%;
     padding: 0 1.7rem;
     overflow: hidden;
     transition: all 0.5s linear;
     background: #222;
+    z-index: 100;
   }
 
   .sidebar:hover {
@@ -82,10 +81,11 @@
   }
 
   .main_content {
-    position: relative;
+    flex: 1;
+    margin-left: 110px;
+    padding: 20px;
+    transition: all 0.5s linear;
     background: #dfdfdf;
-    width: 100%;
-    padding: 1rem;
   }
 
   .header_wrapper {
@@ -221,4 +221,3 @@
     color: darkred;
     text-decoration: underline;
   }
-  
