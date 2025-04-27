@@ -142,8 +142,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <td>{$row['tag']}</td>
                 <td><img src='../img/{$row['image']}' width='60'></td>
                 <td>
-                    <a href='editproduct.php?id={$row['product_id']}'>Edit</a> |
-                    <a href='deleteproduct.php?id={$row['product_id']}' class='delete-btn' onclick=\"return confirm('Are you sure?')\">Delete</a>
+                    <div class='action-buttons'>
+                        <a href='editproduct.php?id={$row['product_id']}' class='btn btn-edit'>
+                            <i class='bx bx-edit-alt'></i>
+                            Edit
+                        </a>
+                        <a href='deleteproduct.php?id={$row['product_id']}' 
+                           class='btn btn-delete'
+                           onclick=\"return confirm('Are you sure you want to delete this product?')\">
+                            <i class='bx bx-trash'></i>
+                            Delete
+                        </a>
+                    </div>
                 </td>
               </tr>";
         }
