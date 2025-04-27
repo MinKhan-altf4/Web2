@@ -53,7 +53,7 @@ if(isset($_POST['signin'])) {
 <body>
     <div class="login-box">
         <div class="login-header">
-            <h1>Login's MALE FASHION</h1>
+            <h1>MALE FASHION</h1>
         </div>
         
         <?php if(isset($error)): ?>
@@ -69,12 +69,7 @@ if(isset($_POST['signin'])) {
             <div class="input-box">
                 <input type="password" class="input-field" placeholder="Password" name="password" required>
             </div>
-            <div class="forgot">
-                <section>
-                    <input type="checkbox" id="check" name="remember">
-                    <label for="check">Remember me</label>
-                </section>
-            </div>
+            
             <div class="input-submit">
                 <button type="submit" class="submit-btn" name="signin">Sign In</button>
             </div>
