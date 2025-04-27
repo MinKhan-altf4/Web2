@@ -3,16 +3,16 @@ require_once 'Admin/php/db.php'; // Kết nối database
 session_start();
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit;
 }
 
 // Lấy thông tin người dùng từ database
-$user_id = $_SESSION['user_id'];
+$id = $_SESSION['id'];
 $sql = "SELECT * FROM user WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 

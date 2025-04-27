@@ -1,4 +1,4 @@
-// cart.js - Phiên bản sửa lỗi khi làm việc với cart.sql
+// cart.js - Đã cập nhật để sử dụng total_price từ cơ sở dữ liệu
 
 /**
  * Kiểm tra trạng thái đăng nhập người dùng
@@ -117,8 +117,8 @@ async function addToCart(product) {
     
     // Gọi API thêm vào giỏ hàng
     const response = await callCartAPI('add', {
-      product_id: parseInt(product.id), // Đảm bảo product_id là số
-      quantity: 1
+      product_id: parseInt(product.id) // Đảm bảo product_id là số
+      // Không cần gửi quantity vì mặc định là 1
     });
     
     if (response.success) {
@@ -274,7 +274,10 @@ async function updateCartUI() {
       const productId = parseInt(item.product_id) || 0;
       const quantity = parseInt(item.quantity) || 1;
       const price = parseFloat(item.price) || 0;
-      const totalPrice = (price * quantity).toFixed(2);
+      // Sử dụng total_price từ cơ sở dữ liệu nếu có, ngược lại tính
+      const totalPrice = item.total_price ? 
+        parseFloat(item.total_price).toFixed(2) : 
+        (price * quantity).toFixed(2);
       const imagePath = item.image ? `img/product/${item.image}` : 'img/product/default.jpg';
       
       return `
@@ -305,11 +308,13 @@ async function updateCartUI() {
     `;
     }).join('');
     
-    // Tính tổng tiền
+    // Tính tổng tiền từ total_price cơ sở dữ liệu
     const total = cart.reduce((sum, item) => {
-      const price = parseFloat(item.price) || 0;
-      const quantity = parseInt(item.quantity) || 0;
-      return sum + (price * quantity);
+      // Sử dụng total_price từ cơ sở dữ liệu nếu có, ngược lại tính theo cách cũ
+      const itemTotal = item.total_price ? 
+        parseFloat(item.total_price) : 
+        ((parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0));
+      return sum + itemTotal;
     }, 0);
     
     if (cartTotal) cartTotal.textContent = `$${total.toFixed(2)}`;
