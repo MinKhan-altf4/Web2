@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit;
 }
@@ -32,6 +32,126 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css" />
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <style>
+        /* Quantity Controls */
+        .pro-qty {
+            display: flex;
+            align-items: center;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+            max-width: 120px;
+            background: #fff;
+        }
+
+        .pro-qty input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+
+        .pro-qty .qtybtn {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .pro-qty .qtybtn:hover {
+            background-color: #f5f5f5;
+            color: #000;
+        }
+
+        .pro-qty .dec {
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .pro-qty .inc {
+            border-left: 1px solid #e5e5e5;
+        }
+
+        /* Delete Button */
+        .cart__close {
+            text-align: center;
+        }
+
+        .cart__close i {
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 50%;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cart__close i:hover {
+            background-color: #ff0000;
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        /* Table Styles */
+        .shopping__cart__table {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .shopping__cart__table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .shopping__cart__table th {
+            padding: 15px 0;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .shopping__cart__table td {
+            padding: 15px 0;
+            vertical-align: middle;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        /* Product Name */
+        .product__cart__item__text h6 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* Product Price */
+        .cart__price {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .pro-qty {
+                max-width: 100px;
+            }
+
+            .pro-qty input {
+                width: 30px;
+                font-size: 14px;
+            }
+
+            .pro-qty .qtybtn {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -113,7 +233,6 @@ if (!isset($_SESSION['user_id'])) {
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./about.php">About Us</a></li>
-                                    <li><a href="./shop-details.php">Shop Details</a></li>
                                     <li><a href="./shopping-cart.php">Shopping Cart</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>

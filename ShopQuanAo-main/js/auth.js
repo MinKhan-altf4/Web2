@@ -59,6 +59,20 @@ function loginUser() {
     });
 }
 
+// Kiểm tra đăng nhập không đồng bộ
+async function isUserLoggedIn() {
+  try {
+    const response = await fetch('php/check_login.php', {
+      credentials: 'include'  // Gửi cookies session
+    });
+    const data = await response.json();
+    return data.isLoggedIn;
+  } catch (error) {
+    console.error('Error checking login status:', error);
+    return false;
+  }
+}
+
 // Cập nhật trạng thái giao diện người dùng
 async function checkLoginStatus() {
     try {

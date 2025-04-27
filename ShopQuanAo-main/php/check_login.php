@@ -8,7 +8,7 @@ $response = array(
     'role' => null
 );
 
-if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
+if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     $response['isLoggedIn'] = true;
     $response['username'] = $_SESSION['username'];
     $response['role'] = $_SESSION['role'];

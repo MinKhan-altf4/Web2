@@ -108,7 +108,6 @@
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./about.php">About Us</a></li>
-                                    <li><a href="./shop-details.php">Shop Details</a></li>
                                     <li><a href="./shopping-cart.php">Shopping Cart</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>
@@ -363,13 +362,7 @@ function searchProducts() {
                             </div>
                             <div class="product__item__text">
                                 <h6>${product.name}</h6>
-                                <button class="add-cart" 
-                                    data-id="${product.id}"
-                                    data-name="${product.name}"
-                                    data-price="${product.price}"
-                                    data-image="${product.image}">
-                                   + Add to Cart
-                                </button>
+                                
                                 <h5>${product.price}</h5>
                             </div>
                         </div>
@@ -433,13 +426,7 @@ function filterByCategory(category) {
                             </div>
                             <div class="product__item__text">
                                 <h6>${product.name}</h6>
-                                <button class="add-cart" 
-                                    data-id="${product.id}"
-                                    data-name="${product.name}"
-                                    data-price="${product.price}"
-                                    data-image="${product.image}">
-                                    Add to Cart
-                                </button>
+                              
                                 <h5>${product.price}</h5>
                             </div>
                         </div>

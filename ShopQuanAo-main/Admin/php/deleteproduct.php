@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Kiểm tra sản phẩm đã được bán hay chưa
-    $check_order = mysqli_query($conn, "SELECT * FROM orders WHERE product_id = $id");
+    $check_order = mysqli_query($conn, "SELECT * FROM cart WHERE product_id = $id");
 
     if (!$check_order) {
         die("Query failed: " . mysqli_error($conn));

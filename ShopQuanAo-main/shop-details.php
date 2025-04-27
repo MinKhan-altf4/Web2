@@ -63,6 +63,206 @@ if (isset($_GET['id'])) {
     .buttonn:hover {
         background-color: gray;
     }
+
+    .product__details__pic__main {
+        margin-bottom: 30px;
+        transition: transform 0.3s ease;
+    }
+
+    .product__details__pic__main:hover {
+        transform: scale(1.02);
+    }
+
+    .product__details__text {
+        background-color: #fff;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .product__details__text:hover {
+        transform: translateY(-5px);
+    }
+
+    .product__details__price h3 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: rgb(16, 16, 17);
+    }
+
+    .product__details__price {
+        text-align: right;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .product__details__description {
+        color: #636e72;
+        line-height: 1.8;
+    }
+
+    .btn-primary {
+        background-color: rgb(88, 89, 92);
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:active,
+    .btn-primary:focus {
+        background-color: rgb(16, 16, 17) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 16, 17, 0.3);
+    }
+
+    /* Remove any conflicting Bootstrap default styles */
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active {
+        background-color: rgb(16, 16, 17) !important;
+        border-color: rgb(16, 16, 17) !important;
+    }
+
+    .meta-item {
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .meta-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .meta-item i {
+        color: #2d3436;
+    }
+
+    .meta-item p {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #636e72;
+    }
+
+    .product__details__info {
+        background-color: #fff;
+        border-radius: 8px;
+    }
+
+    .product__details__info li {
+        font-size: 0.95rem;
+        padding: 0.75rem 0;
+    }
+
+    .product__details__info li:last-child {
+        border-bottom: none;
+    }
+
+    .product__details__info .row {
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
+    .product__details__info .col-6 {
+        padding: 0 1rem;
+    }
+
+    .info-box {
+        height: 100%;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .info-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .shop-details {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    .product-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item {
+        padding: 15px;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .feature-item:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-5px);
+    }
+
+    .feature-item i {
+        color: rgb(16, 16, 17);
+    }
+
+    .product__details__description {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .product__details__info {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .product__details__actions {
+        margin-top: 2rem;
+    }
+
+    .breadcrumb {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: rgb(16, 16, 17);
+        text-decoration: none;
+    }
+
+    .breadcrumb-item.active {
+        color: rgb(16, 16, 17);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991px) {
+        .product__details__text {
+            margin-top: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-title {
+            font-size: 1.5rem;
+        }
+
+        .feature-item {
+            margin-bottom: 1rem;
+        }
+
+        .product__details__info .col-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+    }
     </style>
 </head>
 
@@ -143,7 +343,6 @@ if (isset($_GET['id'])) {
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./about.php">About Us</a></li>
-                                    <li><a href="./shop-details.php">Shop Details</a></li>
                                     <li><a href="./shopping-cart.php">Shopping Cart</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>
@@ -167,97 +366,128 @@ if (isset($_GET['id'])) {
     <!-- Header Section End -->
 
     <!-- Shop Details Section Begin -->
-    <section class="shop-details">
-        <div class="product__details__pic">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__details__breadcrumb">
-                            <a href="./index.php">Home</a>
-                            <a href="./shop.php">Shop</a>
-                            <span>Product Details</span>
-                        </div>
-                    </div>
+    <section class="shop-details py-5">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+                            <li class="breadcrumb-item"><a href="./shop.php">Shop</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><?php echo $product['name']; ?></li>
+                        </ol>
+                    </nav>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="Admin/img/<?php echo $product['image']; ?>">
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+            </div>
+
+            <!-- Product Details -->
+            <div class="row">
+                <!-- Product Image Column -->
+                <div class="col-lg-5">
+                    <div class="product__details__pic__main mb-4">
+                        <img src="Admin/img/<?php echo $product['image']; ?>" 
+                             alt="<?php echo $product['name']; ?>"
+                             class="img-fluid rounded shadow-lg w-100">
                     </div>
-                    <div class="col-lg-6 col-md-9">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="Admin/img/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                    
+                    <!-- Product Features -->
+                    <div class="product__features p-4 bg-white rounded shadow mb-4">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <i class="fa fa-shield fa-2x mb-2 text-primary"></i>
+                                    <h6 class="mb-1">Secure Payment</h6>
+                                    <small class="text-muted">100% secure payment</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <i class="fa fa-truck fa-2x mb-2 text-primary"></i>
+                                    <h6 class="mb-1">Fast Shipping</h6>
+                                    <small class="text-muted">2-3 business days</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <i class="fa fa-refresh fa-2x mb-2 text-primary"></i>
+                                    <h6 class="mb-1">Easy Returns</h6>
+                                    <small class="text-muted">30 day returns</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="product__details__content">
-            <div class="container">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="product__details__text">
-                            <h4><?php echo $product['name']; ?></h4>
-                            <h3>$<?php echo number_format($product['price'], 2); ?></h3>
-                            <p><?php echo $product['description']; ?></p>
-                            
-                            <div class="khung">
-                                <button class="buttonn add-cart"
+
+                <!-- Product Info Column -->
+                <div class="col-lg-7">
+                    <div class="product__details__text p-4 bg-white rounded shadow">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <h2 class="product-title"><?php echo $product['name']; ?></h2>
+                            <div class="product__details__price">
+                                <span class="badge bg-danger mb-2">20% OFF</span>
+                                <h3 class="mb-0">$<?php echo number_format($product['price'], 2); ?></h3>
+                                <small class="text-muted">
+                                    <del>$<?php echo number_format($product['price'] * 1.2, 2); ?></del>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Product Description -->
+                        <div class="product__details__description mb-4">
+                            <h5 class="mb-3">Product Description</h5>
+                            <p class="lead text-muted"><?php echo $product['description']; ?></p>
+                        </div>
+
+                        <!-- Product Information with equal columns -->
+                        <div class="product__details__info mb-4">
+                            <h5 class="mb-3">Product Details</h5>
+                            <div class="row g-4">
+                                <div class="col-6">
+                                    <div class="info-box p-3 bg-light rounded">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                                <span class="text-muted">SKU:</span>
+                                                <span class="fw-bold">#<?php echo $product['product_id']; ?></span>
+                                            </li>
+                                            <li class="d-flex justify-content-between py-2">
+                                                <span class="text-muted">Category:</span>
+                                                <span class="fw-bold"><?php echo $product['category']; ?></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="info-box p-3 bg-light rounded">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                                <span class="text-muted">Tags:</span>
+                                                <span class="fw-bold"><?php echo $product['tag']; ?></span>
+                                            </li>
+                                            <li class="d-flex justify-content-between py-2">
+                                                <span class="text-muted">Shipping:</span>
+                                                <span class="fw-bold">Free</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <div class="product__details__actions">
+                            <button class="btn btn-primary btn-lg w-100 add-cart"
                                     data-id="<?php echo $product['product_id']; ?>"
                                     data-name="<?php echo $product['name']; ?>"
                                     data-price="<?php echo $product['price']; ?>"
                                     data-image="Admin/img/<?php echo $product['image']; ?>">
-                                    Add To Cart
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="product__details__last__option">
-                            <h5><span>Guaranteed Safe Checkout</span></h5>
-                            <img src="img/shop-details/details-payment.png" alt="">
-                            <ul>
-                                <li><span>SKU:</span> <?php echo $product['product_id']; ?></li>
-                                <li><span>Categories:</span> <?php echo $product['category']; ?></li>
-                                <li><span>Tag:</span> <?php echo $product['tag']; ?></li>
-                            </ul>
+                                <i class="fa fa-shopping-cart me-2"></i>
+                                Add To Cart
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="product__details__tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-5" role="tab">Description</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-5" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Information</h5>
-                                        <p><?php echo nl2br($product['description']); ?></p>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
         </div>
     </section>
     <!-- Shop Details Section End -->
@@ -357,23 +587,7 @@ if (isset($_GET['id'])) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const addToCartBtn = document.querySelector('.add-cart');
-        
-        addToCartBtn.addEventListener('click', function() {
-            const productData = {
-                id: this.dataset.id,
-                name: this.dataset.name,
-                price: this.dataset.price,
-                image: this.dataset.image
-            };
-            
-            // Assuming you have a addToCart function in cart.js
-            addToCart(productData);
-        });
-    });
-    </script>
+   
 
 </body>
 
