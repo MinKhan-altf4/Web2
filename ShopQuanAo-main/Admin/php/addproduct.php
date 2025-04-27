@@ -65,15 +65,6 @@ require_once 'auth.php';
           <label for="name_product">Product Name:</label>
           <input type="text" name="name_product" id="name_product" placeholder="Enter product name" class="product_enter" required>
 
-          <label for="size_product">Size Product:</label>
-          <select name="size[]" id="size_product" class="product_enter" required>
-            <option value="">-- Select Size --</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-          </select>
-
           <label for="price_product">Price Product:</label>
           <input type="number" name="price_product" id="price_product" placeholder="Enter price $" class="product_enter" required>
 
@@ -105,15 +96,9 @@ require_once 'auth.php';
 include("db.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_POST['size']) || empty($_POST['size'])) {
-        echo "<script>alert('Please select a size!'); window.history.back();</script>";
-        exit();
-    }
-
     $name = $_POST['name_product'];
-    $size = is_array($_POST['size']) ? implode(",", $_POST['size']) : $_POST['size'];
     $price = $_POST['price_product'];
-    $description = $_POST['description']; // Add this line
+    $description = $_POST['description'];
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
 
@@ -122,8 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
-    $sql = "INSERT INTO products (name, size, price, description, category, tag, image)
-            VALUES ('$name', '$size', '$price', '$description', '$category', '$tag', '$image_name')";
+    $sql = "INSERT INTO products (name, price, description, category, tag, image)
+            VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name')";
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
     exit();
@@ -137,7 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Size</th>
           <th>Price</th>
           <th>Category</th>
           <th>Tag Product</th>
@@ -148,19 +132,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <tbody>
         <?php
         include("db.php");
-        $result = mysqli_query($conn, "SELECT * FROM products WHERE is_deleted = 0");
+        $result = mysqli_query($conn, "SELECT product_id, name, price, category, tag, image FROM products WHERE is_deleted = 0");
 
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>
                 <td>{$row['name']}</td>
-                <td>{$row['size']}</td>
                 <td>{$row['price']}</td>
                 <td>{$row['category']}</td>
                 <td>{$row['tag']}</td>
                 <td><img src='../img/{$row['image']}' width='60'></td>
                 <td>
-                    <a href='editproduct.php?id={$row['id']}'>Edit</a> |
-                    <a href='deleteproduct.php?id={$row['id']}' class='delete-btn' onclick=\"return confirm('Are you sure?')\">Delete</a>
+                    <a href='editproduct.php?id={$row['product_id']}'>Edit</a> |
+                    <a href='deleteproduct.php?id={$row['product_id']}' class='delete-btn' onclick=\"return confirm('Are you sure?')\">Delete</a>
                 </td>
               </tr>";
         }

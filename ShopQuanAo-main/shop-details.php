@@ -1,5 +1,15 @@
 <?php
-// Nếu sau này cần xử lý PHP, thêm ở đây
+include("Admin/php/db.php");
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $sql = "SELECT * FROM products WHERE product_id = $id AND is_deleted = 0";
+    $result = mysqli_query($conn, $sql);
+    $product = mysqli_fetch_assoc($result);
+} else {
+    header("Location: shop.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -174,26 +184,7 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-1.png">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-2.png">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-3.png">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-4.png">
-                                        <i class="fa fa-play"></i>
+                                    <div class="product__thumb__pic set-bg" data-setbg="Admin/img/<?php echo $product['image']; ?>">
                                     </div>
                                 </a>
                             </li>
@@ -203,24 +194,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-2.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-3.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-4" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-4.png" alt="">
-                                    <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1"
-                                        class="video-popup"><i class="fa fa-play"></i></a>
+                                    <img src="Admin/img/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
                                 </div>
                             </div>
                         </div>
@@ -233,27 +207,28 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
-                            <div class="set-bg" data-setbg="img/shop-details/thumb-3.png"></div>
-
-                            <h4>Hooded thermal anorak</h4>
-
-                            <h3>$270.00 <span>70.00</span></h3>
-                            <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-                                cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-                                with placket.</p>
-
+                            <h4><?php echo $product['name']; ?></h4>
+                            <h3>$<?php echo number_format($product['price'], 2); ?></h3>
+                            <p><?php echo $product['description']; ?></p>
+                            
                             <div class="khung">
-                                <a href="#" class="buttonn" data-price="270.00">Add To Cart</a>
+                                <button class="buttonn add-cart"
+                                    data-id="<?php echo $product['product_id']; ?>"
+                                    data-name="<?php echo $product['name']; ?>"
+                                    data-price="<?php echo $product['price']; ?>"
+                                    data-image="Admin/img/<?php echo $product['image']; ?>">
+                                    Add To Cart
+                                </button>
                             </div>
-                            <br>
                         </div>
+                        
                         <div class="product__details__last__option">
                             <h5><span>Guaranteed Safe Checkout</span></h5>
                             <img src="img/shop-details/details-payment.png" alt="">
                             <ul>
-                                <li><span>SKU:</span> 3812912</li>
-                                <li><span>Categories:</span> Clothes</li>
-                                <li><span>Tag:</span> Clothes, Skin, Body</li>
+                                <li><span>SKU:</span> <?php echo $product['product_id']; ?></li>
+                                <li><span>Categories:</span> <?php echo $product['category']; ?></li>
+                                <li><span>Tag:</span> <?php echo $product['tag']; ?></li>
                             </ul>
                         </div>
                     </div>
@@ -266,94 +241,15 @@
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-5" role="tab">Description</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-                                    Reviews</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
-                                    information</a>
-                            </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-5" role="tabpanel">
                                 <div class="product__details__tab__content">
-
                                     <div class="product__details__tab__content__item">
-                                        <h5>Products Infomation</h5>
-                                        <p>The Hooded Thermal Anorak is the ultimate cold-weather essential, designed to
-                                            keep you warm, comfortable, and stylish in harsh conditions.
-                                            Whether you're exploring the great outdoors, commuting in the city, or
-                                            simply enjoying a winter walk, this anorak offers superior protection
-                                            against the elements.
-                                            With a focus on functionality and modern design, it’s perfect for those who
-                                            refuse to compromise on style even in colder temperatures.</p>
+                                        <h5>Products Information</h5>
+                                        <p><?php echo nl2br($product['description']); ?></p>
                                     </div>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Material used</h5>
-                                        <p>Outer Shell: Crafted from high-quality, windproof polyester, the outer layer
-                                            is both water-resistant and durable, providing excellent protection against
-                                            light rain, snow, and cold winds. The smooth, rugged finish ensures the
-                                            jacket can withstand the rigors of outdoor activities while maintaining a
-                                            sleek look.
-                                            Insulation: The anorak features advanced thermal insulation technology,
-                                            designed to trap body heat and keep you warm without adding bulk. The
-                                            lightweight synthetic insulation offers excellent heat retention, making it
-                                            ideal for temperatures that dip below freezing.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Customer review:</h5>
-                                        <p>"I recently purchased the Hooded Thermal Anorak, and it has quickly become my
-                                            go-to jacket for the winter season.
-                                            The quality of the materials is outstanding—it’s warm, lightweight, and
-                                            feels incredibly durable.
-                                            The outer shell does an excellent job of blocking out cold winds and light
-                                            rain, while the soft fleece lining keeps me cozy without overheating.
-                                            I especially love the adjustable hood, which fits snugly around my head and
-                                            keeps me warm even on the windiest days.
-                                            The multiple zippered pockets are perfect for storing my phone, keys, and
-                                            gloves, and I appreciate how the jacket maintains its shape even after being
-                                            stuffed into a backpack.
-                                            Overall, this anorak combines style and functionality effortlessly.
-                                            It’s perfect for everything from hiking trips to casual everyday wear in the
-                                            city.
-                                            Definitely worth the investment if you're looking for a reliable winter
-                                            jacket!"
-                                        </p>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                <div class="product__details__tab__content">
-
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Additional Infomation</h5>
-                                        <p>Warmth and Insulation: The Hooded Thermal Anorak is designed for optimal
-                                            warmth during cold weather.
-                                            It features high-quality thermal insulation that traps heat, ensuring you
-                                            stay comfortable even in freezing temperatures.
-                                            Perfect for winter activities like hiking, skiing, or everyday use in chilly
-                                            climates.
-                                            Material: Made from a blend of durable polyester and soft fleece lining,
-                                            this anorak provides both comfort and protection.
-                                            The outer shell is windproof and water-resistant, shielding you from harsh
-                                            winds and light rain, while the interior lining adds extra warmth without
-                                            bulk.
-                                            Hood and Design: The anorak comes with an adjustable, insulated hood to
-                                            provide full head coverage and protection from the cold.
-                                            The hood is designed to fit comfortably over hats or helmets, making it
-                                            versatile for various outdoor adventures.</p>
-
-                                    </div>
-
+                                    
                                 </div>
                             </div>
                         </div>
@@ -367,83 +263,7 @@
     <!-- Shop Details Section End -->
 
     <!-- Related Section Begin -->
-    <section class="related spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="related-title">Related Product</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <span class="label">New</span>
-                            <ul class="product__hover">
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$67.24</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$67.24</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Multi-pocket Chest Bag</h6>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$43.48</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Diagonal Textured Cap</h6>
-                            <a href="#" class="add-cart" onclick="addToCart()">+ Add To Cart</a>
-
-                            <h5>$60.9</h5>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
     <!-- Related Section End -->
 
     <!-- Footer Section Begin -->
@@ -537,6 +357,23 @@
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addToCartBtn = document.querySelector('.add-cart');
+        
+        addToCartBtn.addEventListener('click', function() {
+            const productData = {
+                id: this.dataset.id,
+                name: this.dataset.name,
+                price: this.dataset.price,
+                image: this.dataset.image
+            };
+            
+            // Assuming you have a addToCart function in cart.js
+            addToCart(productData);
+        });
+    });
+    </script>
 
 </body>
 

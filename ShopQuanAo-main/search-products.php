@@ -1,32 +1,26 @@
 <?php
 include("Admin/php/db.php");
 
-$search = isset($_GET['query']) ? $_GET['query'] : '';
+header('Content-Type: application/json');
 
-if ($search) {
-    $search = mysqli_real_escape_string($conn, $search);
-    $sql = "SELECT * FROM products WHERE 
-            is_deleted = 0 AND 
-            (name LIKE '%$search%' OR 
-             description LIKE '%$search%' OR 
-             category LIKE '%$search%')";
-    
-    $result = mysqli_query($conn, $sql);
-    $products = [];
+$query = isset($_GET['query']) ? $_GET['query'] : '';
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $products[] = [
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'price' => '$' . $row['price'],
-            'image' => 'Admin/img/' . $row['image'],
-            'category' => $row['category'],
-            'description' => $row['description'],
-            'link' => 'shop-details.php?id=' . $row['id']
-        ];
-    }
+$sql = "SELECT product_id, name, price, category, image FROM products 
+        WHERE is_deleted = 0 AND (name LIKE '%$query%' OR category LIKE '%$query%')";
 
-    header('Content-Type: application/json');
-    echo json_encode($products);
+$result = mysqli_query($conn, $sql);
+$products = array();
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $products[] = array(
+        'id' => $row['product_id'],
+        'name' => $row['name'],
+        'price' => '$' . number_format($row['price'], 2),
+        'category' => $row['category'],
+        'image' => 'Admin/img/' . $row['image'],
+        'link' => 'shop-details.php?id=' . $row['product_id']
+    );
 }
+
+echo json_encode($products);
 ?>

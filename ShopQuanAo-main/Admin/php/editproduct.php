@@ -2,11 +2,10 @@
 include("db.php");
 
 $id = $_GET['id'];
-$product = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM products WHERE id = $id"));
+$product = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM products WHERE product_id = $id"));
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name_product'];
-    $size = implode(",", $_POST['size']);
     $price = $_POST['price_product'];
     $description = $_POST['description'];
     $category = $_POST['category_product'];
@@ -21,9 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $sql = "UPDATE products SET 
-            name='$name', size='$size', price='$price', description='$description',
-            category='$category', tag='$tag', image='$image_name'
-            WHERE id=$id";
+            name='$name', 
+            price='$price', 
+            description='$description',
+            category='$category', 
+            tag='$tag', 
+            image='$image_name'
+            WHERE product_id=$id";
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
 }
@@ -89,19 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="product_info">
           <label for="name_product">Product Name:</label>
           <input type="text" name="name_product" id="name_product" class="product_enter" value="<?= htmlspecialchars($product['name'] ?? '') ?>" required>
-
-          <label for="size_product">Size Product:</label>
-          <select name="size[]" id="size_product" class="product_enter" required>
-            <option value="">-- Select Size --</option>
-            <?php
-            $sizes = isset($product['size']) ? explode(",", $product['size']) : [];
-            $allSizes = ['S', 'M', 'L', 'XL'];
-            foreach ($allSizes as $size) {
-                $selected = in_array($size, $sizes) ? 'selected' : '';
-                echo "<option value='$size' $selected>$size</option>";
-            }
-            ?>
-          </select>
 
           <label for="price_product">Price Product:</label>
           <input type="number" name="price_product" id="price_product" class="product_enter" value="<?= htmlspecialchars($product['price'] ?? '') ?>" required>

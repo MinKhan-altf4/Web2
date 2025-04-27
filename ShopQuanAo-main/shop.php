@@ -356,7 +356,7 @@ function searchProducts() {
                             <div class="product__item__pic set-bg" 
                                  style="background-image: url('${product.image}');">
                                 <ul class="product__hover">
-                                    <li><a href="${product.link}">
+                                    <li><a href="shop-details.php?id=${product.id}">
                                         <img src="img/icon/search.png" alt="">
                                     </a></li>
                                 </ul>
@@ -426,7 +426,7 @@ function filterByCategory(category) {
                             <div class="product__item__pic set-bg" 
                                  style="background-image: url('${product.image}');">
                                 <ul class="product__hover">
-                                    <li><a href="${product.link}">
+                                    <li><a href="shop-details.php?id=${product.id}">
                                         <img src="img/icon/search.png" alt="">
                                     </a></li>
                                 </ul>
