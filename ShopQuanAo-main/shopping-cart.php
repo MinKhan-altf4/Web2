@@ -388,7 +388,7 @@ if (!isset($_SESSION['id'])) {
                             <tbody id="cartItems">
                                 <!-- Dữ liệu giỏ hàng sẽ được JavaScript thêm vào đây -->
                                 <td class="cart__close">
-                                    <i class="fa fa-trash" onclick="removeFromCart(${productId})"></i>
+                                    <i class="fa fa-trash" onclick="removeFromCart(<?php echo $productId; ?>)"></i>
                                 </td>
                             </tbody>
                         </table>

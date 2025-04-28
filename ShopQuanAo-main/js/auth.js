@@ -267,3 +267,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// Hiển thị hoặc ẩn các trường thanh toán dựa trên phương thức được chọn
+document.addEventListener("DOMContentLoaded", function () {
+    const paymentMethodInputs = document.querySelectorAll('input[name="payment-method"]');
+    const bankTransferForm = document.querySelector(".bank-transfer-form");
+    const cardPaymentForm = document.querySelector(".card-payment-form");
+
+    paymentMethodInputs.forEach(input => {
+        input.addEventListener("change", function () {
+            if (this.value === "transfer") {
+                bankTransferForm.style.display = "block";
+                cardPaymentForm.style.display = "none";
+            } else if (this.value === "card") {
+                bankTransferForm.style.display = "none";
+                cardPaymentForm.style.display = "block";
+            } else {
+                bankTransferForm.style.display = "none";
+                cardPaymentForm.style.display = "none";
+            }
+        });
+    });
+});
+
