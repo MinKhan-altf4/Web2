@@ -15,6 +15,18 @@ if ($conn->connect_error) {
     die("Kết nối thất bại: " . $conn->connect_error);
 }
 
+// Add after database connection code and before form processing
+
+function generateInvoiceNumber() {
+    // Get current timestamp
+    $timestamp = time();
+    // Get random number between 1000-9999
+    $random = rand(1000, 9999);
+    // Combine timestamp and random number
+    $invoice_number = 'INV-' . $timestamp . '-' . $random;
+    return $invoice_number;
+}
+
 if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit;
@@ -158,6 +170,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows == 0) {
             // Chỉ tạo hóa đơn nếu chưa tồn tại
+            $payment_status = 'pending'; // Default status
+            if ($payment_method === 'cash') {
+                $payment_status = 'pending';
+            } elseif ($payment_method === 'transfer') {
+                $payment_status = 'pending_transfer';
+            } elseif ($payment_method === 'card') {
+                $payment_status = 'processing';
+            }
+
             $create_invoice = "INSERT INTO invoices (order_id, invoice_number, payment_status, total_amount, invoice_date) 
                               VALUES (?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($create_invoice);
