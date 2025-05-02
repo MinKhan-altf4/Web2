@@ -216,7 +216,7 @@
                         <div class="blog__item__text">
                             <span><img src="img/icon/calendar.png" alt="" /> 16 February
                                 2020</span>
-                            <h5>Hoop Earrings A Style From History</h5>
+                            <h5>Hoop Earrings A Style From orders</h5>
                             <a href="#">Read More</a>
                         </div>
                     </div>

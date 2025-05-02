@@ -149,6 +149,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $item_stmt->execute();
         }
 
+        // Kiểm tra xem đơn hàng đã có hóa đơn chưa
+        $check_invoice = "SELECT invoice_id FROM invoices WHERE order_id = ?";
+        $stmt = $conn->prepare($check_invoice);
+        $stmt->bind_param("i", $order_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            // Chỉ tạo hóa đơn nếu chưa tồn tại
+            $create_invoice = "INSERT INTO invoices (order_id, invoice_number, payment_status, total_amount, invoice_date) 
+                              VALUES (?, ?, ?, ?, NOW())";
+            $stmt = $conn->prepare($create_invoice);
+            $invoice_number = generateInvoiceNumber(); // Hàm tạo số hóa đơn
+            $stmt->bind_param("issd", $order_id, $invoice_number, $payment_status, $total_amount);
+            $stmt->execute();
+        }
+
         // Xóa giỏ hàng sau khi đặt hàng thành công
         $clear_cart_sql = "DELETE FROM cart WHERE id = ?";
         $clear_stmt     = $conn->prepare($clear_cart_sql);
@@ -157,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Chuyển hướng đến trang cảm ơn
         echo '<script>
             alert("Đặt hàng thành công!");
-            window.location.href = "history.php";
+            window.location.href = "orders.php";
         </script>';
         exit;
     } else {
