@@ -519,7 +519,9 @@ if (!isset($_SESSION['id'])) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-
+    <script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
 
 </html>

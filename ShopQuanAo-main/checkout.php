@@ -695,6 +695,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
         });
     </script>
+    <script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
 
 </html>

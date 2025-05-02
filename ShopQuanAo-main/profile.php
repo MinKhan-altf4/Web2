@@ -375,7 +375,9 @@ if ($result->num_rows > 0) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
 
-
+    <script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
 
 </html>

@@ -89,48 +89,31 @@ async function isUserLoggedIn() {
 async function checkLoginStatus() {
   try {
     const response = await fetch("php/check_login.php", {
-      credentials: "include", // Quan trọng để gửi cookie session
+      credentials: "include",
     });
     const data = await response.json();
     const loginButton = document.querySelector("#userMenu");
 
     if (data.isLoggedIn && data.username && loginButton) {
-      // Cập nhật UI cho người dùng đã đăng nhập
+      // Thêm preventDefault() để ngăn chặn hành vi mặc định của thẻ a
       loginButton.innerHTML = `
                 <div class="user-menu">
-                    <span style="cursor: default;" onclick="event.preventDefault()">${data.username}</span>
+                    <span style="cursor: default;">${data.username}</span>
                     <ul class="user-options">
-                        <li><a href="profile.php">Profile</a></li>
-                        <li><a href="orders.php">orders</a></li>
-                        <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
+                        <li><a href="profile.php" onclick="event.preventDefault(); window.location.href='profile.php'">Profile</a></li>
+                        <li><a href="orders.php" onclick="event.preventDefault(); window.location.href='orders.php'">Orders</a></li>
+                        <li><button onclick="event.preventDefault(); logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
                     </ul>
                 </div>
             `;
       addDropdownStyles();
-
-      // Cập nhật offcanvas menu
-      const offcanvasLinks = document.getElementById("offcanvasLinks");
-      if (offcanvasLinks) {
-        offcanvasLinks.innerHTML = `
-                    <a href="profile.php">Profile</a>
-                    <a href="logout.php">Logout</a>
-                    <a href="contact.php">SUPPORT</a>
-                `;
-      }
     } else if (loginButton) {
+      // Không tự động redirect về login nếu chưa đăng nhập
       loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
-
-      // Reset offcanvas menu
-      const offcanvasLinks = document.getElementById("offcanvasLinks");
-      if (offcanvasLinks) {
-        offcanvasLinks.innerHTML = `
-                    <a href="login.php">Sign in</a>
-                    <a href="contact.php">SUPPORT</a>
-                `;
-      }
     }
   } catch (error) {
     console.error("Error checking login status:", error);
+    // Không redirect khi có lỗi
   }
 }
 
@@ -260,4 +243,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+});
+
+// Thêm vào cuối file
+document.addEventListener('DOMContentLoaded', function() {
+    // Ngăn chặn hành vi mặc định của dropdown menu
+    document.addEventListener('click', function(e) {
+        if(e.target.closest('.user-menu')) {
+            e.preventDefault();
+            const dropdownMenu = e.target.closest('.user-menu').querySelector('.user-options');
+            if(dropdownMenu) {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+    });
 });

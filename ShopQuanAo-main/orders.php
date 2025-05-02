@@ -427,7 +427,7 @@ $styles = "
             </div>lass="row">
             <div class="row">ol-lg-12 text-center">
                 <div class="col-lg-12 text-center">text">
-                    <div class="footer__copyright__text">be removed. Template is licensed under CC BY 3.0. -->
+                    <div class="footer__copyright__text">
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         <p> Copyright ©
                             Copyright ©
@@ -437,13 +437,14 @@ $styles = "
                             2020 All rights reserved | This template is made with
                             <i class="fa fa-heart-o" aria-hidden="true"></i> byrlib</a>
                             <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p> Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p> 
+                  
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                 </div>
             </div>
         </div>
-    </footer>er Section End -->
+    </footer>
     <!-- Footer Section End -->
     <!-- Search Begin -->
     <!-- Search Begin -->del">
@@ -454,7 +455,7 @@ $styles = "
                 <input type="text" id="search-input" placeholder="Search here....." />
             </form>
         </div>
-    </div>earch End -->
+    </div>
     <!-- Search End -->
     <!-- Js Plugins -->
     <!-- Js Plugins -->ery-3.3.1.min.js"></script>
@@ -470,5 +471,10 @@ $styles = "
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
+    // Thêm vào cuối file
+<script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
+
 </html></html>

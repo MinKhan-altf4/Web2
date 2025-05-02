@@ -442,6 +442,8 @@ document.addEventListener('DOMContentLoaded', function() {
     filterByCategory('all');
 });
 </script>
-
+<script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
 </html>
