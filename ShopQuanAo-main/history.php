@@ -1,6 +1,9 @@
 <?php
 // Nếu sau này cần xử lý PHP, thêm ở đây
 ?>
+
+<!-- history.php -->
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -25,7 +28,78 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css" />
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/login.css" type="text/css" />
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .order-details {
+        margin-top: 30px;
+    }
+
+    .order-details h3 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .order-details p {
+        margin: 5px 0;
+    }
+
+    .back-button {
+        display: block;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: black;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .back-button:hover {
+        background-color: gray;
+    }
+    </style>
 </head>
+<title>Lịch Sử Mua Hàng</title>
 
 <body>
     <!-- Page Preloder -->
@@ -38,7 +112,7 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvaslinks">
-                <a href="login.php">Sign in</a>
+                <a href="#">Sign in</a>
                 <a href="contact.php">SUPPORT</a>
             </div>
             <div class="offcanvas__top__hover">
@@ -51,7 +125,6 @@
             </div>
         </div>
         <div class="offcanvas__nav__option">
-
             <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
@@ -111,14 +184,13 @@
                                     <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li class="active"><a href="./blog.php">Blog</a></li>
+                            <li class="actives"><a href="./blog.php">Blog</a></li>
                             <li><a href="./contact.php">Contacts</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-
                         <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
                     </div>
                 </div>
@@ -128,125 +200,45 @@
     </header>
     <!-- Header Section End -->
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-blog set-bg" data-setbg="img/breadcrumb-bg.jpg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Our Blog</h2>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    <!-- your cart -->
+    <div class="container">
+        <h1>Lịch Sử Mua Hàng</h1>
 
-    <!-- Blog Section Begin -->
-    <section class="blog spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-1.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 16 February
-                                2020</span>
-                            <h5>What Curling Irons Are The Best Ones</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-2.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 21 February
-                                2020</span>
-                            <h5>Eternity Bands Do Last Forever</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-3.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 28 February
-                                2020</span>
-                            <h5>The Health Benefits Of Sunglasses</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-4.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 16 February
-                                2020</span>
-                            <h5>Aiming For Higher The Mastopexy</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-5.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 21 February
-                                2020</span>
-                            <h5>Wedding Rings A Gift For A Lifetime</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-6.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 28 February
-                                2020</span>
-                            <h5>The Different Methods Of Hair Removal</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-7.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 16 February
-                                2020</span>
-                            <h5>Hoop Earrings A Style From History</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-8.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 21 February
-                                2020</span>
-                            <h5>Lasik Eye Surgery Are You Ready</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-9.jpg"></div>
-                        <div class="blog__item__text">
-                            <span><img src="img/icon/calendar.png" alt="" /> 28 February
-                                2020</span>
-                            <h5>Lasik Eye Surgery Are You Ready</h5>
-                            <a href="#">Read More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Bảng hiển thị sản phẩm trong giỏ hàng -->
+        <table id="cart-table">
+            <thead>
+                <tr>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng</th>
+                    <th>Giá Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sản phẩm sẽ được thêm vào đây thông qua JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Thông tin giao hàng -->
+        <div class="order-details">
+            <h3>Thông Tin Giao Hàng</h3>
+            <p><strong>Người nhận:</strong> <span id="recipient"></span></p>
+            <p><strong>Số điện thoại:</strong> <span id="phone"></span></p>
+            <p><strong>Địa chỉ:</strong> <span id="address"></span></p>
+            <p><strong>Tổng giá trị đơn hàng:</strong><span id="total"> </span></p>
+            <p>
+                <strong>Phương thức thanh toán:</strong>
+                <span id="payment-method"></span>
+            </p>
         </div>
-    </section>
-    <!-- Blog Section End -->
+
+        <a href="shop.php" class="back-button">Tiếp tục mua hàng</a>
+    </div>
+
+    <!-- Footer -->
+
+    <!-- About Section Begin -->
+
+    <!-- Client Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -348,6 +340,7 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 
 </html>

@@ -1,143 +1,131 @@
 // Hàm đăng ký người dùng
 function registerUser() {
-  const formData = new FormData();
-  formData.append(
-    "username",
-    document.getElementById("registerUsername").value
-  );
-  formData.append("email", document.getElementById("registerEmail").value);
-  formData.append(
-    "password",
-    document.getElementById("registerPassword").value
-  );
-  formData.append(
-    "fullname",
-    document.getElementById("registerFullname").value
-  );
-  formData.append("phone", document.getElementById("registerPhone").value);
-  formData.append("address", document.getElementById("registerAddress").value);
-  formData.append(
-    "gender",
-    document.querySelector('input[name="gender"]:checked').value
-  );
+    const formData = new FormData();
+    formData.append('username', document.getElementById('registerUsername').value);
+    formData.append('email', document.getElementById('registerEmail').value);
+    formData.append('password', document.getElementById('registerPassword').value);
+    formData.append('fullname', document.getElementById('registerFullname').value);
+    formData.append('phone', document.getElementById('registerPhone').value);
+    formData.append('address', document.getElementById('registerAddress').value);
+    formData.append('gender', document.querySelector('input[name="gender"]:checked').value);
 
-  fetch("php/register_process.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "success") {
-        alert(data.message);
-        window.location.href = "login.php";
-      } else {
-        alert(data.message);
-      }
+    fetch('php/register_process.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = 'login.php';
+        } else {
+            alert(data.message);
+        }
     });
 }
 
 // Xử lý đăng nhập
 function loginUser() {
-  const formData = new FormData();
-  formData.append("username", document.getElementById("loginUsername").value);
-  formData.append("password", document.getElementById("password").value);
-  formData.append("remember", document.getElementById("remember-me").checked);
+    const formData = new FormData();
+    formData.append('username', document.getElementById('loginUsername').value);
+    formData.append('password', document.getElementById('password').value);
+    formData.append('remember', document.getElementById('remember-me').checked);
 
-  fetch("php/login_process.php", {
-    method: "POST",
-    body: formData,
-    credentials: "include", // Use 'include' to ensure cookies work across domains if needed
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "success") {
-        // Store minimal user info for UI purposes
-        sessionStorage.setItem("currentUser", data.username);
-        sessionStorage.setItem("userRole", data.role);
-
-        // Redirect based on role
-        if (data.role === "admin") {
-          window.location.href = "Admin/php/dashboard.php";
-        } else {
-          window.location.href = "index.php";
-        }
-      } else {
-        alert(data.message);
-      }
+    fetch('php/login_process.php', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include' // Use 'include' to ensure cookies work across domains if needed
     })
-    .catch((error) => {
-      console.error("Login error:", error);
-      alert("Đăng nhập thất bại. Vui lòng thử lại.");
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            // Store minimal user info for UI purposes
+            sessionStorage.setItem('currentUser', data.username);
+            sessionStorage.setItem('userRole', data.role);
+            
+            // Redirect based on role
+            if(data.role === 'admin') {
+                window.location.href = 'Admin/php/dashboard.php';
+            } else {
+                window.location.href = 'index.php';
+            }
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Login error:', error);
+        alert('Đăng nhập thất bại. Vui lòng thử lại.');
     });
 }
 
 // Kiểm tra đăng nhập không đồng bộ
 async function isUserLoggedIn() {
   try {
-    const response = await fetch("php/check_login.php", {
-      credentials: "include", // Gửi cookies session
+    const response = await fetch('php/check_login.php', {
+      credentials: 'include'  // Gửi cookies session
     });
     const data = await response.json();
     return data.isLoggedIn;
   } catch (error) {
-    console.error("Error checking login status:", error);
+    console.error('Error checking login status:', error);
     return false;
   }
 }
 
 // Cập nhật trạng thái giao diện người dùng
 async function checkLoginStatus() {
-  try {
-    const response = await fetch("php/check_login.php", {
-      credentials: "include", // Quan trọng để gửi cookie session
-    });
-    const data = await response.json();
-    const loginButton = document.querySelector("#userMenu");
+    try {
+        const response = await fetch('php/check_login.php', {
+            credentials: 'include'  // Quan trọng để gửi cookie session
+        });
+        const data = await response.json();
+        const loginButton = document.querySelector("#userMenu");
 
-    if (data.isLoggedIn && data.username && loginButton) {
-      // Cập nhật UI cho người dùng đã đăng nhập
-      loginButton.innerHTML = `
+        if (data.isLoggedIn && data.username && loginButton) {
+            // Cập nhật UI cho người dùng đã đăng nhập
+            loginButton.innerHTML = `
                 <div class="user-menu">
                     <span style="cursor: default;" onclick="event.preventDefault()">${data.username}</span>
                     <ul class="user-options">
                         <li><a href="profile.php">Profile</a></li>
-                        <li><a href="orders.php">orders</a></li>
+                        <li><a href="history.php">History</a></li>
                         <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
                     </ul>
                 </div>
             `;
-      addDropdownStyles();
+            addDropdownStyles();
 
-      // Cập nhật offcanvas menu
-      const offcanvasLinks = document.getElementById("offcanvasLinks");
-      if (offcanvasLinks) {
-        offcanvasLinks.innerHTML = `
+            // Cập nhật offcanvas menu
+            const offcanvasLinks = document.getElementById("offcanvasLinks");
+            if (offcanvasLinks) {
+                offcanvasLinks.innerHTML = `
                     <a href="profile.php">Profile</a>
                     <a href="logout.php">Logout</a>
                     <a href="contact.php">SUPPORT</a>
                 `;
-      }
-    } else if (loginButton) {
-      loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
-
-      // Reset offcanvas menu
-      const offcanvasLinks = document.getElementById("offcanvasLinks");
-      if (offcanvasLinks) {
-        offcanvasLinks.innerHTML = `
+            }
+        } else if (loginButton) {
+            loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
+            
+            // Reset offcanvas menu
+            const offcanvasLinks = document.getElementById("offcanvasLinks");
+            if (offcanvasLinks) {
+                offcanvasLinks.innerHTML = `
                     <a href="login.php">Sign in</a>
                     <a href="contact.php">SUPPORT</a>
                 `;
-      }
+            }
+        }
+    } catch (error) {
+        console.error('Error checking login status:', error);
     }
-  } catch (error) {
-    console.error("Error checking login status:", error);
-  }
 }
 
 // Thêm style cho dropdown
 function addDropdownStyles() {
-  const style = document.createElement("style");
-  style.textContent = `
+    const style = document.createElement("style");
+    style.textContent = `
         .user-menu {
             position: relative;
             display: inline-block;
@@ -177,87 +165,127 @@ function addDropdownStyles() {
             display: block;
         }
     `;
-  document.head.appendChild(style);
+    document.head.appendChild(style);
 }
 
 // Đăng xuất
 function logout() {
-  if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
-    fetch("php/logout.php", {
-      method: "POST", // Use POST for logout
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          // Clear session storage
-          sessionStorage.clear();
-          alert("Đã đăng xuất thành công!");
-          window.location.href = "login.php";
-        } else {
-          throw new Error(data.message || "Logout failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-        alert("Đăng xuất thất bại. Vui lòng thử lại.");
-      });
-  }
+    if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+        fetch('php/logout.php', {
+            method: 'POST', // Use POST for logout
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Clear session storage
+                sessionStorage.clear();
+                alert("Đã đăng xuất thành công!");
+                window.location.href = "login.php";
+            } else {
+                throw new Error(data.message || 'Logout failed');
+            }
+        })
+        .catch(error => {
+            console.error('Logout error:', error);
+            alert('Đăng xuất thất bại. Vui lòng thử lại.');
+        });
+    }
 }
 
-// Cập nhật offcanvas menu
-const offcanvasLinks = document.getElementById("offcanvasLinks");
-const loggedInUser = localStorage.getItem("loggedInUser");
+// Hiển thị đơn hàng gần nhất
+document.addEventListener("DOMContentLoaded", function () {
+    checkLoginStatus();
 
-if (offcanvasLinks) {
-  if (loggedInUser) {
-    offcanvasLinks.innerHTML = `
+    const orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    const cartTableBody = document.querySelector("#cart-table tbody");
+
+    if (cartTableBody) {
+        if (orderHistory.length === 0) {
+            cartTableBody.innerHTML = `<tr><td colspan="4" class="text-center">Không có đơn hàng nào.</td></tr>`;
+        } else {
+            const latestOrder = orderHistory[orderHistory.length - 1];
+            const { recipient, phone, address, paymentMethod, totalPrice, items } = latestOrder;
+
+            document.getElementById("recipient").textContent = recipient;
+            document.getElementById("phone").textContent = phone;
+            document.getElementById("address").textContent = address;
+            document.getElementById("payment-method").textContent = paymentMethod;
+            document.getElementById("total").textContent = `$${totalPrice.toFixed(2)}`;
+
+            cartTableBody.innerHTML = items.map(item => `
+                <tr>
+                    <td class="product__cart__item">
+                        <div class="product__cart__item__pic">
+                            <img src="${item.image}" alt="${item.name}" />
+                        </div>
+                        <div class="product__cart__item__text">
+                            <h6>${item.name}</h6>
+                        </div>
+                    </td>
+                    <td class="quantity__item">
+                        <div class="quantity">
+                            <span>${item.quantity}</span>
+                        </div>
+                    </td>
+                    <td class="cart__price">$${(item.price * item.quantity).toFixed(2)}</td>
+                </tr>`).join("");
+        }
+    }
+
+    // Cập nhật offcanvas menu
+    const offcanvasLinks = document.getElementById("offcanvasLinks");
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (offcanvasLinks) {
+        if (loggedInUser) {
+            offcanvasLinks.innerHTML = `
                 <a href="profile.php">Profile</a>
                 <a href="logout.php">Logout</a>
-                <a href="contact.php">SUPPORT</a>
+                <a href="contact.php">SPT</a>
             `;
-  } else {
-    offcanvasLinks.innerHTML = `
+        } else {
+            offcanvasLinks.innerHTML = `
                 <a href="login.php">Sign in</a>
-                <a href="contact.php">SUPPORT</a>
+                <a href="contact.php">SPT</a>
             `;
-  }
-}
+        }
+    }
+});
 
 // Add auto-hide for success messages
-document.addEventListener("DOMContentLoaded", function () {
-  const messages = document.querySelectorAll(".message");
-  messages.forEach(function (message) {
-    if (message.classList.contains("success-message")) {
-      setTimeout(function () {
-        message.style.opacity = "0";
-        setTimeout(function () {
-          message.style.display = "none";
-        }, 500);
-      }, 5000);
-    }
-  });
+document.addEventListener('DOMContentLoaded', function() {
+    const messages = document.querySelectorAll('.message');
+    messages.forEach(function(message) {
+        if (message.classList.contains('success-message')) {
+            setTimeout(function() {
+                message.style.opacity = '0';
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 500);
+            }, 5000);
+        }
+    });
 });
 // Hiển thị hoặc ẩn các trường thanh toán dựa trên phương thức được chọn
 document.addEventListener("DOMContentLoaded", function () {
-  const paymentMethodInputs = document.querySelectorAll(
-    'input[name="payment-method"]'
-  );
-  const bankTransferForm = document.querySelector(".bank-transfer-form");
-  const cardPaymentForm = document.querySelector(".card-payment-form");
+    const paymentMethodInputs = document.querySelectorAll('input[name="payment-method"]');
+    const bankTransferForm = document.querySelector(".bank-transfer-form");
+    const cardPaymentForm = document.querySelector(".card-payment-form");
 
-  paymentMethodInputs.forEach((input) => {
-    input.addEventListener("change", function () {
-      if (this.value === "transfer") {
-        bankTransferForm.style.display = "block";
-        cardPaymentForm.style.display = "none";
-      } else if (this.value === "card") {
-        bankTransferForm.style.display = "none";
-        cardPaymentForm.style.display = "block";
-      } else {
-        bankTransferForm.style.display = "none";
-        cardPaymentForm.style.display = "none";
-      }
+    paymentMethodInputs.forEach(input => {
+        input.addEventListener("change", function () {
+            if (this.value === "transfer") {
+                bankTransferForm.style.display = "block";
+                cardPaymentForm.style.display = "none";
+            } else if (this.value === "card") {
+                bankTransferForm.style.display = "none";
+                cardPaymentForm.style.display = "block";
+            } else {
+                bankTransferForm.style.display = "none";
+                cardPaymentForm.style.display = "none";
+            }
+        });
     });
-  });
 });
+
