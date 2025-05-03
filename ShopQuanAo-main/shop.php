@@ -493,7 +493,7 @@ function displayProducts(products, page = 1) {
                     <div class="product__item__text">
                         <h6>${product.name}</h6>
                         <a href="#" class="add-cart" data-id="${product.id}">+ Add To Cart</a>
-                        <h5>$${product.price}</h5>
+                        <h5>${product.price}</h5>
                     </div>
                 </div>
             </div>`;
