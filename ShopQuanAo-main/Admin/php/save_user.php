@@ -14,21 +14,25 @@ if(isset($_POST['save'])) {
     
     // Nếu là thêm mới
     if(!isset($_POST['id'])) {
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $sql = "INSERT INTO user (username, fullname, phone, address, gender, email, password, role, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $password = $_POST['password'];
+        $original_password = $password; // Lưu mật khẩu gốc
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO user (username, fullname, phone, address, gender, email, password, original_password, role, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssssss", $username, $fullname, $phone, $address, $gender, $email, $password, $role, $status);
+        $stmt->bind_param("ssssssssss", $username, $fullname, $phone, $address, $gender, $email, $hashed_password, $original_password, $role, $status);
     }
     // Nếu là cập nhật
     else {
         $id = $_POST['id'];
         if(!empty($_POST['password'])) {
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, gender=?, email=?, password=?, role=?, status=? 
+            $password = $_POST['password'];
+            $original_password = $password; // Lưu mật khẩu gốc
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, gender=?, email=?, password=?, original_password=?, role=?, status=? 
                     WHERE id=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssssssssi", $username, $fullname, $phone, $address, $gender, $email, $password, $role, $status, $id);
+            $stmt->bind_param("ssssssssssi", $username, $fullname, $phone, $address, $gender, $email, $hashed_password, $original_password, $role, $status, $id);
         } else {
             $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, gender=?, email=?, role=?, status=? 
                     WHERE id=?";

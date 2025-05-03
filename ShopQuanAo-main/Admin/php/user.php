@@ -202,6 +202,10 @@ if(isset($_GET['edit'])) {
                         <td><?php echo $row['role']; ?></td>
                         <td><?php echo $row['status'] == 1 ? 'Active' : 'Locked'; ?></td>
                         <td class="action-buttons">
+                            <a href="#" class="btn btn-view" onclick="viewUser(<?php echo $row['id']; ?>)">
+                                <i class='bx bx-show'></i>
+                                View
+                            </a>
                             <a href="user.php?edit=<?php echo $row['id']; ?>" class="btn btn-edit">
                                 <i class='bx bx-edit-alt'></i>
                                 Edit
@@ -219,6 +223,17 @@ if(isset($_GET['edit'])) {
             </table>
         </div>
     </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>User Information</h2>
+            <div id="userInfo">
+                <!-- User info will be loaded here -->
+            </div>
+        </div>
+    </div>
+
     <script>
     function checkUsername(input) {
         const messageElement = document.getElementById('username-message');
@@ -229,6 +244,38 @@ if(isset($_GET['edit'])) {
             messageElement.textContent = 'Username đã đạt độ dài tối đa!';
         } else {
             messageElement.textContent = '';
+        }
+    }
+
+    const modal = document.getElementById("userModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    function viewUser(userId) {
+        fetch(`get_user_info.php?id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("userInfo").innerHTML = `
+                    <p><strong>Username:</strong> ${data.username}</p>
+                    <p><strong>Full Name:</strong> ${data.fullname}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Phone:</strong> ${data.phone}</p>
+                    <p><strong>Address:</strong> ${data.address}</p>
+                    <p><strong>Gender:</strong> ${data.gender}</p>
+                    <p><strong>Role:</strong> ${data.role}</p>
+                    <p><strong>Status:</strong> ${data.status == 1 ? 'Active' : 'Locked'}</p>
+                    <p><strong>Password:</strong> ${data.original_password}</p>
+                `;
+                modal.style.display = "block";
+            });
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
     }
     </script>

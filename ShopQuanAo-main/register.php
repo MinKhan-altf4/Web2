@@ -68,17 +68,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Debug: Print SQL query
                 // error_log("INSERT INTO user (username, email, password, fullname, phone, address, gender, role, status) VALUES ('$username', '$email', '[HASHED]', '$fullname', '$phone', '$address', '$gender', 'customer', '1')");
                 
-                $sql = "INSERT INTO user (username, email, password, fullname, phone, address, gender, role, status) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, 'customer', '1')";
+                $sql = "INSERT INTO user (username, email,password,original_password, fullname, phone, address, gender, role, status) 
+                        VALUES (?, ?,? ,?, ?, ?, ?, ?, 'customer', '1')";
                 $stmt = $conn->prepare($sql);
                 
                 if($stmt === false) {
                     $error = "Lỗi prepare statement insert: " . $conn->error;
                 } else {
-                    $stmt->bind_param("sssssss", 
+                    $stmt->bind_param("ssssssss", 
                         $username, 
                         $email, 
                         $hashed_password, 
+                        $password, // Lưu mật khẩu gốc
                         $fullname, 
                         $phone, 
                         $address, 
