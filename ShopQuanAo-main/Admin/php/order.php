@@ -145,7 +145,7 @@ $additional_styles = "
     .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1000;
         left: 0;
         top: 0;
         width: 100%;
@@ -160,6 +160,7 @@ $additional_styles = "
         border: 1px solid #888;
         width: 50%;
         border-radius: 5px;
+        position: relative;
     }
     
     .status {
@@ -236,43 +237,14 @@ $additional_styles = "
         font-weight: bold;
         cursor: pointer;
     }
-    
-    .edit-btn {
-        background-color: #3498db;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 3px;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .edit-btn:hover {
-        background-color: #2980b9;
-    }
-    
-    .delete-btn {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        margin-left: 5px;
-    }
-    
-    .delete-btn:hover {
-        background-color: #c0392b;
-    }
-    
-    .action-buttons {
-        white-space: nowrap;
-    }
 </style>
 ";
 ?>
-<html !DOCTYPE>
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="UTF-8">
+  <title>Order Management</title>
   <link rel="stylesheet" href="../css/order.css">
   <link rel="stylesheet" href="../css/grid.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -281,40 +253,45 @@ $additional_styles = "
 <body>
   <div class="sidebar">
     <div class="logo"></div>
-    
-      <ul class="menu">
-        <li class="active">
-         <a href="dashboard.php" >
-          <i class='bx bx-grid-alt'></i>
-            <span>Dashboard</span>
-         </a>
+    <ul class="menu">
+        <li>
+            <a href="dashboard.php">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard</span>
+            </a>
         </li>
         <li>
-         <a href="user.php">
-          <i class='bx bx-user'></i>
-            <span>User</span>
-        </a>
-      </li>
-        <li><a href="addproduct.php">
-          <i class='bx bx-box'></i>
-        <span>Product</span>
-        </a></li>
-        <li><a href="analytics.php">
-        <i class='bx bx-pie-chart-alt'></i>
-        <span>Analytics</span>
-        </a></li>
-        <li><a href="order.php">
-        <i class='bx bx-cart' ></i>
-        <span>Order</span>
-        </a></li>
-       
-        <li class="logout"><a href="logout.php">
-          <i class='bx bx-log-out' id="log_out"></i>
-          <span>Logout</span>
-          </a></li>
-      </ul>
-            
-  </div>
+            <a href="user.php">
+                <i class='bx bx-user'></i>
+                <span>User</span>
+            </a>
+        </li>
+        <li>
+            <a href="addproduct.php">
+                <i class='bx bx-box'></i>
+                <span>Product</span>
+            </a>
+        </li>
+        <li>
+            <a href="analytics.php">
+                <i class='bx bx-pie-chart-alt'></i>
+                <span>Analytics</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="order.php">
+                <i class='bx bx-cart'></i>
+                <span>Order</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="logout.php">
+                <i class='bx bx-log-out'></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</div>
   <div class="main_content">
     <div class="header_wrapper">
       <h2 class="header_title">Order Management</h2>
@@ -408,14 +385,14 @@ $additional_styles = "
                 </span>
               </td>
               <td class="action-buttons">
-                <a href="order.php?edit=<?php echo $row['order_id']; ?>" class="edit-btn">
+                <a href="order.php?edit=<?php echo $row['order_id']; ?>" class="btn btn-edit">
                     <i class='bx bx-edit-alt'></i>
                     Edit
                 </a>
-                <button type="button" class="delete-btn" onclick="confirmDelete(<?php echo $row['order_id']; ?>)">
+                <a href="#" onclick="confirmDelete(<?php echo $row['order_id']; ?>)" class="btn btn-delete">
                     <i class='bx bx-trash'></i>
                     Delete
-                </button>
+                </a>
               </td>
             </tr>
           <?php endwhile; ?>
@@ -523,3 +500,4 @@ $additional_styles = "
     }
 </script>
 </body>
+</html>

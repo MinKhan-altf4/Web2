@@ -164,6 +164,35 @@ while ($item = $items_result->fetch_assoc()) {
                 height: 100px;       /* Increased from 60px */
             }
         }
+
+        .customer-info h4,
+        .order-info h4 {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;  /* Increased spacing below headers */
+            color: #333;
+            border-bottom: 2px solid #f5f5f5;
+            padding-bottom: 0.8rem;
+        }
+
+        .invoice-number {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .customer-info p,
+        .order-info p {
+            margin-bottom: 0.8rem;  /* Spacing between info lines */
+            line-height: 1.6;
+        }
+
+        .customer-info strong,
+        .order-info strong {
+            font-weight: 600;
+            color: #444;
+        }
     </style>
 </head>
 
@@ -373,3 +402,4 @@ while ($item = $items_result->fetch_assoc()) {
 });  </script>
 </body>
 </html>
+``` 
