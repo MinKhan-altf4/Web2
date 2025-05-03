@@ -261,7 +261,7 @@ async function updateCartUI() {
     if (cart.length === 0) {
       cartTableBody.innerHTML = `
         <tr>
-          <td colspan="4" class="text-center">Giỏ hàng trống</td>
+          <td colspan="4" class="text-center">The cart is empty.</td>
         </tr>`;
       if (cartTotal) cartTotal.textContent = "$0.00";
       if (cartSubtotal) cartSubtotal.textContent = "$0.00";

@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="offcanvas__nav__option">
 
 
-            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -225,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
 
-                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
                     </div>
                 </div>
             </div>

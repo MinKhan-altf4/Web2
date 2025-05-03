@@ -54,7 +54,7 @@
         </div>
         <div class="offcanvas__nav__option">
             <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchProducts()" />
-            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span class="cart-count">0</span></a>
+            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-7">
                         <div class="header__top__left">
-                            <p>Free shipping, 30-day return or refunad guarantee.</p>
+                            <p>Free shipping, 30-day return or refund guarantee.</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-5">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
                     </div>
                 </div>
             </div>

@@ -284,7 +284,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="img/icon/search.png" alt="" /></a>
 
-            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span>0</span></a>
+            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
             <div class="price">$0.00</div>
         </div>
         <div id="mobile-menu-wrap"></div>
@@ -353,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
 
-                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> <span><?php echo count($cart_items); ?></span></a>
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
 
                     </div>
                 </div>
