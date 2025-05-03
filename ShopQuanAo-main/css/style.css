@@ -588,7 +588,7 @@ ol {
   padding-top: 230px;
 }
 
-.hero__text h6 {
+hero__text h6 {
   color: #e53637;
   font-size: 14px;
   font-weight: 700;
@@ -3999,6 +3999,14 @@ ol {
 }
 
 .shop__sidebar__categories a:hover {
+  color: #e53637;
+}
+
+.shop__sidebar__price ul li a.active {
+  color: #e53637;
+}
+
+.shop__sidebar__categories ul li a.active {
   color: #e53637;
 }
 
