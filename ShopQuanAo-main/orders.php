@@ -258,18 +258,18 @@ $styles = "
         <div class="row">
             <div class="col-lg-12">
                 <div class="order__table">
-                    <h4>Danh sách đơn hàng của bạn</h4>
+                    <h4>List of your orders</h4>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Mã đơn hàng</th>
-                                <th>Ngày đặt hàng</th>
-                                <th>Số hóa đơn</th>
-                                <th>Trạng thái đơn hàng</th>
-                                <th>Trạng thái thanh toán</th>
-                                <th>Phương thức thanh toán</th>
-                                <th>Tổng tiền</th>
-                                <th>Hóa đơn</th>  <!-- Changed from "Thao tác" -->
+                                <th>Order ID</th>
+                                <th>Order Date</th>
+                                <th>Invoice No.</th>
+                                <th>Order Status</th>
+                                <th>Payment Status</th>
+                                <th>Payment Method</th>
+                                <th>Total Amount</th>
+                                <th>Invoice</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -285,22 +285,22 @@ $styles = "
                                     <?php
                                     switch(strtolower($row['order_status'])) {
                                         case 'pending':
-                                            echo '<span class="order-status status-pending">Đang xử lý</span>';
+                                            echo '<span class="order-status status-pending">Pending</span>';
                                             break;
                                         case 'processing':
-                                            echo '<span class="order-status status-processing">Đang chuẩn bị</span>';
+                                            echo '<span class="order-status status-processing">Processing</span>';
                                             break;
                                         case 'shipped':
-                                            echo '<span class="order-status status-shipped">Đang giao hàng</span>';
+                                            echo '<span class="order-status status-shipped">Shipped</span>';
                                             break;
                                         case 'confirmed':
-                                            echo '<span class="order-status status-confirmed">Đã xác nhận</span>';
+                                            echo '<span class="order-status status-confirmed">Confirmed</span>';
                                             break;
                                         case 'delivered':
-                                            echo '<span class="order-status status-delivered">Đã giao hàng</span>';
+                                            echo '<span class="order-status status-delivered">Delivered</span>';
                                             break;
                                         case 'cancelled':
-                                            echo '<span class="order-status status-cancelled">Đã hủy</span>';
+                                            echo '<span class="order-status status-cancelled">Cancelled</span>';
                                             break;
                                         default:
                                             echo '<span class="order-status status-' . strtolower($row['order_status']) . '">' 
@@ -313,26 +313,23 @@ $styles = "
                                     $payment_method = strtolower($row['payment_method']);
                                     $payment_status = $row['payment_status'];
 
-                                    // Standardize payment status display
                                     if ($payment_method == 'card' || $payment_method == 'transfer') {
-                                        // Auto set to paid for card/transfer payments
                                         $update_sql = "UPDATE invoices SET payment_status = 'Paid' WHERE order_id = ?";
                                         $stmt = $conn->prepare($update_sql);
                                         $stmt->bind_param("i", $row['order_id']);
                                         $stmt->execute();
-                                        echo '<span class="badge badge-success">Đã thanh toán</span>';
+                                        echo '<span class="badge badge-success">Paid</span>';
                                     } else {
-                                        // For other payment methods
                                         switch($payment_status) {
                                             case 'Paid':
-                                                echo '<span class="badge badge-success">Đã thanh toán</span>';
+                                                echo '<span class="badge badge-success">Paid</span>';
                                                 break;
                                             case 'Processing':
-                                                echo '<span class="badge badge-warning">Đang xử lý</span>';
+                                                echo '<span class="badge badge-warning">Processing</span>';
                                                 break;
                                             case 'Unpaid':
                                             default:
-                                                echo '<span class="badge badge-danger">Chưa thanh toán</span>';
+                                                echo '<span class="badge badge-danger">Unpaid</span>';
                                                 break;
                                         }
                                     }
@@ -342,16 +339,16 @@ $styles = "
                                 <td>$<?php echo number_format($row['total_amount'], 2); ?></td>
                                 <td>
                                     <?php if ($row['invoice_id']): ?>
-                                        <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>" class="btn btn-sm btn-info">Xem hóa đơn</a>
+                                        <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>" class="btn btn-sm btn-info">View Invoice</a>
                                     <?php else: ?>
-                                        <span class="text-muted">Chưa có</span>
+                                        <span class="text-muted">Not Available</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
                             <?php
                                 }
                             } else {
-                                echo '<tr><td colspan="8" class="text-center">Bạn chưa có đơn hàng nào.</td></tr>';
+                                echo '<tr><td colspan="8" class="text-center">You have no orders yet.</td></tr>';
                             }
                             ?>
                         </tbody>
@@ -360,85 +357,76 @@ $styles = "
             </div>
         </div>
     </div>
-    </div>
-    <!-- Footer -->
-    <!-- Footer -->
-    <!-- About Section Begin -->
-    <!-- About Section Begin -->
-    <!-- Client Section End -->
-    <!-- Client Section End -->
+    
     <!-- Footer Section Begin -->
-    <!-- Footer Section Begin -->
-    <footer class="footer">er">
+    <footer class="footer">
         <div class="container">
-            <div class="row">ol-lg-3 col-md-6 col-sm-6">
+            <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">o">
-                        <div class="footer__logo">img/footer-logo.png" alt="" /></a>
+                    <div class="footer__about">
+                        <div class="footer__logo">
                             <a href="#"><img src="img/footer-logo.png" alt="" /></a>
                         </div>
-                        <p> The customer is at the heart of our unique business model, which
+                        <p>
                             The customer is at the heart of our unique business model, which
                             includes design.
-                        </p>ref="#"><img src="img/payment.png" alt="" /></a>
+                        </p>
                         <a href="#"><img src="img/payment.png" alt="" /></a>
                     </div>
-                </div>lass="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                </div>
                 <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
                     <div class="footer__widget">
                         <h6>Shopping</h6>
-                        <ul><li><a href="#">Clothing Store</a></li>
+                        <ul>
                             <li><a href="#">Clothing Store</a></li>
                             <li><a href="#">Trending Shoes</a></li>
                             <li><a href="#">Accessories</a></li>
                             <li><a href="#">Sale</a></li>
                         </ul>
                     </div>
-                </div>lass="col-lg-2 col-md-3 col-sm-6">
+                </div>
                 <div class="col-lg-2 col-md-3 col-sm-6">
                     <div class="footer__widget">
                         <h6>Shopping</h6>
-                        <ul><li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Contact Us</a></li></li>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
                             <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>s</a></li>
+                            <li><a href="#">Delivary</a></li>
                             <li><a href="#">Return & Exchanges</a></li>
                         </ul>
                     </div>
-                </div>lass="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                </div>
                 <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
                     <div class="footer__widget">
-                        <h6>NewLetter</h6>__newslatter">
+                        <h6>NewLetter</h6>
                         <div class="footer__newslatter">
-                            <p> Be the first to know about new arrivals, look books, sales &
+                            <p>
                                 Be the first to know about new arrivals, look books, sales &
                                 promos!
-                            </p>m action="#">
+                            </p>
                             <form action="#">
                                 <input type="text" placeholder="Your email" />
-                                <input type="text" placeholder="Your email" />
-                                <button type="submit">mail_alt"></span>
+                                <button type="submit">
                                     <span class="icon_mail_alt"></span>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>lass="row">
-            <div class="row">ol-lg-12 text-center">
-                <div class="col-lg-12 text-center">text">
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
                     <div class="footer__copyright__text">
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p> Copyright ©
+                        <p>
                             Copyright ©
-                            <script>.write(new Date().getFullYear());
+                            <script>
                             document.write(new Date().getFullYear());
-                            </script>rights reserved | This template is made with
+                            </script>
                             2020 All rights reserved | This template is made with
-                            <i class="fa fa-heart-o" aria-hidden="true"></i> byrlib</a>
+                            <i class="fa fa-heart-o" aria-hidden="true"></i> by
                             <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p> 
-                  
+                        </p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                 </div>
@@ -446,35 +434,30 @@ $styles = "
         </div>
     </footer>
     <!-- Footer Section End -->
+
     <!-- Search Begin -->
-    <!-- Search Begin -->del">
-    <div class="search-model">ex align-items-center justify-content-center">
+    <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
-            <form class="search-model-form">h-input" placeholder="Search here....." />
+            <form class="search-model-form">
                 <input type="text" id="search-input" placeholder="Search here....." />
             </form>
         </div>
     </div>
     <!-- Search End -->
+    
     <!-- Js Plugins -->
-    <!-- Js Plugins -->ery-3.3.1.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery.nicescroll.min.js"></script>ipt>
+    <script src="js/jquery.nicescroll.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/jquery.countdown.min.js"></script>
     <script src="js/jquery.slicknav.js"></script>
-    <script src="js/mixitup.min.js"></script>ript>
+    <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    // Thêm vào cuối file
-<script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
 </body>
-
-</html></html>
+</html>
