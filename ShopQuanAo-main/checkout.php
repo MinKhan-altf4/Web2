@@ -170,12 +170,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows == 0) {
             // Chỉ tạo hóa đơn nếu chưa tồn tại
-            $payment_status = 'pending'; // Default status
-            if ($payment_method === 'cash') {
-                $payment_status = 'pending';
-            } elseif ($payment_method === 'transfer') {
+            $payment_status = 'Unpaid'; // Default status
+            if ($payment_method === 'Cash') {
+                $payment_status = 'Unpaid';
+            } elseif ($payment_method === 'Transfer') {
                 $payment_status = 'pending_transfer';
-            } elseif ($payment_method === 'card') {
+            } elseif ($payment_method === 'Card') {
                 $payment_status = 'processing';
             }
 

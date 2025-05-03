@@ -376,3 +376,13 @@ tbody tr:only-child td {
     margin-bottom: 5px;
   }
 }
+.status.paid {
+  background-color: #c8f7c5;
+  color: #27ae60;
+}
+
+.status.unpaid {
+  background-color: #f7c5c5;
+  color: #c0392b;
+}
+
