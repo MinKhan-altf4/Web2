@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
         $error = "Vui lòng điền đầy đủ thông tin!";
     }
+    // Validate phone number length
+    else if(strlen($phone) > 10) {
+        $error = "Vui lòng điền đúng số điện thoại!";
+    }
     // Kiểm tra password khớp nhau
     else if($password !== $confirm_password) {
         $error = "Mật khẩu không khớp!";
@@ -262,9 +266,6 @@ if(isset($error)) {
                             <span class="details">Phone Number</span>
                             <input type="text" name="phone_number" id="phone_number" 
                                    placeholder="Enter your number" 
-                                   maxlength="10" 
-                                   pattern="[0-9]{10}"
-                                   oninput="checkPhoneNumber(this)"
                                    required />
                             <span id="phone-message" class="message"></span>
                         </div>
@@ -426,29 +427,19 @@ if(isset($error)) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script>
-function checkPhoneNumber(input) {
-    const messageElement = document.getElementById('phone-message');
-    // Remove any non-numeric characters
-    input.value = input.value.replace(/[^0-9]/g, '');
+document.querySelector('form').addEventListener('submit', function(e) {
+    const phoneNumber = document.getElementById('phone_number').value;
     
-    if (input.value.length > 10) {
-        input.value = input.value.slice(0, 10); // Cut off after 10 digits
-        messageElement.textContent = 'Số điện thoại không được vượt quá 10 số!';
-        messageElement.style.color = 'red';
-    } else if (input.value.length === 10) {
-        messageElement.textContent = 'Số điện thoại đạt giới hạn';
-        messageElement.style.color = 'red';
-    } else {
-        messageElement.textContent = '';
+    // Check phone number length
+    if (phoneNumber.length > 10) {
+        e.preventDefault(); // Prevent form submission
+        alert('Vui lòng điền đúng số điện thoại!');
+        document.getElementById('phone_number').focus();
+        return false;
     }
-}
-
-// Add this to your existing script section
-const phoneInput = document.getElementById('phone_number');
-phoneInput.addEventListener('keypress', function(e) {
-    if (this.value.length >= 10) {
-        e.preventDefault(); // Prevent typing more than 10 digits
-    }
+    
+    // Remove any non-numeric characters for server-side validation
+    document.getElementById('phone_number').value = phoneNumber.replace(/[^0-9]/g, '');
 });
     </script>
 </body>

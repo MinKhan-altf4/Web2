@@ -35,25 +35,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
     }
 }
 
-// Thêm xử lý cập nhật đơn hàng
+// Sửa lại phần xử lý cập nhật đơn hàng
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_order'])) {
     $order_id = $_POST['order_id'];
-    $status = strtolower($_POST['status']); // Chuyển status thành chữ thường
+    $status = strtolower($_POST['status']);
     $shipping_address = $_POST['shipping_address'];
-    $shipping_city = $_POST['shipping_city'];
     
     $update_sql = "UPDATE checkout SET 
                   order_status = ?,
-                  shipping_address = ?,
-                  shipping_city = ?
+                  shipping_address = ?
                   WHERE order_id = ?";
     
     if ($stmt = $conn->prepare($update_sql)) {
-        $stmt->bind_param("sssi", $status, $shipping_address, $shipping_city, $order_id);
+        $stmt->bind_param("ssi", $status, $shipping_address, $order_id);
         
         if ($stmt->execute()) {
             $success_message = "Cập nhật đơn hàng thành công!";
-            // Chuyển hướng để tránh gửi lại form
             header("Location: order.php?success=1");
             exit;
         } else {
@@ -77,9 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
     if (!empty($_POST['status'])) {
         $where_clause .= " AND o.order_status = '" . $_POST['status'] . "'";
     }
-    if (!empty($_POST['district'])) {
-        $where_clause .= " AND o.district = '" . $_POST['district'] . "'";
-    }
+   
     if (!empty($_POST['payment_status'])) {
         $where_clause .= " AND i.payment_status = '" . $_POST['payment_status'] . "'";
     }
@@ -87,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
 
 // Cập nhật phần query để lấy thêm thông tin cần thiết
 $sql = "SELECT o.*, u.fullname as customer_name, i.invoice_number, i.payment_status, i.total_amount,
-               o.shipping_fullname, o.shipping_phone, o.shipping_address, o.shipping_city, 
+               o.shipping_fullname, o.shipping_phone, o.shipping_address,  
                o.payment_method, o.order_date, o.order_status
         FROM checkout o 
         LEFT JOIN user u ON o.user_id = u.id
@@ -121,7 +116,7 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
 if (isset($_GET['id'])) {
     $invoice_id = (int)$_GET['id'];
     $sql = "SELECT i.*, o.order_status, o.shipping_fullname, o.shipping_phone, 
-                   o.shipping_address, o.shipping_city, o.payment_method
+                   o.shipping_address,  o.payment_method
             FROM invoices i
             JOIN checkout o ON i.order_id = o.order_id
             WHERE i.invoice_id = ?";
@@ -312,38 +307,30 @@ $additional_styles = "
   
     <!-- Bộ lọc đơn hàng -->
     <div class="filter_order">
-    <h3>Filter Orders</h3>
-    <form method="POST" class="filter_info">
-        <div class="filter">
-          <label>From Date:</label>
-          <input type="date" name="from_date">
-        </div>
-        <div class="filter">
-          <label>To Date:</label>
-          <input type="date" name="to_date">
-        </div>
-        <div class="filter">
-          <label>Status:</label>
-          <select name="status">
-            <option value="">All</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
-        <div class="filter">
-          <label>District:</label>
-          <select name="district">
-            <option value="">All</option>
-            <option value="1">District 1</option>
-            <option value="2">District 2</option>
-            <option value="3">District 3</option>
-          </select>
-        </div>
-        <button type="submit" class="submit-btn">Apply Filter</button>
-    </form>
-</div>
+        <h3>Filter Orders</h3>
+        <form method="POST" action="order.php" class="filter_info">
+            <div class="filter">
+              <label>From Date:</label>
+              <input type="date" name="from_date">
+            </div>
+            <div class="filter">
+              <label>To Date:</label>
+              <input type="date" name="to_date">
+            </div>
+            <div class="filter">
+              <label>Status:</label>
+              <select name="status">
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+           
+            <button type="submit" class="submit-btn">Apply Filter</button>
+        </form>
+    </div>
   
     <!-- Bảng danh sách đơn hàng -->
     <div class="tabular_wrapper">
@@ -367,7 +354,7 @@ $additional_styles = "
                 <strong>Name:</strong> <?php echo htmlspecialchars($row['shipping_fullname']); ?><br>
                 <strong>Phone:</strong> <?php echo htmlspecialchars($row['shipping_phone']); ?><br>
                 <strong>Address:</strong> <?php echo htmlspecialchars($row['shipping_address']); ?><br>
-                <strong>City:</strong> <?php echo htmlspecialchars($row['shipping_city']); ?>
+                
               </td>
               <td>
                 <strong>Date:</strong> <?php echo date('d/m/Y H:i', strtotime($row['order_date'])); ?><br>
@@ -446,11 +433,6 @@ $additional_styles = "
             <div class="form-group">
                 <label>Shipping Address:</label>
                 <input type="text" name="shipping_address" value="<?php echo htmlspecialchars($edit_order['shipping_address']); ?>" required>
-            </div>
-            
-            <div class="form-group">
-                <label>City:</label>
-                <input type="text" name="shipping_city" value="<?php echo htmlspecialchars($edit_order['shipping_city']); ?>" required>
             </div>
             
             <button type="submit" name="update_order" class="submit-btn">Update Order</button>

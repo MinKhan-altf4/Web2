@@ -118,9 +118,44 @@ form .signup-link {
   margin-top: 20px;
   text-align: center;
 }
+
+/* Styling for sign up link */
+.signup-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.signup-link a {
+    color: #0b0b0b;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.signup-link a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #070707;
+    transition: width 0.3s ease;
+}
+
+.signup-link a:hover {
+    color: #060606;
+}
+
+.signup-link a:hover:after {
+    width: 100%;
+}
+
 form .pass-link a,
 form .signup-link a {
-  color: #4158d0;
+  color: #fc0202;
   text-decoration: none;
 }
 form .pass-link a:hover,

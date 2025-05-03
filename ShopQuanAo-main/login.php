@@ -5,7 +5,6 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $remember = isset($_POST['remember-me']) ? true : false;
 
     $sql = "SELECT * FROM user WHERE username=? AND status='1'";
     $stmt = $conn->prepare($sql);
@@ -20,10 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
             
-            if($remember) {
-                setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), '/');
-            }
-
             header('Content-Type: application/json');
             echo json_encode([
                 'status' => 'success',
@@ -33,10 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             exit();
         } else {
-            $error = "Sai mật khẩu!";
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Sai mật khẩu!'
+            ]);
+            exit();
         }
     } else {
-        $error = "Tài khoản không tồn tại!";
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Tài khoản không tồn tại!'
+        ]);
+        exit();
     }
 }
 ?>
@@ -138,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvaslinks">
-                <a href="#">Sign in</a>
+                <a href="login.php">Sign in</a>
                 <a href="contact.php">SUPPORT</a>
             </div>
             <div class="offcanvas__top__hover">
@@ -175,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a href="#">Sign in</a>
+                                <a href="login.php">Sign in</a>
                                 <a href="contact.php">SUPPORT</a>
                             </div>
                             <div class="header__top__hover">
@@ -253,16 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Password</label>
         <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
     </div>
-
-    <div class="content">
-        <div class="checkbox">
-            <input type="checkbox" id="remember-me" name="remember-me" />
-            <label for="remember-me">Remember me</label>
-        </div>
-        <div class="pass-link">
-            <a href="#">Forgot password?</a>
-        </div>
-    </div>
+    
     <div class="field">
         <input type="button" onclick="loginUser()" value="Login" />
     </div>

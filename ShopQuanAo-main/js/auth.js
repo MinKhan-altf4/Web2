@@ -38,37 +38,42 @@ function registerUser() {
 
 // Xử lý đăng nhập
 function loginUser() {
-  const formData = new FormData();
-  formData.append("username", document.getElementById("loginUsername").value);
-  formData.append("password", document.getElementById("password").value);
-  formData.append("remember", document.getElementById("remember-me").checked);
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('password').value;
 
-  fetch("php/login_process.php", {
-    method: "POST",
-    body: formData,
-    credentials: "include", // Use 'include' to ensure cookies work across domains if needed
+  if (!username || !password) {
+    alert('Vui lòng nhập đầy đủ thông tin!');
+    return;
+  }
+
+  fetch('login.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "success") {
-        // Store minimal user info for UI purposes
-        sessionStorage.setItem("currentUser", data.username);
-        sessionStorage.setItem("userRole", data.role);
-
-        // Redirect based on role
-        if (data.role === "admin") {
-          window.location.href = "Admin/php/dashboard.php";
-        } else {
-          window.location.href = "index.php";
-        }
-      } else {
-        alert(data.message);
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      window.location.href = 'index.php';
+    } else {
+      // Show error message
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error';
+      errorDiv.textContent = data.message;
+      // Remove any existing error messages
+      const existingError = document.querySelector('.error');
+      if (existingError) {
+        existingError.remove();
       }
-    })
-    .catch((error) => {
-      console.error("Login error:", error);
-      alert("Đăng nhập thất bại. Vui lòng thử lại.");
-    });
+      document.getElementById('loginForm').prepend(errorDiv);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+  });
 }
 
 // Kiểm tra đăng nhập không đồng bộ
