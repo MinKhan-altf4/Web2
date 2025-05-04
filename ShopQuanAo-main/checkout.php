@@ -120,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // Nếu người dùng không tích "Different address" (đã disabled, $_POST trả về rỗng)
             if (empty($shipping_fullname)) {
-                $profile_sql   = "SELECT fullname, phone, address FROM user WHERE id = ?";
+                $profile_sql   = "SELECT fullname, phone, address,city FROM user WHERE id = ?";
                 $profile_stmt  = $conn->prepare($profile_sql);
                 $profile_stmt->bind_param("i", $user_id);
                 $profile_stmt->execute();
@@ -130,6 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $shipping_fullname = $row['fullname'];
                     $shipping_phone    = $row['phone'];
                     $shipping_address  = $row['address'];
+                    $shipping_city = $row['city'];
                 }
                 $profile_stmt->close();
             }
