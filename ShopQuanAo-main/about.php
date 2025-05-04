@@ -223,7 +223,7 @@
     <!-- Counter Section Begin -->
     <section class="counter spad">
         <div class="container">
-            
+
         </div>
     </section>
     <!-- Counter Section End -->
@@ -336,9 +336,11 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
 
 </html>

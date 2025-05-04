@@ -34,6 +34,13 @@ if (!isset($_SESSION['id'])) {
 
 $user_id = $_SESSION['id'];  
 
+// Lấy thông tin user
+$sql_user = "SELECT * FROM user WHERE id = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $user_id);
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
+$user_data = $result_user->fetch_assoc();
 
 
 // Get cart items
@@ -75,6 +82,25 @@ if (empty($cart_items)) {
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Di chuyển lấy payment_method lên đầu
+    $payment_method = $conn->real_escape_string($_POST['payment-method'] ?? '');
+    
+    // VALIDATION - Đặt ngay sau khi có payment_method
+    if ($payment_method === "transfer") {
+        if (empty($_POST['bank_reference'])) {
+            echo '<script>alert("Vui lòng nhập số tham chiếu ngân hàng");</script>';
+            echo '<script>window.history.back();</script>';
+            exit;
+        }
+    } 
+    elseif ($payment_method === "card") {
+        if (empty($_POST['card_number']) || empty($_POST['card_holder']) || 
+            empty($_POST['expiry_date']) || empty($_POST['cvv'])) {
+            echo '<script>alert("Vui lòng nhập đầy đủ thông tin thẻ thanh toán");</script>';
+            echo '<script>window.history.back();</script>';
+            exit;
+        }
+    }
     // Lấy thông tin từ form
     $user_id = $_SESSION['id'];
     $order_date = date('Y-m-d H:i:s');
@@ -82,8 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $shipping_phone = $conn->real_escape_string($_POST['shipping_phone'] ?? '');
     $shipping_address = $conn->real_escape_string($_POST['shipping_address'] ?? '');
     $shipping_city = $conn->real_escape_string($_POST['shipping_city'] ?? '');
-    $shipping_state = $conn->real_escape_string($_POST['shipping_state'] ?? '');
-    $shipping_zip = $conn->real_escape_string($_POST['shipping_zip'] ?? '');
     $payment_method = $conn->real_escape_string($_POST['payment-method'] ?? '');
     $order_notes = $conn->real_escape_string($_POST['order_note'] ?? '');
     $total_amount = $subtotal;
@@ -109,38 +133,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             shipping_phone, 
             shipping_address, 
             shipping_city, 
-            shipping_state, 
-            shipping_zip,
             payment_method, 
             bank_reference, 
             card_last4, 
             card_brand, 
             total_amount, 
             order_notes
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // Nếu người dùng không tích "Different address" (đã disabled, $_POST trả về rỗng)
-            if (empty($shipping_fullname)) {
-                $profile_sql   = "SELECT fullname, phone, address,city FROM user WHERE id = ?";
-                $profile_stmt  = $conn->prepare($profile_sql);
-                $profile_stmt->bind_param("i", $user_id);
-                $profile_stmt->execute();
-                $profile_res   = $profile_stmt->get_result();
-                if ($profile_res->num_rows > 0) {
-                    $row = $profile_res->fetch_assoc();
-                    $shipping_fullname = $row['fullname'];
-                    $shipping_phone    = $row['phone'];
-                    $shipping_address  = $row['address'];
-                    $shipping_city = $row['city'];
-                }
-                $profile_stmt->close();
+        if (empty($shipping_fullname) || empty($shipping_phone) || empty($shipping_address) || empty($shipping_city)) {
+            $profile_sql   = "SELECT fullname, phone, address, city FROM user WHERE id = ?";
+            $profile_stmt  = $conn->prepare($profile_sql);
+            $profile_stmt->bind_param("i", $user_id);
+            $profile_stmt->execute();
+            $profile_res   = $profile_stmt->get_result();
+            if ($profile_res->num_rows > 0) {
+                $row = $profile_res->fetch_assoc();
+                $shipping_fullname = $row['fullname'];
+                $shipping_phone    = $row['phone'];
+                $shipping_address  = $row['address'];
+                $shipping_city     = $row['city'];
+            }
+            $profile_stmt->close();
             }
 
     
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "isssssssssssds", 
+        "isssssssssss", 
         $user_id, $order_date, $shipping_fullname, $shipping_phone,
-        $shipping_address, $shipping_city, $shipping_state, $shipping_zip,
+        $shipping_address, $shipping_city,
         $payment_method, $bank_reference, $card_last4, $card_brand,
         $total_amount, $order_notes
     );
@@ -181,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             $create_invoice = "INSERT INTO invoices (order_id, invoice_number, payment_status, total_amount, invoice_date) 
-                              VALUES (?, ?, ?, ?, NOW())";
+                                VALUES (?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($create_invoice);
             $invoice_number = generateInvoiceNumber(); // Hàm tạo số hóa đơn
             $stmt->bind_param("issd", $order_id, $invoice_number, $payment_status, $total_amount);
@@ -229,10 +251,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <style>
+    .form-group {
+        margin-bottom: 1.2em;
+    }
+
+    .error {
+        color: red;
+        font-size: .85em;
+        min-height: 1em;
+        margin-top: .25em;
+    }
+
+    #transfer-group,
+    #card-group {
+        display: none;
+    }
+    </style>
+    <style>
     .address-fields input:disabled {
         background-color: #f9f9f9;
         opacity: 0.6;
         cursor: not-allowed;
+    }
+    </style>
+    <style>
+    input:required:invalid,
+    select:required:invalid {
+        border-color: #ff0000;
+    }
+
+    input:required:valid,
+    select:required:valid {
+        border-color: #00ff00;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        display: none;
     }
     </style>
     <style>
@@ -254,6 +311,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         /* Ẩn mũi tên điều chỉnh kích thước */
         overflow-y: hidden;
         /* Ẩn thanh cuộn dọc */
+    }
+    </style>
+    <style>
+    /* Thêm vào phần style trong head */
+    .delivery-info {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .delivery-info h5 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .delivery-info p {
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    .delivery-info p strong {
+        color: #333;
+        min-width: 80px;
+        display: inline-block;
     }
     </style>
 
@@ -387,78 +473,95 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="checkout.php" method="POST">
+                <form id="checkout-form" action="checkout.php" method="POST" novalidate>
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
-                            <h6 class="checkout__title">Billing Details</h6>
+                            <h4>Billing Details</h4>
                             <div class="checkout__input__checkbox">
-                                <label for="different-address">
-                                    Different address?
-                                    <input type="checkbox" id="different-address" />
-                                    <span class="checkmark"></span>
-                                </label>
                             </div>
 
-                            <div id="different-address-fields-wrapper" class="address-fields">
-                                <div class="checkout-section">
-                                    <!-- Phần địa chỉ -->
-                                    <div id="different-address-fields" class="address-fields">
-                                        <div class="checkout-section">
-                                            <!-- Phần địa chỉ giao hàng khác -->
-                                            <div id="different-address-fields" class="address-fields">
-                                                <div class="checkout__input">
-                                                    <p>Full Name<span>*</span></p>
-                                                    <input type="text" name="shipping_fullname" id="other-full-name" required />
-                                                </div>
-                                                <div class="checkout__input">
-                                                    <p>Phone Number<span>*</span></p>
-                                                    <input type="tel" name="shipping_phone" id="other-phone-number" required />
-                                                </div>
-                                                <div class="checkout__input">
-                                                    <p>Street Address<span>*</span></p>
-                                                    <input type="text" name="shipping_address" id="other-address" required />
-                                                </div>
-                                                <div class="checkout__input">
-                                                    <p>City<span>*</span></p>
-                                                    <input type="text" name="shipping_city" id="other-city" required />
-                                                </div>
-                                                <div class="checkout__input">
-                                                    <p>State<span>*</span></p>
-                                                    <input type="text" name="shipping_state" id="other-state" required />
-                                                </div>
-                                                <div class="checkout__input">
-                                                    <p>Postcode / ZIP<span>*</span></p>
-                                                    <input type="text" name="shipping_zip" id="other-zip" required />
-                                                </div>
-                                            </div>
+                            <div class="row">
+                                <div class="col-lg-8 col-md-6">
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="diff-address">
+                                        <label class="form-check-label" for="diff-address">
+                                            Different address?
+                                        </label>
+                                    </div>
+
+                                    <!-- BLOCK 1: Profile (mặc định show) -->
+                                    <div id="profile-block" class="delivery-info">
+                                        <h5>Delivery Information</h5>
+                                        <p><strong>Full Name:</strong> <?= htmlspecialchars($user_data['fullname']) ?>
+                                        </p>
+                                        <p><strong>Email:</strong> <?= htmlspecialchars($user_data['email']) ?></p>
+                                        <p><strong>Phone:</strong> <?= htmlspecialchars($user_data['phone']) ?></p>
+                                        <p><strong>Address:</strong> <?= htmlspecialchars($user_data['address']) ?></p>
+                                        <p><strong>City:</strong> <?= htmlspecialchars($user_data['city']) ?></p>
+                                    </div>
+
+                                    <!-- BLOCK 2: Form nhập (mặc định ẩn) -->
+                                    <div id="form-block" class="p-4 bg-light rounded" style="display: none;">
+                                        <h5 class="mb-3">
+                                            Delivery Information</h5>
+                                        <div class="mb-3">
+                                            <label>Full Name*</label>
+                                            <input type="text" name="shipping_fullname" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Email*</label>
+                                            <input type="email" name="shipping_email" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Phone Number*</label>
+                                            <input type="text" name="shipping_phone" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Street Address*</label>
+                                            <input type="text" name="shipping_address" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <select name="shipping_city" class="form-select">
+                                                <!-- Đã bỏ readonly -->
+                                                <option value="">-- Select city --</option>
+                                                <option value="HoChiMinh">Hồ Chí Minh</option>
+                                                <option value="Hanoi">Hà Nội</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Cột Your Order giữ nguyên -->
+                                <div class="col-lg-4">
+                                    <!-- ... -->
+                                </div>
                             </div>
+
                         </div>
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-4 col-md-6 position-sticky" style="top: 20px; align-self: start;">
                             <div class="checkout__order">
                                 <h4 class="order__title">Your order</h4>
                                 <div class="checkout__order__products">
                                     Product <span>Total</span>
                                 </div>
-                                    <ul class="checkout__total__products">
-                                        <?php foreach ($cart_items as $item): ?>
-                                            <li>
-                                                <?php echo htmlspecialchars($item['name']); ?> 
-                                                <span>$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                    <ul class="checkout__total__all">
-                                        <li>Subtotal <span>$<?php echo number_format($subtotal, 2); ?></span></li>
-                                        <li>Total <span>$<?php echo number_format($subtotal, 2); ?></span></li>
-                                    </ul>
+                                <ul class="checkout__total__products">
+                                    <?php foreach ($cart_items as $item): ?>
+                                    <li>
+                                        <?php echo htmlspecialchars($item['name']); ?>
+                                        <span>$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span>$<?php echo number_format($subtotal, 2); ?></span></li>
+                                    <li>Total <span>$<?php echo number_format($subtotal, 2); ?></span></li>
+                                </ul>
 
                                 <!-- Ghi chú cho đơn hàng -->
                                 <div class="checkout__input">
                                     <p>Ghi chú cho đơn hàng (Nếu có)</p>
-                                    <textarea name="order_note" id="order-note" placeholder="Nhập ghi chú của bạn tại đây" rows="1"
+                                    <textarea name="order_note" id="order-note"
+                                        placeholder="Nhập ghi chú của bạn tại đây" rows="1"
                                         class="form-control"></textarea>
                                 </div>
 
@@ -481,12 +584,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <div class="bank-transfer-form" style="display: none">
-                                        <h5>Bank Details</h5>
+                                    <div id="transfer-group">
+                                        <h5>Bank Transfer Details</h5>
                                         <p>Bank Name: XYZ Bank</p>
                                         <p>Account Number: 123456789</p>
                                         <p>SWIFT Code: XYZ123</p>
-                                        <input type="text" name="bank_reference" id="bank-reference" placeholder="Reference Number" />
+                                        <div class="form-group">
+                                            <label for="bank-reference">Reference Number</label>
+                                            <input type="text" name="bank_reference" id="bank-reference"
+                                                class="form-control" placeholder="Reference Number">
+                                            <div class="error" id="error-bank-reference"></div>
+                                        </div>
                                     </div>
                                     <div class="checkout__input__checkbox">
                                         <label for="payment-method-card">
@@ -496,29 +604,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <div class="card-payment-form" style="display: none">
-                                        <h5>Card Payment</h5>
+                                    <div id="card-group">
                                         <div class="form-group">
                                             <label for="card-number">Card Number</label>
                                             <input type="text" name="card_number" id="card-number" class="form-control"
-                                                placeholder="1234 5678 9012 3456" maxlength="19" />
+                                                placeholder="1234 5678 9012 3456" maxlength="19">
+                                            <div class="error" id="error-card-number"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="card-holder">Card Holder Name</label>
+                                            <label for="card-holder">Card Holder</label>
                                             <input type="text" name="card_holder" id="card-holder" class="form-control"
-                                                placeholder="John Doe" />
+                                                placeholder="John Doe">
+                                            <div class="error" id="error-card-holder"></div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="expiry-date">Expiry Date</label>
-                                                <input type="text" name="expiry_date" id="expiry-date" class="form-control"
-                                                    placeholder="MM/YY" maxlength="5" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="cvv">CVV</label>
-                                                <input type="text" name="cvv" id="cvv" class="form-control" placeholder="123"
-                                                    maxlength="3" />
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="expiry-date">Expiry Date (MM/YY)</label>
+                                            <input type="text" name="expiry_date" id="expiry-date" class="form-control"
+                                                placeholder="MM/YY" maxlength="5">
+                                            <div class="error" id="error-expiry-date"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv">CVV</label>
+                                            <input type="text" name="cvv" id="cvv" class="form-control"
+                                                placeholder="123" maxlength="3">
+                                            <div class="error" id="error-cvv"></div>
                                         </div>
                                     </div>
 
@@ -637,6 +746,105 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
+
+    <script>
+    (function() {
+        const form = document.getElementById('checkout-form');
+        const pmRadios = document.querySelectorAll('input[name="payment-method"]');
+        const transferEl = document.getElementById('transfer-group');
+        const cardEl = document.getElementById('card-group');
+
+        const validators = {
+            transfer: {
+                input: document.getElementById('bank-reference'),
+                error: document.getElementById('error-bank-reference'),
+                validate: i => i.value.trim() !== '',
+                msg: {
+                    missing: 'Vui lòng nhập Reference Number.'
+                }
+            },
+            card_number: {
+                input: document.getElementById('card-number'),
+                error: document.getElementById('error-card-number'),
+                validate: i => /^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/.test(i.value.trim()),
+                msg: {
+                    missing: 'Vui lòng nhập số thẻ.',
+                    pattern: 'Số thẻ phải 16 chữ số.'
+                }
+            },
+            card_holder: {
+                input: document.getElementById('card-holder'),
+                error: document.getElementById('error-card-holder'),
+                validate: i => i.value.trim() !== '',
+                msg: {
+                    missing: 'Vui lòng nhập tên trên thẻ.'
+                }
+            },
+            expiry_date: {
+                input: document.getElementById('expiry-date'),
+                error: document.getElementById('error-expiry-date'),
+                validate: i => /^[0-1]\d\/\d{2}$/.test(i.value.trim()),
+                msg: {
+                    missing: 'Vui lòng nhập ngày hết hạn.',
+                    pattern: 'Định dạng MM/YY.'
+                }
+            },
+            cvv: {
+                input: document.getElementById('cvv'),
+                error: document.getElementById('error-cvv'),
+                validate: i => /^\d{3}$/.test(i.value.trim()),
+                msg: {
+                    missing: 'Vui lòng nhập CVV.',
+                    pattern: 'CVV phải 3 chữ số.'
+                }
+            }
+        };
+
+        function updateVisibility() {
+            const m = document.querySelector('input[name="payment-method"]:checked').value;
+            transferEl.style.display = m === 'transfer' ? 'block' : 'none';
+            cardEl.style.display = m === 'card' ? 'block' : 'none';
+        }
+
+        function showError(v) {
+            const val = v.input.value.trim();
+            if (!val) {
+                v.error.textContent = v.msg.missing;
+                return false;
+            }
+            if (v.msg.pattern && !v.validate(v.input)) {
+                v.error.textContent = v.msg.pattern;
+                return false;
+            }
+            v.error.textContent = '';
+            return true;
+        }
+
+        form.addEventListener('submit', e => {
+            const m = document.querySelector('input[name="payment-method"]:checked').value;
+            let ok = true;
+            if (m === 'transfer') {
+                if (!showError(validators.transfer)) ok = false;
+            }
+            if (m === 'card') {
+                ['card_number', 'card_holder', 'expiry_date', 'cvv'].forEach(k => {
+                    if (!showError(validators[k])) ok = false;
+                });
+            }
+            if (!ok) e.preventDefault();
+        });
+
+        Object.values(validators).forEach(v => {
+            v.input.addEventListener('input', () => {
+                if (v.validate(v.input)) v.error.textContent = '';
+            });
+        });
+
+        pmRadios.forEach(r => r.addEventListener('change', updateVisibility));
+        updateVisibility();
+    })();
+    </script>
+
     <script>
     // Show/hide payment method fields
     document.addEventListener('DOMContentLoaded', function() {
@@ -681,12 +889,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         addressFields.forEach(field => {
             field.disabled = !differentAddressCheckbox.checked;
         });
-    });
-    </script>
-    <script>
+    }); <
+    /> <
+    script >
         document.addEventListener('DOMContentLoaded', function() {
             // Kiểm tra nếu không có session (giả sử dùng AJAX hoặc cookie)
-            fetch('check_session.php')  // Tạo file này để kiểm tra session
+            fetch('check_session.php') // Tạo file này để kiểm tra session
                 .then(response => response.json())
                 .then(data => {
                     if (!data.loggedIn) {
@@ -696,9 +904,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
         });
     </script>
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chk = document.getElementById('diff-address');
+        const profBlk = document.getElementById('profile-block');
+        const formBlk = document.getElementById('form-block');
+
+        chk.addEventListener('change', function() {
+            if (chk.checked) {
+                profBlk.style.display = 'none';
+                formBlk.style.display = '';
+            } else {
+                profBlk.style.display = '';
+                formBlk.style.display = 'none';
+            }
+        });
+    });
+    </script>
+
 </body>
 
 </html>

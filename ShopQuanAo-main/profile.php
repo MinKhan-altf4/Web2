@@ -26,6 +26,7 @@ if ($result->num_rows > 0) {
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Male_Fashion Template" />
@@ -265,8 +266,8 @@ if ($result->num_rows > 0) {
                     <p><strong>City:</strong> <?php echo htmlspecialchars($user['city'] ?? 'Not set'); ?></p>
                     <p><strong>Gender:</strong> <?php echo htmlspecialchars($user['gender'] ?? 'Not set'); ?></p>
                 </div>
-             
-        </div>
+
+            </div>
     </section>
 
     <!-- Footer -->
@@ -376,9 +377,11 @@ if ($result->num_rows > 0) {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
 
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
 
 </html>

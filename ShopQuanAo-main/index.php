@@ -236,11 +236,11 @@
 
     <!-- Product Section Begin -->
 
-    
-<!-- Product Section End -->
+
+    <!-- Product Section End -->
 
     <!-- Categories Section Begin -->
-    
+
     <!-- Categories Section End -->
 
     <!-- Instagram Section Begin -->
