@@ -262,6 +262,7 @@ if ($result->num_rows > 0) {
                     <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                     <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone'] ?? 'Not set'); ?></p>
                     <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address'] ?? 'Not set'); ?></p>
+                    <p><strong>City:</strong> <?php echo htmlspecialchars($user['city'] ?? 'Not set'); ?></p>
                     <p><strong>Gender:</strong> <?php echo htmlspecialchars($user['gender'] ?? 'Not set'); ?></p>
                 </div>
              

@@ -39,6 +39,100 @@ if(isset($_GET['edit'])) {
     <link rel="stylesheet" href="../css/accounts.css">
     <link rel="stylesheet" href="../css/grid.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* Thay đổi từ 15% xuống 5% */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 80vh; /* Thêm chiều cao tối đa */
+            overflow-y: auto; /* Thêm thanh cuộn nếu nội dung dài */
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        /* Thêm animation cho modal */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cập nhật style cho userInfo */
+        #userInfo {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        #userInfo p {
+            margin: 10px 0;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        #userInfo strong {
+            display: inline-block;
+            width: 150px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .modal h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1;
+        }
+
+        /* Cập nhật style cho nút đóng */
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -171,6 +265,15 @@ if(isset($_GET['edit'])) {
                         <option value="0" <?php echo (isset($edit_user) && $edit_user['status'] == '0') ? 'selected' : ''; ?>>Locked</option>
                     </select>
                 </div>
+
+                <div class="form_group">
+                    <label for="city">City:</label>
+                    <select name="city" id="city" required>
+                        <option value="">Select city</option>
+                        <option value="Hanoi" <?php echo (isset($edit_user) && $edit_user['city'] == 'Hanoi') ? 'selected' : ''; ?>>Hà Nội</option>
+                        <option value="HoChiMinh" <?php echo (isset($edit_user) && $edit_user['city'] == 'HoChiMinh') ? 'selected' : ''; ?>>Hồ Chí Minh</option>
+                    </select>
+                </div>
                 
                 <div class="form_group">
                     <button type="submit" name="save" class="submit-btn">
@@ -255,15 +358,16 @@ if(isset($_GET['edit'])) {
             .then(response => response.json())
             .then(data => {
                 document.getElementById("userInfo").innerHTML = `
-                    <p><strong>Username:</strong> ${data.username}</p>
-                    <p><strong>Full Name:</strong> ${data.fullname}</p>
-                    <p><strong>Email:</strong> ${data.email}</p>
-                    <p><strong>Phone:</strong> ${data.phone}</p>
-                    <p><strong>Address:</strong> ${data.address}</p>
-                    <p><strong>Gender:</strong> ${data.gender}</p>
-                    <p><strong>Role:</strong> ${data.role}</p>
+                    <p><strong>Username:</strong> ${data.username || 'N/A'}</p>
+                    <p><strong>Full Name:</strong> ${data.fullname || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+                    <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+                    <p><strong>Address:</strong> ${data.address || 'N/A'}</p>
+                    <p><strong>City:</strong> ${data.city || 'N/A'}</p>
+                    <p><strong>Gender:</strong> ${data.gender || 'N/A'}</p>
+                    <p><strong>Role:</strong> ${data.role || 'N/A'}</p>
                     <p><strong>Status:</strong> ${data.status == 1 ? 'Active' : 'Locked'}</p>
-                    <p><strong>Password:</strong> ${data.original_password}</p>
+                    <p><strong>Password:</strong> ${data.original_password || 'N/A'}</p>
                 `;
                 modal.style.display = "block";
             });

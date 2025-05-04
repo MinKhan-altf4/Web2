@@ -7,6 +7,7 @@ if(isset($_POST['save'])) {
     $fullname = $_POST['fullname'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
+    $city = $_POST['city'];
     $gender = $_POST['gender'];
     $email = $_POST['email'];
     $role = $_POST['role'];
@@ -17,10 +18,10 @@ if(isset($_POST['save'])) {
         $password = $_POST['password'];
         $original_password = $password; // Lưu mật khẩu gốc
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO user (username, fullname, phone, address, gender, email, password, original_password, role, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO user (username, fullname, phone, address, city, gender, email, password, original_password, role, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssssss", $username, $fullname, $phone, $address, $gender, $email, $hashed_password, $original_password, $role, $status);
+        $stmt->bind_param("sssssssssss", $username, $fullname, $phone, $address, $city, $gender, $email, $hashed_password, $original_password, $role, $status);
     }
     // Nếu là cập nhật
     else {
@@ -29,15 +30,15 @@ if(isset($_POST['save'])) {
             $password = $_POST['password'];
             $original_password = $password; // Lưu mật khẩu gốc
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, gender=?, email=?, password=?, original_password=?, role=?, status=? 
+            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, city=?, gender=?, email=?, password=?, original_password=?, role=?, status=? 
                     WHERE id=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssssssssi", $username, $fullname, $phone, $address, $gender, $email, $hashed_password, $original_password, $role, $status, $id);
+            $stmt->bind_param("sssssssssssi", $username, $fullname, $phone, $address, $city, $gender, $email, $hashed_password, $original_password, $role, $status, $id);
         } else {
-            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, gender=?, email=?, role=?, status=? 
+            $sql = "UPDATE user SET username=?, fullname=?, phone=?, address=?, city=?, gender=?, email=?, role=?, status=? 
                     WHERE id=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssssssi", $username, $fullname, $phone, $address, $gender, $email, $role, $status, $id);
+            $stmt->bind_param("sssssssssi", $username, $fullname, $phone, $address, $city, $gender, $email, $role, $status, $id);
         }
     }
 

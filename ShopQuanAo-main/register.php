@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = mysqli_real_escape_string($conn, $_POST['phone_number']);
     $address = mysqli_real_escape_string($conn, $_POST['address']); // thay vì registerAddress
     $gender = isset($_POST['gender']) ? mysqli_real_escape_string($conn, $_POST['gender']) : '';
+    $city = mysqli_real_escape_string($conn, $_POST['city']);
 
     // Validate required fields
     if(empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
@@ -68,14 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Debug: Print SQL query
                 // error_log("INSERT INTO user (username, email, password, fullname, phone, address, gender, role, status) VALUES ('$username', '$email', '[HASHED]', '$fullname', '$phone', '$address', '$gender', 'customer', '1')");
                 
-                $sql = "INSERT INTO user (username, email,password,original_password, fullname, phone, address, gender, role, status) 
-                        VALUES (?, ?,? ,?, ?, ?, ?, ?, 'customer', '1')";
+                $sql = "INSERT INTO user (username, email,password,original_password, fullname, phone, address, city, gender, role, status) 
+                        VALUES (?, ?,? ,?, ?, ?, ?, ?, ?, 'customer', '1')";
                 $stmt = $conn->prepare($sql);
                 
                 if($stmt === false) {
                     $error = "Lỗi prepare statement insert: " . $conn->error;
                 } else {
-                    $stmt->bind_param("ssssssss", 
+                    $stmt->bind_param("sssssssss", 
                         $username, 
                         $email, 
                         $hashed_password, 
@@ -83,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $fullname, 
                         $phone, 
                         $address, 
+                        $city,
                         $gender
                     );
                     
@@ -283,6 +285,14 @@ if(isset($error)) {
                         <div class="input-box">
                             <span class="details">Address</span>
                             <input type="text" name="address" placeholder="Enter your address" required />
+                        </div>
+                        <div class="input-box">
+                            <span class="details">City</span>
+                            <select name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="Hanoi">Hà Nội</option>
+                                <option value="HoChiMinh">Hồ Chí Minh</option>
+                            </select>
                         </div>
                     </div>
                     <div class="gender-details">
