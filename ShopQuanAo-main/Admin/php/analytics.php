@@ -77,6 +77,7 @@ require_once 'db.php'; // Kết nối CSDL
                               FROM checkout c
                               JOIN user u ON c.user_id = u.id
                               WHERE c.order_date BETWEEN ? AND ?
+                              AND c.order_status != 'cancelled'
                               GROUP BY u.id, u.fullname
                               ORDER BY total_expenditure DESC
                               LIMIT 5";
@@ -96,6 +97,7 @@ FROM checkout_items ci
 JOIN products p ON ci.product_id = p.product_id
 JOIN checkout c ON ci.order_id = c.order_id
 WHERE c.order_date BETWEEN ? AND ?
+AND c.order_status != 'cancelled'
 GROUP BY p.product_id, p.name
 ORDER BY total_revenue DESC";
             $stmt = $conn->prepare($productQuery);
@@ -104,7 +106,10 @@ ORDER BY total_revenue DESC";
             $productResult = $stmt->get_result();
             
             // Tính tổng doanh thu
-            $totalRevenueQuery = "SELECT SUM(total_amount) as total FROM checkout WHERE order_date BETWEEN ? AND ?";
+            $totalRevenueQuery = "SELECT SUM(total_amount) as total 
+                      FROM checkout 
+                      WHERE order_date BETWEEN ? AND ?
+                      AND order_status != 'cancelled'";
             $stmt = $conn->prepare($totalRevenueQuery);
             $stmt->bind_param("ss", $fromDate, $toDate);
             $stmt->execute();
