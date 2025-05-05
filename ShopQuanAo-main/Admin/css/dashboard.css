@@ -344,3 +344,139 @@ tfoot td {
 .status-shipped { background-color: #2ecc71; color: white; }
 .status-delivered { background-color: #27ae60; color: white; }
 .status-cancelled { background-color: #e74c3c; color: white; }
+
+/* Mobile Menu Button */
+.mobile-menu {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.mobile-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .card_wrapper {
+        gap: 0.5rem;
+    }
+    
+    .payment_card {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mobile-menu {
+        display: block;
+    }
+
+    .sidebar {
+        width: 0;
+        left: -100%;
+        transition: 0.3s;
+    }
+
+    .sidebar.active {
+        width: 240px;
+        left: 0;
+    }
+
+    .main_content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .header_wrapper {
+        padding: 10px 1rem;
+    }
+
+    .card_wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .payment_card {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .amount_value {
+        font-size: 20px;
+    }
+
+    .card_detail {
+        font-size: 14px;
+    }
+
+    .table_container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 800px;
+    }
+
+    .header_wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search_box {
+        width: 100%;
+    }
+
+    .mobile-toggle {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .card_wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .header_wrapper {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .payment_card {
+        height: 120px;
+    }
+
+    .card_header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .amount_value {
+        font-size: 20px;
+    }
+
+    .card_detail {
+        font-size: 14px;
+    }
+
+    .table_container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    td, th {
+        padding: 10px;
+        font-size: 13px;
+    }
+}

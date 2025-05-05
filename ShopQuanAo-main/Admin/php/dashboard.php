@@ -30,101 +30,11 @@ $recentOrders = $conn->query($recentOrdersQuery);
 <html !DOCTYPE>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/grid.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <style>
-    /* Thêm CSS cho dashboard */
-    .card_wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-    
-    .payment_card {
-        padding: 20px;
-        border-radius: 10px;
-        transition: transform 0.3s ease;
-    }
-    
-    .payment_card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .card_header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-    
-    .amount_value {
-        font-size: 24px;
-        font-weight: 700;
-        display: block;
-        margin-top: 5px;
-    }
-    
-    .card_detail {
-        font-size: 14px;
-        opacity: 0.8;
-    }
-    
-    /* Màu sắc */
-    .light_red { background: #ffebee; }
-    .dark_red { color: #f44336; }
-    .light_purple { background: #f3e5f5; }
-    .dark_purple { color: #9c27b0; }
-    .light_green { background: #e8f5e9; }
-    .dark_green { color: #4caf50; }
-    .light_blue { background: #e3f2fd; }
-    .dark_blue { color: #2196f3; }
-    .light_orange { background: #fff3e0; }
-    .dark_orange { color: #ff9800; }
-    
-    /* Bảng dữ liệu */
-    .table_container {
-        overflow-x: auto;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    th, td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solidrgb(10, 10, 10);
-    }
-    
-    th {
-        background-color:rgb(5, 5, 5);
-        font-weight: 600;
-    }
-    
-    .status-badge {
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        text-transform: capitalize;
-    }
-    
-  
-    
-    .action-btn {
-        color: #2196f3;
-        padding: 5px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 14px;
-    }
-    
-    .action-btn:hover {
-        background: #e3f2fd;
-    }
-  </style>
+ 
 </head>
 <body>
   <div class="sidebar">
@@ -163,6 +73,11 @@ $recentOrders = $conn->query($recentOrdersQuery);
   </div>
   
   <div class="main_content">
+    <!-- Add mobile menu button -->
+    <div class="mobile-toggle">
+        <i class='bx bx-menu'></i>
+    </div>
+    
     <div class="header_wrapper">
       <div class="header_title">
         <span>MALE FASHION</span>
@@ -239,7 +154,7 @@ $recentOrders = $conn->query($recentOrdersQuery);
                 <?php echo $stats['total_products'] ?? 0; ?>
               </span>
             </div>
-            <i class='bx bx-box dark_blue'></i>
+            <i class='bx bxs-user dark_blue'></i>
           </div>
           <span class="card_detail">
             Active in store
@@ -281,5 +196,6 @@ $recentOrders = $conn->query($recentOrdersQuery);
       </div>
     </div>
   </div>
+    <script src="../js/main.js"></script>
 </body>
 </html>

@@ -2,9 +2,11 @@
 require_once 'auth.php';
 require_once 'db.php'; // Kết nối CSDL
 ?>
-<html !DOCTYPE>
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/analytics.css">
   <link rel="stylesheet" href="../css/grid.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -48,6 +50,12 @@ require_once 'db.php'; // Kết nối CSDL
     </div>
 
     <div class="main_content">
+      <!-- Add mobile menu button -->
+      
+      <div class="mobile-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      
       <div class="header_wrapper">
         <h2 class="header_title">Analytics Management</h2>
       </div>
@@ -198,5 +206,6 @@ ORDER BY total_revenue DESC";
         <?php } ?>
       </div>
     </div>
+    <script src="../js/main.js"></script>
 </body>
 </html>

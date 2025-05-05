@@ -1,0 +1,10 @@
+/* Add these responsive styles */
+@media screen and (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .col {
+        padding: 10px;
+    }
+}

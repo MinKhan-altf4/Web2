@@ -351,3 +351,287 @@ table tr:last-child td {
 .submit-btn:hover {
     background-color: #2980b9;
 }
+
+/* Mobile Menu Button */
+.mobile-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.mobile-menu i {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        width: 0;
+        left: -100%;
+        transition: 0.3s;
+    }
+
+    .sidebar.active {
+        width: 240px;
+        left: 0;
+    }
+
+    .main_content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .filter-section form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-section label {
+        width: 100%;
+    }
+
+    .filter-section input {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .section {
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .table_container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 800px;
+    }
+
+    .order-info-box {
+        padding: 10px;
+    }
+
+    .order-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .total-revenue {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .total-revenue h3 {
+        font-size: 18px;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        width: 240px;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main_content {
+        margin-left: 0;
+        padding: 15px;
+        padding-top: 60px;
+    }
+
+    .analytics_management {
+        padding: 10px;
+    }
+
+    .table_container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-section input,
+    .filter-section select,
+    .filter-section button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .analytics_management h3 {
+        font-size: 18px;
+    }
+
+    .section h2 {
+        font-size: 16px;
+    }
+
+    .filter-section input {
+        padding: 8px;
+    }
+
+    td, th {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .order-info-box {
+        font-size: 12px;
+    }
+
+    .section {
+        padding: 10px;
+    }
+
+    .section h2 {
+        font-size: 18px;
+    }
+
+    td, th {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .order-info-box {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* Table styles */
+.table_container {
+    overflow-x: auto;
+    margin: 20px 0;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Statistics Section */
+.section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Total Revenue */
+.total-revenue {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: right;
+}
+
+.total-revenue h3 {
+    color: #333;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Customer Orders */
+.order-info-box {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.order-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .section {
+        padding: 15px;
+    }
+
+    .table_container {
+        padding: 15px;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .total-revenue {
+        padding: 12px;
+    }
+
+    .order-info-box {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .section h2 {
+        font-size: 16px;
+    }
+}

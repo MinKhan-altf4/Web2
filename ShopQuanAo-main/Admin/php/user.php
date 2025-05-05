@@ -36,6 +36,7 @@ if(isset($_GET['edit'])) {
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/accounts.css">
     <link rel="stylesheet" href="../css/grid.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -61,8 +62,8 @@ if(isset($_GET['edit'])) {
             position: relative;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-height: 80vh; /* Thêm chiều cao tối đa */
-            overflow-y: auto; /* Thêm thanh cuộn nếu nội dung dài */
+            max-height: 90vh;
+            overflow-y: auto;
             animation: modalFadeIn 0.3s ease-out;
         }
 
@@ -132,6 +133,64 @@ if(isset($_GET['edit'])) {
             text-decoration: none;
             cursor: pointer;
         }
+
+        /* Thêm media query cho mobile */
+        @media screen and (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+                padding: 15px;
+            }
+
+            #userInfo p {
+                padding: 8px;
+                font-size: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+                background-color: #f9f9f9;
+                margin: 5px 0;
+                border-radius: 6px;
+            }
+
+            #userInfo strong {
+                width: 100%;
+                margin-bottom: 4px;
+                color: #666;
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+
+            .modal h2 {
+                font-size: 18px;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+
+            .close {
+                right: 15px;
+                top: 10px;
+                font-size: 24px;
+            }
+        }
+
+        /* Thêm animation mượt mà cho mobile */
+        @media screen and (max-width: 768px) {
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .modal {
+                background-color: rgba(0,0,0,0.6);
+                padding: 0 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -178,6 +237,9 @@ if(isset($_GET['edit'])) {
     </div>
 
     <div class="main_content">
+        <div class="mobile-toggle">
+            <i class='bx bx-menu'></i>
+        </div>
         <div class="header_wrapper">
             <h2 class="header_title">User Management</h2>
             <div class="search_box">
@@ -383,5 +445,6 @@ if(isset($_GET['edit'])) {
         }
     }
     </script>
+    <script src="../js/main.js"></script>
 </body>
 </html>

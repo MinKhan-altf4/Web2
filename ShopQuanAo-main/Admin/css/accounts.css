@@ -201,7 +201,7 @@ body {
 
 /* Style cho submit button trong form */
 .submit-btn {
-    background-color: #28a745;
+    background-color: #3498db;
     color: white;
     padding: 12px 24px;
     border: none;
@@ -341,4 +341,152 @@ body {
 .btn-view:hover {
     background-color: #138496;
     transform: translateY(-2px);
+}
+
+/* Mobile Menu Button */
+.mobile-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .add_user {
+    padding: 15px;
+  }
+
+  .form_group {
+    flex-direction: column;
+  }
+
+  .form_group input,
+  .form_group select,
+  .form_group textarea {
+    width: 100%;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .modal-content {
+    width: 90%;
+    margin: 10% auto;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    width: 0;
+    left: -100%;
+    transition: 0.3s;
+  }
+
+  .sidebar.active {
+    width: 240px;
+    left: 0;
+  }
+
+  .main_content {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .header_wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search_box {
+    width: 100%;
+  }
+
+  .search_box input {
+    width: 100%;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+
+  .user_list {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 800px;
+  }
+
+  #userInfo p {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  #userInfo strong {
+    width: 100%;
+  }
+}
+
+/* Responsive search box */
+@media screen and (max-width: 768px) {
+    .search_box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search_box input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .search_box i {
+        display: none; /* Ẩn icon tìm kiếm trên mobile */
+    }
+
+    .search_box input::placeholder {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .search_box input {
+        padding: 10px 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+  .header_title {
+    font-size: 20px;
+  }
+
+  .add_user h3 {
+    font-size: 18px;
+  }
+
+  .form_group input,
+  .form_group select,
+  .form_group textarea {
+    padding: 8px;
+  }
+
+  .modal-content {
+    margin: 5% auto;
+  }
+
+  #userInfo {
+    font-size: 14px;
+  }
 }

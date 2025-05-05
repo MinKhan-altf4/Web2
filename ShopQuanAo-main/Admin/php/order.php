@@ -293,6 +293,7 @@ $additional_styles = "
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Management</title>
   <link rel="stylesheet" href="../css/order.css">
   <link rel="stylesheet" href="../css/grid.css">
@@ -321,13 +322,13 @@ $additional_styles = "
                 <span>Product</span>
             </a>
         </li>
-        <li>
+        <li class="active">  
             <a href="analytics.php">
                 <i class='bx bx-pie-chart-alt'></i>
                 <span>Analytics</span>
             </a>
         </li>
-        <li class="active">
+        <li>
             <a href="order.php">
                 <i class='bx bx-cart'></i>
                 <span>Order</span>
@@ -342,6 +343,9 @@ $additional_styles = "
     </ul>
 </div>
   <div class="main_content">
+    <div class="mobile-toggle">
+        <i class='bx bx-menu'></i>
+    </div>
     <div class="header_wrapper">
       <h2 class="header_title">Order Management</h2>
     </div>
@@ -586,5 +590,6 @@ $additional_styles = "
     return false;
 }
 </script>
+<script src="../js/main.js"></script>
 </body>
 </html>
