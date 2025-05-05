@@ -40,7 +40,7 @@ if ($column_exists == 0) {
         ADD COLUMN card_holder VARCHAR(100)
     ";
     if ($conn->query($alter_table_query) === FALSE) {
-        die("Lỗi khi thêm cột vào bảng checkout: " . $conn->error);
+        die("Error adding column to checkout table: " . $conn->error);
     }
 }
 
@@ -189,8 +189,8 @@ $styles = "
     </div>
     <!-- Offcanvas Menu End -->
 
-     <!-- Header Section Begin -->
-     <header class="header">
+    <!-- Header Section Begin -->
+    <header class="header">
         <div class="header__top">
             <div class="container">
                 <div class="row">
@@ -359,9 +359,10 @@ $styles = "
                                 <td>$<?php echo number_format($row['total_amount'], 2); ?></td>
                                 <td>
                                     <?php if ($row['invoice_id']): ?>
-                                        <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>" class="btn btn-sm btn-info">View Invoice</a>
+                                    <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>"
+                                        class="btn btn-sm btn-info">View Invoice</a>
                                     <?php else: ?>
-                                        <span class="text-muted">Not Available</span>
+                                    <span class="text-muted">Not Available</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -377,7 +378,7 @@ $styles = "
             </div>
         </div>
     </div>
-    
+
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container">
@@ -465,7 +466,7 @@ $styles = "
         </div>
     </div>
     <!-- Search End -->
-    
+
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -480,8 +481,11 @@ $styles = "
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
     </script>
-<script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
+
 </html>

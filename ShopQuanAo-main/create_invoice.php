@@ -99,7 +99,7 @@ $insert_invoice->bind_param("issddddd",
 );
 
 if (!$insert_invoice->execute()) {
-    die("Lỗi khi tạo hóa đơn: " . $conn->error);
+    die("Error creating invoice: " . $conn->error);
 }
 
 // Lấy ID hóa đơn vừa tạo

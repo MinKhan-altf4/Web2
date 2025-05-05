@@ -255,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <?php if(isset($_GET['message']) && $_GET['message'] == 'register_success'): ?>
-            <div class="success">Đăng ký thành công! Vui lòng đăng nhập.</div>
+            <div class="success">Registration successful! Please login.</div>
             <?php endif; ?>
 
             <form id="loginForm">

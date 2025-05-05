@@ -18,7 +18,7 @@ async function isUserLoggedIn() {
     const data = await response.json();
     return data.isLoggedIn === true;  // Đảm bảo kết quả là boolean
   } catch (error) {
-    console.error('Lỗi kiểm tra đăng nhập:', error);
+    console.error('Login check error:', error);
     return false;
   }
 }
@@ -56,24 +56,24 @@ async function callCartAPI(action, data = {}) {
       console.error('Phản hồi không phải JSON:', text);
       // Log thêm thông tin để debug
       console.error('URL gọi:', `php/cart-api.php?action=${action}`);
-      console.error('Dữ liệu gửi đi:', data);
-      throw new Error('Định dạng phản hồi không hợp lệ');
+      console.error('Data sent:', data);
+      throw new Error('Invalid response format');
     }
     
     if (!response.ok) {
       const errorResult = await response.json();
-      throw new Error(errorResult.message || `Lỗi HTTP! Trạng thái: ${response.status}`);
+      throw new Error(errorResult.message || `HTTP Error! Status: ${response.status}`);
     }
     
     const result = await response.json();
     return result;
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.error('Timeout khi gọi API');
-      throw new Error('Hết thời gian yêu cầu');
+      console.error('Timeout when calling API');
+      throw new Error('Request timed out');
     }
-    console.error('Lỗi API:', error);
-    return { success: false, message: error.message || 'Lỗi kết nối' };
+    console.error('API Error:', error);
+    return { success: false, message: error.message || 'Connection error' };
   }
 }
 
@@ -85,11 +85,11 @@ async function getCart() {
   try {
     const response = await callCartAPI('get');
     if (!response.success) {
-      console.error('Lỗi lấy giỏ hàng:', response.message);
+      console.error('Error getting cart:', response.message);
     }
     return response.success && Array.isArray(response.cart) ? response.cart : [];
   } catch (error) {
-    console.error('Lỗi khi lấy giỏ hàng:', error);
+    console.error('Error while getting cart:', error);
     return [];
   }
 }
@@ -102,7 +102,7 @@ async function getCart() {
 async function addToCart(product) {
   try {
     if (!product || !product.id) {
-      console.error('Thiếu thông tin sản phẩm');
+      console.error('Missing product information');
       return false;
     }
 
@@ -112,9 +112,9 @@ async function addToCart(product) {
     if (!loggedIn) {
       Swal.fire({
         icon: 'warning',
-        title: 'Yêu cầu đăng nhập',
-        text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!',
-        confirmButtonText: 'Đăng nhập'
+        title: 'Login required',
+        text: 'Please login to add products to cart!',
+        confirmButtonText: 'Log in'
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = 'login.php'; // hoặc URL trang đăng nhập của bạn
@@ -132,22 +132,22 @@ async function addToCart(product) {
     if (response.success) {
       Swal.fire({
         icon: 'success',
-        title: 'Thành công',
-        text: `Đã được thêm vào giỏ hàng!`,
+        title: 'Success',
+        text: `Added to cart!`,
         showConfirmButton: false,
         timer: 2000
       });
       await updateCartUI(); // Cập nhật UI giỏ hàng
       return true;
     } else {
-      throw new Error(response.message || 'Có lỗi xảy ra');
+      throw new Error(response.message || 'An error occurred.');
     }
   } catch (error) {
-    console.error('Lỗi khi thêm vào giỏ hàng:', error);
+    console.error('Error adding to cart:', error);
     Swal.fire({
       icon: 'error',
-      title: 'Đã xảy ra lỗi',
-      text: error.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng',
+      title: 'An error occurred.',
+      text: error.message || 'An error occurred while adding to cart',
       confirmButtonText: 'OK'
     });
     return false;
@@ -163,12 +163,12 @@ async function addToCart(product) {
 async function updateQuantity(productId, newQuantity) {
   try {
     if (isNaN(productId) || isNaN(newQuantity)) {
-      console.error('Dữ liệu không hợp lệ:', { productId, newQuantity });
+      console.error('Invalid data:', { productId, newQuantity });
       return false;
     }
     
     if (newQuantity < 1) {
-      console.log('Số lượng không được nhỏ hơn 1');
+      console.log('Quantity must not be less than 1');
       return false;
     }
     
@@ -181,11 +181,11 @@ async function updateQuantity(productId, newQuantity) {
       await updateCartUI();
       return true;
     } else {
-      throw new Error(response.message || 'Có lỗi xảy ra');
+      throw new Error(response.message || 'An error occurred.');
     }
   } catch (error) {
-    console.error('Lỗi khi cập nhật số lượng:', error);
-    alert('Có lỗi xảy ra khi cập nhật số lượng');
+    console.error('Error updating quantity:', error);
+    alert('An error occurred while updating the quantity.');
     return false;
   }
 } 
@@ -219,23 +219,23 @@ const debouncedUpdateQuantity = debounce(updateQuantity, 500);
 async function removeFromCart(productId) {
   try {
     if (isNaN(productId)) {
-      console.error('ID sản phẩm không hợp lệ:', productId);
+      console.error('Invalid product ID:', productId);
       await Swal.fire({
         icon: 'warning',
-        title: 'ID không hợp lệ',
-        text: 'Không tìm thấy sản phẩm để xóa.'
+        title: 'Invalid ID',
+        text: 'No products found to delete.'
       });
       return false;
     }
 
     // Dùng SweetAlert2 để hỏi xác nhận
     const { isConfirmed } = await Swal.fire({
-      title: 'Xác nhận xóa',
-      text: 'Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?',
+      title: 'Confirm deletion',
+      text: 'Are you sure you want to remove this product from your cart?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Có',
-      cancelButtonText: 'Hủy'
+      confirmButtonText: 'Have',
+      cancelButtonText: 'Cancel'
     });
     if (!isConfirmed) return false;
 
@@ -252,21 +252,21 @@ async function removeFromCart(productId) {
         toast: true,
         position: 'top-end',
         icon: 'success',
-        title: 'Đã xóa sản phẩm',
+        title: 'Product deleted',
         showConfirmButton: false,
         timer: 1500,
         timerProgressBar: true
       });
       return true;
     } else {
-      throw new Error(response.message || 'Xóa thất bại');
+      throw new Error(response.message || 'Delete failure');
     }
   } catch (error) {
-    console.error('Lỗi khi xóa sản phẩm:', error);
+    console.error('error while deleting product:', error);
     await Swal.fire({
       icon: 'error',
       title: 'Lỗi',
-      text: error.message || 'Có lỗi xảy ra khi xóa sản phẩm'
+      text: error.message || 'An error occurred while deleting the product.'
     });
     return false;
   }
@@ -283,7 +283,7 @@ const removeCartItem = removeFromCart;
 async function updateCartUI() {
   const cartTableBody = document.getElementById("cartItems");
   if (!cartTableBody) {
-    console.log('Không tìm thấy phần tử cartItems, có thể không phải trang giỏ hàng');
+    console.log('CartItems element not found, probably not cart page');
     await updateCartCount(); // Chỉ cập nhật số lượng nếu không có bảng giỏ hàng
     return;
   }
@@ -293,7 +293,7 @@ async function updateCartUI() {
     const response = await callCartAPI('get');
     
     if (!response.success) {
-      throw new Error(response.message || 'Không thể lấy thông tin giỏ hàng');
+      throw new Error(response.message || 'Unable to get cart information');
     }
     
     const cart = Array.isArray(response.cart) ? response.cart : [];
@@ -335,7 +335,7 @@ async function updateCartUI() {
             <img src="${imagePath}" alt="${item.name}" style="width: 90px; height: 90px;" onerror="this.src='img/product/default.jpg'">
           </div>
           <div class="product__cart__item__text">
-            <h6>${item.name || 'Sản phẩm không xác định'}</h6>
+            <h6>${item.name || 'Product not specified'}</h6>
             <h5>$${price.toFixed(2)}</h5>
           </div>
         </td>
@@ -369,7 +369,7 @@ async function updateCartUI() {
     if (cartSubtotal) cartSubtotal.textContent = `$${total.toFixed(2)}`;
     
   } catch (error) {
-    console.error('Lỗi khi cập nhật UI giỏ hàng:', error);
+    console.error('Error while updating cart UI:', error);
    
   } finally {
     cartTableBody.classList.remove('loading');
@@ -394,7 +394,7 @@ async function updateCartCount(cart = null) {
       span.textContent = totalItems;
     });
   } catch (error) {
-    console.error('Lỗi khi cập nhật số lượng giỏ hàng:', error);
+    console.error('Error updating cart quantity:', error);
   }
 }
 
@@ -408,7 +408,7 @@ document.addEventListener("DOMContentLoaded", function() {
       
       const productId = parseInt(inputElement.dataset.id || e.target.closest('tr')?.dataset.id);
       if (!productId) {
-        console.error('Không tìm thấy ID sản phẩm');
+        console.error('Product ID not found');
         return;
       }
       
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function() {
           await debouncedUpdateQuantity(productId, quantity);
         } catch (error) {
           // Phục hồi giá trị cũ nếu có lỗi
-          console.error('Lỗi cập nhật:', error);
+          console.error('Update error:', error);
           inputElement.value = quantity > 1 ? quantity - 1 : quantity + 1;
         }
       }
@@ -450,8 +450,8 @@ document.addEventListener("DOMContentLoaded", function() {
       
       // Kiểm tra dữ liệu sản phẩm
       if (!product.id || isNaN(product.id)) {
-        console.error('Thiếu hoặc sai ID sản phẩm:', productElement.dataset);
-        alert('Thông tin sản phẩm không đầy đủ!');
+        console.error('Missing or incorrect product ID:', productElement.dataset);
+        alert('Product information is incomplete!');
         return;
       }
       
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Sử dụng retryOperation để tăng độ tin cậy
   retryOperation(() => updateCartUI())
     .catch(error => {
-      console.error('Không thể tải giỏ hàng sau nhiều lần thử:', error);
+      console.error('Unable to load cart after multiple attempts:', error);
       // Cập nhật UI để thông báo lỗi nếu cần thiết
     });
 });
@@ -491,12 +491,12 @@ async function retryOperation(operation, maxRetries = 3) {
       lastError = error;
       retries++;
       if (retries >= maxRetries) break;
-      console.log(`Thử lại lần ${retries}...`);
+      console.log(`again ${retries}...`);
       await new Promise(resolve => setTimeout(resolve, 1000 * retries));
     }
   }
   
-  console.error(`Không thể hoàn thành sau ${maxRetries} lần thử:`, lastError);
+  console.error(`Cannot be completed later ${maxRetries} try:`, lastError);
   throw lastError;
 }
 
@@ -507,8 +507,8 @@ async function checkoutCart() {
   if (cart.length === 0) {
     return Swal.fire({
       icon: 'info',
-      title: 'Giỏ hàng trống',
-      text: 'Bạn sẽ được chuyển đến trang sản phẩm.',
+      title: 'Cart is empty',
+      text: 'You will be redirected to the product page.',
       timer: 2000,
       showConfirmButton: false,
       willClose: () => { window.location.href = 'shop.php'; }

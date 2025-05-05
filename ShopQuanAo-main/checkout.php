@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // VALIDATION - Đặt ngay sau khi có payment_method
     if ($payment_method === "transfer") {
         if (empty($_POST['bank_reference'])) {
-            echo '<script>alert("Vui lòng nhập số tham chiếu ngân hàng");</script>';
+            echo '<script>alert("Please enter bank reference number");</script>';
             echo '<script>window.history.back();</script>';
             exit;
         }
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     elseif ($payment_method === "card") {
         if (empty($_POST['card_number']) || empty($_POST['card_holder']) || 
             empty($_POST['expiry_date']) || empty($_POST['cvv'])) {
-            echo '<script>alert("Vui lòng nhập đầy đủ thông tin thẻ thanh toán");</script>';
+            echo '<script>alert("Please enter full payment card information");</script>';
             echo '<script>window.history.back();</script>';
             exit;
         }
@@ -214,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $clear_stmt->execute();
         $orderSuccess = true;
     } else {
-        echo '<script>alert("Lỗi khi lưu đơn hàng: ' . $conn->error . '");</script>';
+        echo '<script>alert("error saving order: ' . $conn->error . '");</script>';
     }
 }
 ?>
@@ -552,7 +552,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 <!-- Ghi chú cho đơn hàng -->
                                 <div class="checkout__input">
-                                    <p>Ghi chú cho đơn hàng (Nếu có)</p>
+                                    <p>Order Notes (If Any)</p>
                                     <textarea name="order_note" id="order-note"
                                         placeholder="Nhập ghi chú của bạn tại đây" rows="1"
                                         class="form-control"></textarea>

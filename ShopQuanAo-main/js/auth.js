@@ -194,11 +194,11 @@ function addDropdownStyles() {
 // Đăng xuất
 function logout() {
   Swal.fire({
-    title: 'Bạn có chắc chắn muốn đăng xuất?',
+    title: 'Are you sure you want to log out?',
     icon: 'question',
     showCancelButton: true,
-    confirmButtonText: 'Đăng xuất',
-    cancelButtonText: 'Hủy'
+    confirmButtonText: 'Log out',
+    cancelButtonText: 'Cancel'
   }).then((result) => {
     if (result.isConfirmed) {
       fetch("php/logout.php", {
@@ -212,8 +212,8 @@ function logout() {
             sessionStorage.clear();
             Swal.fire({
               icon: 'success',
-              title: 'Đăng xuất thành công',
-              text: 'Bạn đã đăng xuất khỏi hệ thống!',
+              title: 'Logout successful',
+              text: 'You have logged out of the system!',
               showConfirmButton: false,
               timer: 2000
             });
@@ -230,8 +230,8 @@ function logout() {
           console.error("Logout error:", error);
           Swal.fire({
             icon: 'error',
-            title: 'Đăng xuất thất bại',
-            text: error.message || 'Vui lòng thử lại sau.',
+            title: 'Logout failed',
+            text: error.message || 'Please try again later.',
             confirmButtonText: 'OK'
           });
         });

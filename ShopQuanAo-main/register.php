@@ -38,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate required fields
     if(empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $error = "Vui lòng điền đầy đủ thông tin!";
+        $error = "Please fill in all information!";
     }
     // Validate phone number length
     else if(strlen($phone) > 10) {
-        $error = "Vui lòng điền đúng số điện thoại!";
+        $error = "Please enter correct phone number!";
     }
     // Kiểm tra password khớp nhau
     else if($password !== $confirm_password) {
-        $error = "Mật khẩu không khớp!";
+        $error = "Passwords do not match!";
     } 
     else {
         // Kiểm tra username/email đã tồn tại
@@ -54,14 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $check_stmt = $conn->prepare($check_sql);
         
         if($check_stmt === false) {
-            $error = "Lỗi prepare statement check: " . $conn->error;
+            $error = "Prepare statement check error: " . $conn->error;
         } else {
             $check_stmt->bind_param("ss", $username, $email);
             $check_stmt->execute();
             $result = $check_stmt->get_result();
 
             if($result->num_rows > 0) {
-                $error = "Username hoặc email đã tồn tại!";
+                $error = "Username or email already exists!";
             } else {
                 // Hash password và lưu user mới
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -90,13 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if($stmt->execute()) {
                         echo "<script>
-                            alert('Đăng ký thành công!');
+                            alert('Registration successful!');
                             window.location.href = 'login.php';
                         </script>";
                         exit();
                     } else {
                         echo "<script>
-                            alert('Đăng ký thất bại: " . addslashes($stmt->error) . "');
+                            alert('Registration failed: " . addslashes($stmt->error) . "');
                         </script>";
                     }
                 }
@@ -328,7 +328,7 @@ if(isset($error)) {
 
                 <?php if(isset($_GET['message']) && $_GET['message'] == 'register_success'): ?>
                 <div class="message success-message">
-                    Đăng ký thành công! Vui lòng đăng nhập.
+                    Registration successful! Please login.
                 </div>
                 <?php endif; ?>
             </div>
