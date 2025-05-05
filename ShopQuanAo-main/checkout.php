@@ -931,7 +931,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 .then(response => response.json())
                 .then(data => {
                     if (!data.loggedIn) {
-                        alert('Vui lòng đăng nhập để tiếp tục thanh toán.');
+                        alert('Please login to continue checkout.');
                         window.location.href = 'login.php';
                     }
                 });
@@ -974,11 +974,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
     <?php endif; ?>
 
-    <?php /*if (!empty($orderSuccess)): ?>
+    <?php if (!empty($orderSuccess)): ?>
     <script>
     Swal.fire({
         icon: 'success',
-        title: 'Đặt hàng thành công!',
+        title: 'Order successful!',
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true
@@ -986,7 +986,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         window.location.href = 'orders.php';
     });
     </script>
-    <?php endif; */ ?>
+    <?php endif; ?>
 
 
 </body>
