@@ -154,7 +154,15 @@ ol {
 .text-white a {
   color: #fff;
 }
+.primary-btn .arrow_right {
+  display: inline-block;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
 
+.primary-btn:hover .arrow_right {
+  transform: translateX(5px);
+}
 /* buttons */
 
 .primary-btn {
@@ -569,52 +577,47 @@ ol {
 }
 
 .hero__slider.owl-carousel .owl-nav button {
-  font-size: 36px;
-  color: #333333;
   position: absolute;
-  left: 75px;
+  left: 15px;
   top: 50%;
-  margin-top: -18px;
-  line-height: 29px;
+  transform: translateY(-50%);
 }
 
 .hero__slider.owl-carousel .owl-nav button.owl-next {
-  left: auto;
-  right: 75px;
+  left: auto;  /* Reset left position */
+    right: 15px; /* Set right position */
 }
+
 
 .hero__items {
   height: 800px;
   padding-top: 230px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.hero__items.set-bg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
 }
 
-hero__text h6 {
+.hero__text h6 {
   color: #e53637;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 28px;
-  position: relative;
-  top: 100px;
-  opacity: 0;
-  -webkit-transition: all, 0.3s;
-  -o-transition: all, 0.3s;
-  transition: all, 0.3s;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
 }
 
 .hero__text h2 {
   color: #111111;
   font-size: 48px;
-  font-weight: 700;
   line-height: 58px;
+  font-weight: 700;
   margin-bottom: 30px;
-  position: relative;
-  top: 100px;
-  opacity: 0;
-  -webkit-transition: all, 0.6s;
-  -o-transition: all, 0.6s;
-  transition: all, 0.6s;
 }
 
 .hero__text p {
@@ -4085,4 +4088,142 @@ hero__text h6 {
 
 .view-invoice-btn:hover {
   background-color: #138496;
+}
+
+@media (max-width: 768px) {
+  .hero__items {
+      height: 70vh;
+  }
+  
+  .hero__text {
+      padding-top: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero__items {
+      height: 50vh;
+  }
+}
+@media (max-width: 768px) {
+  .hero__text {
+      padding-top: 60px;
+  }
+
+  .hero__text h6 {
+      font-size: 12px;
+      margin-bottom: 20px;
+  }
+
+  .hero__text h2 {
+      font-size: 36px;
+      line-height: 46px;
+      margin-bottom: 25px;
+  }
+
+  .hero__social a {
+      margin-right: 15px;
+  }
+}
+
+/* Media query for mobile phones */
+@media (max-width: 576px) {
+  .hero__text {
+      padding-top: 40px;
+      text-align: center;
+  }
+
+  .hero__text h6 {
+      font-size: 11px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+  }
+
+  .hero__text h2 {
+      font-size: 28px;
+      line-height: 38px;
+      margin-bottom: 20px;
+  }
+
+  .hero__social {
+      margin-top: 20px;
+      text-align: center;
+  }
+
+  .hero__social a {
+      margin: 0 10px;
+  }
+}
+
+/* Media query for extra small devices */
+@media (max-width: 320px) {
+  .hero__text {
+      padding-top: 30px;
+  }
+
+  .hero__text h6 {
+      font-size: 10px;
+      margin-bottom: 10px;
+  }
+
+  .hero__text h2 {
+      font-size: 24px;
+      line-height: 34px;
+      margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .primary-btn .arrow_right {
+      margin-left: 8px;
+      font-size: 14px;
+  }
+}
+
+/* Media query for mobile phones */
+@media (max-width: 576px) {
+  .primary-btn .arrow_right {
+      margin-left: 6px;
+      font-size: 12px;
+  }
+}
+
+/* Media query for extra small devices */
+@media (max-width: 320px) {
+  .primary-btn .arrow_right {
+      margin-left: 4px;
+      font-size: 10px;
+  }
+}
+@media (max-width: 768px) {
+  .hero__slider.owl-carousel .owl-nav button {
+      left: 10px;
+  }
+  
+  .hero__slider.owl-carousel .owl-nav button.owl-next {
+      left: auto;
+      right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero__slider.owl-carousel .owl-nav button {
+      left: 5px;
+  }
+  
+  .hero__slider.owl-carousel .owl-nav button.owl-next {
+      left: auto;
+      right: 5px;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero__slider.owl-carousel .owl-nav button {
+      left: 2px;
+  }
+  
+  .hero__slider.owl-carousel .owl-nav button.owl-next {
+      left: auto;
+      right: 2px;
+  }
 }
