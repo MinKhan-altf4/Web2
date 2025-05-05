@@ -760,7 +760,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error: document.getElementById('error-bank-reference'),
                 validate: i => i.value.trim() !== '',
                 msg: {
-                    missing: 'Vui lòng nhập Reference Number.'
+                    missing: 'Please enter Reference Number.'
                 }
             },
             card_number: {
@@ -768,8 +768,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error: document.getElementById('error-card-number'),
                 validate: i => /^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/.test(i.value.trim()),
                 msg: {
-                    missing: 'Vui lòng nhập số thẻ.',
-                    pattern: 'Số thẻ phải 16 chữ số.'
+                    missing: 'Please enter card number.',
+                    pattern: 'Card number must be 16 digits.'
                 }
             },
             card_holder: {
@@ -777,7 +777,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error: document.getElementById('error-card-holder'),
                 validate: i => i.value.trim() !== '',
                 msg: {
-                    missing: 'Vui lòng nhập tên trên thẻ.'
+                    missing: 'Please enter the name on the card.'
                 }
             },
             expiry_date: {
@@ -785,8 +785,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error: document.getElementById('error-expiry-date'),
                 validate: i => /^[0-1]\d\/\d{2}$/.test(i.value.trim()),
                 msg: {
-                    missing: 'Vui lòng nhập ngày hết hạn.',
-                    pattern: 'Định dạng MM/YY.'
+                    missing: 'Please enter expiration date.',
+                    pattern: 'MM/YY format.'
                 }
             },
             cvv: {
@@ -794,8 +794,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error: document.getElementById('error-cvv'),
                 validate: i => /^\d{3}$/.test(i.value.trim()),
                 msg: {
-                    missing: 'Vui lòng nhập CVV.',
-                    pattern: 'CVV phải 3 chữ số.'
+                    missing: 'Please enter CVV.',
+                    pattern: 'CVV must be 3 digits.'
                 }
             }
         };
