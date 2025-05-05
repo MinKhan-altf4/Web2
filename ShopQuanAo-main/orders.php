@@ -9,17 +9,7 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-// Kết nối cơ sở dữ liệu
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "shopquanao";
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
+require_once './admin/php/db.php';
 
 // Kiểm tra và thêm cột card_number và card_holder vào bảng checkout
 $check_columns_query = "

@@ -1,19 +1,10 @@
 <?php
+require_once './admin/php/db.php';
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Kết nối cơ sở dữ liệu trực tiếp
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "shopquanao";
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
 
 // Add after database connection code and before form processing
 
