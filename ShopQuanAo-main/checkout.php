@@ -816,6 +816,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         form.addEventListener('submit', e => {
             const m = document.querySelector('input[name="payment-method"]:checked').value;
             let ok = true;
+            // === VALIDATE DIFFERENT ADDRESS ===
+            const diff = document.getElementById('diff-address').checked;
+            if (diff) {
+                // chọn tất cả field bắt buộc trong form-block
+                document.querySelectorAll('#form-block [required]').forEach(f => {
+                    if (!f.value.trim()) {
+                        ok = false;
+                        // tạo hoặc hiển thị error-message
+                        let em = f.parentElement.querySelector('.error-message');
+                        if (!em) {
+                            em = document.createElement('div');
+                            em.className = 'error-message';
+                            f.parentElement.appendChild(em);
+                        }
+                        em.textContent = 'This field is required';
+                        em.style.display = 'block';
+                    }
+                });
+            }
             if (m === 'transfer') {
                 if (!showError(validators.transfer)) ok = false;
             }
@@ -836,6 +855,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         pmRadios.forEach(r => r.addEventListener('change', updateVisibility));
         updateVisibility();
     })();
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chk = document.getElementById('diff-address'); // đúng id :contentReference[oaicite:6]{index=6}
+        const addressFields = document.querySelectorAll('#form-block [required]');
+        // toggle required+disabled
+        chk.addEventListener('change', function() {
+            addressFields.forEach(f => {
+                f.disabled = !chk.checked;
+            });
+        });
+        // init
+        addressFields.forEach(f => f.disabled = !chk.checked);
+    });
     </script>
 
     <script>
