@@ -925,11 +925,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     Swal.fire({
         icon: 'info',
         title: 'Giỏ hàng trống',
-        text: 'Bạn sẽ được chuyển về trang giỏ hàng',
+        text: 'Bạn sẽ được chuyển về trang shop',
         showConfirmButton: false,
         timer: 2000
     }).then(() => {
-        window.location.href = 'shopping-cart.php';
+        window.location.href = 'shop.php';
     });
     </script>
     <?php endif; ?>
