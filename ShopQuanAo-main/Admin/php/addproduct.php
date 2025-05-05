@@ -2,110 +2,104 @@
 require_once 'auth.php';
 ?>
 <html html>
-
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/addproduct.css">
-    <link rel="stylesheet" href="../css/grid.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/addproduct.css">
+  <link rel="stylesheet" href="../css/grid.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
-
 <body>
-    <div class="sidebar">
-        <div class="logo"></div>
-        <ul class="menu">
-            <li>
-                <a href="dashboard.php">
-                    <i class='bx bx-grid-alt'></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="user.php">
-                    <i class='bx bx-user'></i>
-                    <span>User</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="addproduct.php">
-                    <i class='bx bx-box'></i>
-                    <span>Product</span>
-                </a>
-            </li>
-            <li>
-                <a href="analytics.php">
-                    <i class='bx bx-pie-chart-alt'></i>
-                    <span>Analytics</span>
-                </a>
-            </li>
-            <li>
-                <a href="order.php">
-                    <i class='bx bx-cart'></i>
-                    <span>Order</span>
-                </a>
-            </li>
-            <li class="logout">
-                <a href="logout.php">
-                    <i class='bx bx-log-out'></i>
-                    <span>Logout</span>
-                </a>
-            </li>
-        </ul>
+  <div class="sidebar">
+    <div class="logo"></div>
+    <ul class="menu">
+        <li>
+            <a href="dashboard.php">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="user.php">
+                <i class='bx bx-user'></i>
+                <span>User</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="addproduct.php">
+                <i class='bx bx-box'></i>
+                <span>Product</span>
+            </a>
+        </li>
+        <li>
+            <a href="analytics.php">
+                <i class='bx bx-pie-chart-alt'></i>
+                <span>Analytics</span>
+            </a>
+        </li>
+        <li>
+            <a href="order.php">
+                <i class='bx bx-cart'></i>
+                <span>Order</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="logout.php">
+                <i class='bx bx-log-out'></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+  </div>
+
+  <div class="main_content">
+    <div class="header_wrapper">
+      <div class="header_title">
+        <span>MALE FASHION</span>
+        <h2>Product</h2>
+      </div>
+    </div>
+    <div class="add_product">
+      <h3>ADD A NEW PRODUCT</h3>
+      <form action="addproduct.php" method="POST" enctype="multipart/form-data">
+        <div class="product_info">
+          <label for="name_product">Product Name:</label>
+          <input type="text" name="name_product" id="name_product" placeholder="Enter product name" class="product_enter" required>
+
+          <label for="price_product">Price Product:</label>
+          <input type="number" name="price_product" id="price_product" placeholder="Enter price $" class="product_enter" required>
+
+          <label for="description">Product Description:</label>
+<textarea name="description" id="description" placeholder="Enter product description" class="product_enter" rows="4"></textarea>
+
+
+          <label for="category_product">Category Product:</label>
+          <select name="category_product" id="category_product" class="product_enter" required>
+            <option value="">-- Select Category --</option>
+            <option value="Bags">Bags</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Shoes">Shoes</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+
+          <label for="tag_product">Tag Product:</label>
+          <input type="text" name="tag_product" id="tag_product" placeholder="Enter tag" class="product_enter" required>
+
+          <label for="image">Image Product:</label>
+          <input type="file" class="product_enter" name="image" id="image" accept="image/*" required>
+          <label for="is_visible">Hiển thị sản phẩm:</label>
+<select name="is_visible" id="is_visible" class="product_enter" required>
+    <option value="1" selected>Hiện</option>
+    <option value="0">Ẩn</option>
+</select>
+
+
+          <button type="submit" class="submit-btn">ADD PRODUCT</button>
+          
+        </div>
+      </form>
     </div>
 
-    <div class="main_content">
-        <div class="header_wrapper">
-            <div class="header_title">
-                <span>MALE FASHION</span>
-                <h2>Product</h2>
-            </div>
-        </div>
-        <div class="add_product">
-            <h3>ADD A NEW PRODUCT</h3>
-            <form action="addproduct.php" method="POST" enctype="multipart/form-data">
-                <div class="product_info">
-                    <label for="name_product">Product Name:</label>
-                    <input type="text" name="name_product" id="name_product" placeholder="Enter product name"
-                        class="product_enter" required>
-
-                    <label for="price_product">Price Product:</label>
-                    <input type="number" name="price_product" id="price_product" placeholder="Enter price $"
-                        class="product_enter" required>
-
-                    <label for="description">Product Description:</label>
-                    <textarea name="description" id="description" placeholder="Enter product description"
-                        class="product_enter" rows="4"></textarea>
-
-
-                    <label for="category_product">Category Product:</label>
-                    <select name="category_product" id="category_product" class="product_enter" required>
-                        <option value="">-- Select Category --</option>
-                        <option value="Bags">Bags</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Shoes">Shoes</option>
-                        <option value="Accessories">Accessories</option>
-                    </select>
-
-                    <label for="tag_product">Tag Product:</label>
-                    <input type="text" name="tag_product" id="tag_product" placeholder="Enter tag" class="product_enter"
-                        required>
-
-                    <label for="image">Image Product:</label>
-                    <input type="file" class="product_enter" name="image" id="image" accept="image/*" required>
-                    <label for="is_visible">Hiển thị sản phẩm:</label>
-                    <select name="is_visible" id="is_visible" class="product_enter" required>
-                        <option value="1" selected>Hiện</option>
-                        <option value="0">Ẩn</option>
-                    </select>
-
-
-                    <button type="submit" class="submit-btn">ADD PRODUCT</button>
-
-                </div>
-            </form>
-        </div>
-
-        <?php
+<?php
 include("db.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -122,8 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
-    $sql = "INSERT INTO products (name, price, description, category, tag, image)
-            VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name')";
+    $sql = "INSERT INTO products (name, price, description, category, tag, image, is_visible)
+        VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name', $is_visible)";
 
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
@@ -131,22 +125,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-        <div class="tabular_wrapper">
-            <h3 class="main_title">Product List</h3>
-            <div class="table_container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Tag Product</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+<div class="tabular_wrapper">
+  <h3 class="main_title">Product List</h3>
+  <div class="table_container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Tag Product</th>
+          <th>Image</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
         include("db.php");
         $result = mysqli_query($conn, "SELECT product_id, name, price, category, tag, image FROM products WHERE is_deleted = 0");
 
@@ -174,11 +168,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </tr>";
         }
         ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
 </body>
-
 </html>
