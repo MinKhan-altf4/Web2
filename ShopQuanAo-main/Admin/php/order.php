@@ -2,65 +2,46 @@
 require_once 'auth.php';
 require_once 'config.php';
 
-// Add after the require statements
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
-    $order_id = (int)$_POST['order_id'];
-    
-    // Start transaction
-    $conn->begin_transaction();
-    
-    try {
-        // Delete related invoice first (if exists)
-        $delete_invoice = "DELETE FROM invoices WHERE order_id = ?";
-        $stmt = $conn->prepare($delete_invoice);
-        $stmt->bind_param("i", $order_id);
-        $stmt->execute();
-        
-        // Then delete the order
-        $delete_order = "DELETE FROM checkout WHERE order_id = ?";
-        $stmt = $conn->prepare($delete_order);
-        $stmt->bind_param("i", $order_id);
-        
-        if ($stmt->execute()) {
-            $conn->commit();
-            $success_message = "Đơn hàng đã được xóa thành công!";
-            header("Location: order.php?success=1");
-            exit;
-        } else {
-            throw new Exception("Lỗi khi xóa đơn hàng");
-        }
-    } catch (Exception $e) {
-        $conn->rollback();
-        $error_message = "Lỗi: " . $e->getMessage();
-    }
-}
+
+
 
 // Sửa lại phần xử lý cập nhật đơn hàng
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_order'])) {
     $order_id = $_POST['order_id'];
     $status = strtolower($_POST['status']);
     $shipping_address = $_POST['shipping_address'];
-    $shipping_city = $_POST['city']; // Thêm dòng này
+    $shipping_city = $_POST['city'];
     
-    $update_sql = "UPDATE checkout SET 
-                  order_status = ?,
-                  shipping_address = ?,
-                  shipping_city = ?
-                  WHERE order_id = ?";
+    // Start transaction
+    $conn->begin_transaction();
     
-    if ($stmt = $conn->prepare($update_sql)) {
-        $stmt->bind_param("sssi", $status, $shipping_address, $shipping_city, $order_id);
+    try {
+        // Update order information
+        $update_sql = "UPDATE checkout SET 
+                      order_status = ?,
+                      shipping_address = ?,
+                      shipping_city = ?
+                      WHERE order_id = ?";
         
-        if ($stmt->execute()) {
-            $success_message = "Cập nhật đơn hàng thành công!";
-            header("Location: order.php?success=1");
-            exit;
-        } else {
-            $error_message = "Lỗi khi cập nhật đơn hàng: " . $stmt->error;
+        $stmt = $conn->prepare($update_sql);
+        $stmt->bind_param("sssi", $status, $shipping_address, $shipping_city, $order_id);
+        $stmt->execute();
+        
+        // If status is changed to delivered, update payment status to paid
+        if ($status == 'delivered') {
+            $update_payment_sql = "UPDATE invoices SET payment_status = 'Paid' WHERE order_id = ?";
+            $stmt = $conn->prepare($update_payment_sql);
+            $stmt->bind_param("i", $order_id);
+            $stmt->execute();
         }
-        $stmt->close();
-    } else {
-        $error_message = "Lỗi khi chuẩn bị câu lệnh: " . $conn->error;
+        
+        $conn->commit();
+        $success_message = "Cập nhật đơn hàng thành công!";
+        header("Location: order.php?success=1");
+        exit;
+    } catch (Exception $e) {
+        $conn->rollback();
+        $error_message = "Lỗi khi cập nhật đơn hàng: " . $e->getMessage();
     }
 }
 // Kiểm tra kết nối CSDL trước khi xóa
@@ -71,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
     
     $order_id = (int)$_POST['order_id'];
     
-    // Validate order_id
     if ($order_id <= 0) {
         $error_message = "ID đơn hàng không hợp lệ";
         header("Location: order.php?error=1");
@@ -82,33 +62,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
     $conn->begin_transaction();
     
     try {
-        // Delete related invoice first (if exists)
+        // 1. Xóa tất cả items trong checkout_items trước
+        $delete_items = "DELETE FROM checkout_items WHERE order_id = ?";
+        $stmt = $conn->prepare($delete_items);
+        $stmt->bind_param("i", $order_id);
+        if (!$stmt->execute()) {
+            throw new Exception("Lỗi khi xóa items: " . $stmt->error);
+        }
+        
+        // 2. Xóa invoice (nếu có)
         $delete_invoice = "DELETE FROM invoices WHERE order_id = ?";
         $stmt = $conn->prepare($delete_invoice);
         $stmt->bind_param("i", $order_id);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception("Lỗi khi xóa invoice: " . $stmt->error);
+        }
         
-        // Then delete the order
+        // 3. Cuối cùng xóa order
         $delete_order = "DELETE FROM checkout WHERE order_id = ?";
         $stmt = $conn->prepare($delete_order);
         $stmt->bind_param("i", $order_id);
-        
-        if ($stmt->execute()) {
-            $conn->commit();
-            $success_message = "Đơn hàng đã được xóa thành công!";
-            header("Location: order.php?success=1");
-            exit;
-        } else {
-            throw new Exception("Lỗi khi xóa đơn hàng: " . $stmt->error);
+        if (!$stmt->execute()) {
+            throw new Exception("Lỗi khi xóa order: " . $stmt->error);
         }
+        
+        $conn->commit();
+        $success_message = "Đã xóa hoàn toàn đơn hàng #$order_id và tất cả dữ liệu liên quan!";
+        header("Location: order.php?success=1");
+        exit;
+        
     } catch (Exception $e) {
         $conn->rollback();
-        $error_message = "Lỗi: " . $e->getMessage();
+        $error_message = "Lỗi hệ thống: " . $e->getMessage();
         header("Location: order.php?error=1&message=" . urlencode($error_message));
         exit;
     }
 }
-
 // Sửa lại phần xử lý filter
 
 $where_clause = "1=1";
