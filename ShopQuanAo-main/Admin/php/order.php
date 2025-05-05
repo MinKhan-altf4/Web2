@@ -40,14 +40,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_order'])) {
     $order_id = $_POST['order_id'];
     $status = strtolower($_POST['status']);
     $shipping_address = $_POST['shipping_address'];
+    $shipping_city = $_POST['city']; // Thêm dòng này
     
     $update_sql = "UPDATE checkout SET 
                   order_status = ?,
-                  shipping_address = ?
+                  shipping_address = ?,
+                  shipping_city = ?
                   WHERE order_id = ?";
     
     if ($stmt = $conn->prepare($update_sql)) {
-        $stmt->bind_param("ssi", $status, $shipping_address, $order_id);
+        $stmt->bind_param("sssi", $status, $shipping_address, $shipping_city, $order_id);
         
         if ($stmt->execute()) {
             $success_message = "Cập nhật đơn hàng thành công!";
@@ -59,6 +61,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_order'])) {
         $stmt->close();
     } else {
         $error_message = "Lỗi khi chuẩn bị câu lệnh: " . $conn->error;
+    }
+}
+// Kiểm tra kết nối CSDL trước khi xóa
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
+    if (!$conn) {
+        die("Kết nối CSDL thất bại");
+    }
+    
+    $order_id = (int)$_POST['order_id'];
+    
+    // Validate order_id
+    if ($order_id <= 0) {
+        $error_message = "ID đơn hàng không hợp lệ";
+        header("Location: order.php?error=1");
+        exit;
+    }
+    
+    // Start transaction
+    $conn->begin_transaction();
+    
+    try {
+        // Delete related invoice first (if exists)
+        $delete_invoice = "DELETE FROM invoices WHERE order_id = ?";
+        $stmt = $conn->prepare($delete_invoice);
+        $stmt->bind_param("i", $order_id);
+        $stmt->execute();
+        
+        // Then delete the order
+        $delete_order = "DELETE FROM checkout WHERE order_id = ?";
+        $stmt = $conn->prepare($delete_order);
+        $stmt->bind_param("i", $order_id);
+        
+        if ($stmt->execute()) {
+            $conn->commit();
+            $success_message = "Đơn hàng đã được xóa thành công!";
+            header("Location: order.php?success=1");
+            exit;
+        } else {
+            throw new Exception("Lỗi khi xóa đơn hàng: " . $stmt->error);
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        $error_message = "Lỗi: " . $e->getMessage();
+        header("Location: order.php?error=1&message=" . urlencode($error_message));
+        exit;
     }
 }
 
@@ -74,7 +121,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
     if (!empty($_POST['status'])) {
         $where_clause .= " AND o.order_status = '" . $_POST['status'] . "'";
     }
-   
+    if (!empty($_POST['city'])) {
+        $where_clause .= " AND o.shipping_city = '" . $_POST['city'] . "'";
+    }
     if (!empty($_POST['payment_status'])) {
         $where_clause .= " AND i.payment_status = '" . $_POST['payment_status'] . "'";
     }
@@ -82,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
 
 // Cập nhật phần query để lấy thêm thông tin cần thiết
 $sql = "SELECT o.*, u.fullname as customer_name, i.invoice_number, i.payment_status, i.total_amount,
-               o.shipping_fullname, o.shipping_phone, o.shipping_address,  
+               o.shipping_fullname, o.shipping_phone, o.shipping_address, o.shipping_city,
                o.payment_method, o.order_date, o.order_status
         FROM checkout o 
         LEFT JOIN user u ON o.user_id = u.id
@@ -116,7 +165,7 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
 if (isset($_GET['id'])) {
     $invoice_id = (int)$_GET['id'];
     $sql = "SELECT i.*, o.order_status, o.shipping_fullname, o.shipping_phone, 
-                   o.shipping_address,  o.payment_method
+                   o.shipping_address, o.shipping_city, o.payment_method
             FROM invoices i
             JOIN checkout o ON i.order_id = o.order_id
             WHERE i.invoice_id = ?";
@@ -318,6 +367,14 @@ $additional_styles = "
               <input type="date" name="to_date">
             </div>
             <div class="filter">
+              <label>City:</label>
+              <select name="city">
+                <option value="">All</option>
+                <option value="HoChiMinh">HoChiMinh</option>
+                <option value="Hanoi">Hanoi</option>
+              </select>
+            </div>
+            <div class="filter">
               <label>Status:</label>
               <select name="status">
                 <option value="">All</option>
@@ -327,7 +384,14 @@ $additional_styles = "
                 <option value="cancelled">Cancelled</option>
               </select>
             </div>
-           
+            <div class="filter">
+              <label>Payment Status:</label>
+              <select name="payment_status">
+                <option value="">All</option>
+                <option value="paid">Paid</option>
+                <option value="unpaid">Unpaid</option>
+              </select>
+            </div>
             <button type="submit" class="submit-btn">Apply Filter</button>
         </form>
     </div>
@@ -354,7 +418,7 @@ $additional_styles = "
                 <strong>Name:</strong> <?php echo htmlspecialchars($row['shipping_fullname']); ?><br>
                 <strong>Phone:</strong> <?php echo htmlspecialchars($row['shipping_phone']); ?><br>
                 <strong>Address:</strong> <?php echo htmlspecialchars($row['shipping_address']); ?><br>
-                
+                <strong>City:</strong> <?php echo htmlspecialchars($row['shipping_city']); ?>
               </td>
               <td>
                 <strong>Date:</strong> <?php echo date('d/m/Y H:i', strtotime($row['order_date'])); ?><br>
@@ -376,10 +440,10 @@ $additional_styles = "
                     <i class='bx bx-edit-alt'></i>
                     Edit
                 </a>
-                <a href="#" onclick="confirmDelete(<?php echo $row['order_id']; ?>)" class="btn btn-delete">
-                    <i class='bx bx-trash'></i>
-                    Delete
-                </a>
+                <a href="#" onclick="return confirmDelete(<?php echo $row['order_id']; ?>)" class="btn btn-delete">
+    <i class='bx bx-trash'></i>
+    Delete
+</a>
               </td>
             </tr>
           <?php endwhile; ?>
@@ -435,6 +499,14 @@ $additional_styles = "
                 <input type="text" name="shipping_address" value="<?php echo htmlspecialchars($edit_order['shipping_address']); ?>" required>
             </div>
             
+            <div class="form-group">
+                <label>City:</label>
+                <select name="city" required>
+                    <option value="HoChiMinh" <?php echo ($edit_order['shipping_city'] == 'HoChiMinh') ? 'selected' : ''; ?>>HoChiMinh</option>
+                    <option value="Hanoi" <?php echo ($edit_order['shipping_city'] == 'Hanoi') ? 'selected' : ''; ?>>Hanoi</option>
+                </select>
+            </div>
+            
             <button type="submit" name="update_order" class="submit-btn">Update Order</button>
         </form>
         <?php endif; ?>
@@ -470,9 +542,9 @@ $additional_styles = "
             input.value = 'true';
             
             const orderIdInput = document.createElement('input');
-            orderIdInput.type = 'hidden';
-            orderIdInput.name = 'order_id';
-            orderIdInput.value = orderId;
+            input.type = 'hidden';
+            input.name = 'order_id';
+            input.value = orderId;
             
             form.appendChild(input);
             form.appendChild(orderIdInput);
@@ -480,6 +552,34 @@ $additional_styles = "
             form.submit();
         }
     }
+    function confirmDelete(orderId) {
+    if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'order.php';
+        
+        // Tạo input cho delete_order
+        const deleteInput = document.createElement('input');
+        deleteInput.type = 'hidden';
+        deleteInput.name = 'delete_order';
+        deleteInput.value = '1';
+        
+        // Tạo input cho order_id
+        const orderIdInput = document.createElement('input');
+        orderIdInput.type = 'hidden';
+        orderIdInput.name = 'order_id';
+        orderIdInput.value = orderId;
+        
+        // Thêm cả 2 input vào form
+        form.appendChild(deleteInput);
+        form.appendChild(orderIdInput);
+        
+        // Thêm form vào body và submit
+        document.body.appendChild(form);
+        form.submit();
+    }
+    return false;
+}
 </script>
 </body>
 </html>

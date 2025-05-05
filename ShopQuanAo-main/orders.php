@@ -229,7 +229,7 @@ $styles = "
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li><a href="./index.php">Home</a></li>
-                            <li class="active"><a href="./orders.php">Orders</a></li>
+                            <li class="active"><a href="./Shop.php">Shop</a></li>
                             <li>
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
