@@ -491,23 +491,27 @@ while ($item = $items_result->fetch_assoc()) {
     </header>
     <!-- Header Section End -->
     <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-option no-print">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="order__table">
-                        <h4>Bills</h4>
-                        <div class="breadcrumb__links">
-                            <a href="./index.php">Home</a>
+<section class="breadcrumb-option no-print">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="order__table">
+                    <h4>Bills</h4>
+                    <div class="breadcrumb__links">
+                        <a href="./index.php">Home</a>
+                        <?php if (isset($_GET['source']) && $_GET['source'] == 'orders'): ?>
                             <a href="./orders.php">Orders</a>
-                            <span>Bill</span>
-                        </div>
+                        <?php elseif (isset($_GET['source']) && $_GET['source'] == 'checkout'): ?>
+                            <a href="./checkout.php">Checkout</a>
+                        <?php endif; ?>
+                        <span>Bill #<?php echo $invoice['invoice_number']; ?></span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
     <!-- Invoice Section Begin -->
     <section class="invoice spad">
@@ -616,8 +620,8 @@ while ($item = $items_result->fetch_assoc()) {
 
             <div class="row mt-4">
                 <div class="col-lg-12 text-center">
-                    <a href="orders.php" class="btn btn-primary no-print">Back to order list</a>
-                    <button onclick="window.print()" class="btn btn-secondary no-print">Print invoice</button>
+                    <a href="shop.php" class="btn btn-primary no-print">Continue Shopping</a>
+                   
 
                 </div>
             </div>

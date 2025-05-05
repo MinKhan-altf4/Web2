@@ -205,14 +205,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $invoice_number = generateInvoiceNumber(); // Hàm tạo số hóa đơn
             $stmt->bind_param("issd", $order_id, $invoice_number, $payment_status, $total_amount);
             $stmt->execute();
-        }
+            $invoice_id = $conn->insert_id;
+    }
+        
 
         // Xóa giỏ hàng sau khi đặt hàng thành công
         $clear_cart_sql = "DELETE FROM cart WHERE id = ?";
         $clear_stmt     = $conn->prepare($clear_cart_sql);
         $clear_stmt->bind_param("i", $user_id);
         $clear_stmt->execute();
-        $orderSuccess = true;
+        
+        // Chuyển hướng đến trang invoice.php
+    header("Location: invoice.php?id=" . $invoice_id . "&source=checkout");
+    exit();
+   
     } else {
         echo '<script>alert("error saving order: ' . $conn->error . '");</script>';
     }
@@ -968,7 +974,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
     <?php endif; ?>
 
-    <?php if (!empty($orderSuccess)): ?>
+    <?php /*if (!empty($orderSuccess)): ?>
     <script>
     Swal.fire({
         icon: 'success',
@@ -980,7 +986,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         window.location.href = 'orders.php';
     });
     </script>
-    <?php endif; ?>
+    <?php endif; */ ?>
 
 
 </body>
