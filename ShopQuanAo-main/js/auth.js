@@ -194,7 +194,7 @@ function addDropdownStyles() {
 
 // Đăng xuất
 function logout() {
-  if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+  if (confirm("Do you want to log out?")) {
       fetch('php/logout.php', {
           method: 'POST', // Use POST for logout
           credentials: 'include'
@@ -204,7 +204,7 @@ function logout() {
           if (data.status === 'success') {
               // Clear session storage
               sessionStorage.clear();
-              alert("Đã đăng xuất thành công!");
+              alert("Successfully logged out!");
               window.location.href = "login.php";
           } else {
               throw new Error(data.message || 'Logout failed');
@@ -212,7 +212,7 @@ function logout() {
       })
       .catch(error => {
           console.error('Logout error:', error);
-          alert('Đăng xuất thất bại. Vui lòng thử lại.');
+          alert('Logout failed. Please try again.');
       });
   }
 }
