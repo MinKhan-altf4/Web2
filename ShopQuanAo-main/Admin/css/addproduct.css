@@ -1,3 +1,4 @@
+/* Reset styles để tránh xung đột */
 * {
     margin: 0;
     padding: 0;
@@ -6,13 +7,14 @@
 }
 
 html, body {
-    min-height: 100vh;
-    height: auto;
+    height: 100vh;
+    overflow-x: hidden;
     background-color: #dfdfdf;
 }
 
 body {
     display: flex;
+    background: #f1f1f1;
 }
 
 .sidebar {
@@ -80,14 +82,14 @@ body {
     width: 100%;
 }
 
+/* Sửa lại main content */
 .main_content {
     flex: 1;
     margin-left: 110px;
     padding: 20px;
     transition: all 0.5s linear;
-    background: #dfdfdf;
     width: calc(100% - 110px);
-    max-width: 1200px; /* Thêm max-width */
+    background: #dfdfdf;
 }
 
 .header_wrapper {
@@ -97,19 +99,21 @@ body {
     flex-wrap: wrap;
     background: #fff;
     border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
 }
 
 .header_title {
+    font-size: 24px;
     color: #555;
 }
 
 .add_product {
-    background: #fff;
-    padding: 20px;
+    background-color: #fff;
+    padding: 2rem;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
+    width: 100%;
 }
 
 .add_product .product_info {
@@ -121,22 +125,27 @@ body {
 
 .add_product h3 {
     color: #555;
+    font-size: 24px;
+    margin-bottom: 30px;
     align-items: center;
 }
 
+/* Sửa lại form layout */
 .product_info {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 .product_info label {
-    color: #222;
-    font-size: 20px;
+    color: #666;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
 }
 
+/* Xóa các style không cần thiết và xung đột */
 .product_info .product_enter {
     background: rgb(237, 237, 237);
     border-radius: 15px;
@@ -145,42 +154,61 @@ body {
     align-items: center;
     gap: 10px;
     padding: 15px 10px;
-}
-
-.product_enter {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
     width: 100%;
 }
 
+.product_enter {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #f8f9fa;
+}
+
+textarea.product_enter {
+    min-height: 120px;
+    resize: vertical;
+}
+
+select.product_enter {
+    appearance: none;
+    background-image: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 35px;
+}
+
 .submit-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #3498db;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 20px;
+    background: #3498db;
     color: white;
-    font-weight: bold;
-    border-radius: 8px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
-    border-style: none;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
 }
 
 .submit-btn:hover {
-    background-color: #2980b9;
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .tabular_wrapper {
     background: #fff;
-    margin-top: 1rem;
     border-radius: 10px;
-    padding: 20px;
+    padding: 2rem;
+    margin-top: 20px;
 }
 
 .table_container {
-    width: 100%;
     overflow-x: auto;
+    width: 100%;
 }
 
 table {
@@ -197,6 +225,9 @@ th {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    background-color: #222;
+    color: white;
 }
 
 /* Thêm style cho cột Action */
@@ -210,13 +241,14 @@ tbody {
 
 td {
     padding: 12px;
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
     border-bottom: 1px solid #ddd;
+    border: 1px solid #ccc;
 }
 
 tr:nth-child(even) {
-    background: #fff;
+    background: #f9f9f9;
 }
 
 tfoot {
@@ -263,11 +295,12 @@ a.delete-btn:hover {
     align-items: center;
     gap: 5px;
     transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 /* Nút Edit */
 .btn-edit {
-    background-color: #007bff;
+    background: #007bff;
     color: white;
 }
 
@@ -278,7 +311,7 @@ a.delete-btn:hover {
 
 /* Nút Delete */
 .btn-delete {
-    background-color: #dc3545;
+    background: #dc3545;
     color: white;
 }
 
@@ -318,21 +351,19 @@ a.delete-btn:hover {
     margin-bottom: 15px;
 }
 
-/* Responsive styles */
+/* Remove all existing media queries and replace with these new ones */
 @media screen and (max-width: 768px) {
     .mobile-toggle {
         display: block;
     }
 
     .sidebar {
-        width: 0;
-        left: -100%;
-        transition: 0.3s;
+        transform: translateX(-100%);
     }
 
     .sidebar.active {
+        transform: translateX(0);
         width: 240px;
-        left: 0;
     }
 
     .main_content {
@@ -342,260 +373,85 @@ a.delete-btn:hover {
     }
 
     .header_wrapper {
-        padding: 15px;
-    }
-
-    .header_title h2 {
-        font-size: 20px;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .add_product {
         padding: 15px;
     }
 
-    .add_product h3 {
-        font-size: 18px;
-        margin-bottom: 15px;
+    .product_info {
+        width: 100%;
+        padding: 0;
+        gap: 10px;
     }
 
-    .product_info {
-        gap: 10px;
+    .product_info label {
+        font-size: 14px;
     }
 
     .product_enter {
         padding: 8px;
         font-size: 14px;
+        height: 40px;
     }
 
-    .submit-btn {
-        width: 100%;
-        padding: 10px;
+    textarea.product_enter {
+        height: 100px;
     }
 
+    /* Table styles */
     .tabular_wrapper {
         padding: 10px;
+        width: 100%;
+        margin: 0;
     }
 
     .table_container {
-        margin: 0 -10px;
-        width: 95%;
-        font-size: 11px;
+        width: 100%;
+        overflow-x: auto;
     }
 
     table {
-        width: 95%;
-        margin: 0 auto;
+        width: 100%;
+        min-width: 800px; /* Ensures table doesn't get too narrow */
     }
 
     th, td {
-        padding: 4px 6px;
+        padding: 8px;
+        font-size: 13px;
     }
 
-    /* Điều chỉnh cột trong bảng */
-    th:nth-child(3),
-    td:nth-child(3),
-    th:nth-child(4),
-    td:nth-child(4) {
-        display: none;
-    }
-
-    /* Điều chỉnh nút action */
+    /* Action buttons */
     .action-buttons {
-        display: flex;
         flex-direction: column;
         gap: 5px;
     }
 
     .btn {
+        width: 100%;
         padding: 6px 12px;
         font-size: 12px;
-    }
-
-    /* Điều chỉnh kích thước ảnh */
-    td img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .main_content {
-        width: 100%;
-        margin-left: 0;
-        padding: 10px;
-    }
-
-    .header_wrapper {
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .header_title {
-        font-size: 14px;
-    }
-
-    .header_title h2 {
-        font-size: 16px;
+        justify-content: center;
     }
 
     .add_product {
-        padding: 10px;
-        margin-bottom: 10px;
+        padding: 20px;
     }
 
     .add_product h3 {
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
-
-    .product_info {
-        gap: 8px;
-    }
-
-    .product_info label {
-        font-size: 12px;
-    }
-
-    .product_enter {
-        padding: 6px;
-        font-size: 12px;
-        height: 32px;
-    }
-
-    textarea.product_enter {
-        height: 80px;
-    }
-
-    .submit-btn {
-        height: 32px;
-        font-size: 12px;
-    }
-
-    .tabular_wrapper {
-        padding: 10px;
-    }
-
-    .main_title {
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
-
-    table {
-        font-size: 12px;
-    }
-
-    th, td {
-        padding: 6px;
-    }
-
-    .tabular_wrapper {
-        padding: 8px;
-        width: 100%;
-        font-size: 12px;
-    }
-
-    .table_container {
-        overflow-x: auto;
-        width: 100%;
-    }
-
-    table {
-        min-width: 100%;
-        font-size: 12px;
-    }
-
-    th, td {
-        padding: 6px;
-        white-space: nowrap;
-    }
-
-    th {
-        background: #222;
-        color: white;
-        font-size: 12px;
-    }
-
-    td img {
-        width: 25px;
-        height: 25px;
-        object-fit: cover;
-    }
-
-    .main_title {
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 4px;
-    }
-
-    .action-buttons button,
-    .action-buttons a {
-        padding: 4px 8px;
-        font-size: 11px;
-    }
-
-    .tabular_wrapper {
-        padding: 8px;
-        width: 95%; /* Make wrapper slightly smaller */
-        margin: 0 auto;
-    }
-
-    .table_container {
-        overflow-x: auto;
-        width: 100%;
-        font-size: 11px;
-    }
-
-    table {
-        width: 95%; /* Make table slightly smaller */
-        margin: 0 auto;
-    }
-
-    th, td {
-        padding: 4px 6px;
-    }
-
-    th {
-        font-size: 11px;
-    }
-
-    td img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 3px;
-    }
-
-    .action-buttons button,
-    .action-buttons a {
-        padding: 2px 4px;
-        font-size: 10px;
-    }
-
-    .main_title {
-        font-size: 13px;
-        margin-bottom: 6px;
-        text-align: center;
+        font-size: 20px;
+        margin-bottom: 20px;
     }
 }
 
-/* Thêm styles cho màn hình cực nhỏ */
 @media screen and (max-width: 480px) {
-    .header_wrapper,
-    .add_product,
-    .tabular_wrapper {
-        padding: 10px;
+    .main_content {
+        padding: 8px;
     }
 
-    .header_title span {
-        font-size: 14px;
-    }
-
-    .header_title h2 {
+    .header_title {
         font-size: 20px;
     }
 
@@ -604,30 +460,23 @@ a.delete-btn:hover {
     }
 
     .product_info label {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .product_enter {
-        padding: 10px;
+        padding: 6px;
         font-size: 13px;
+        height: 36px;
     }
 
-    table {
-        font-size: 13px;
+    th, td {
+        padding: 6px;
+        font-size: 12px;
     }
 
     .btn {
-        width: 100%;
-        text-align: center;
-    }
-
-    td {
-        padding: 10px;
-        font-size: 13px;
-    }
-
-    td img {
-        width: 40px;
+        padding: 5px 10px;
+        font-size: 11px;
     }
 }
 
