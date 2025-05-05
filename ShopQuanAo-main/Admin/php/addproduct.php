@@ -90,10 +90,10 @@ require_once 'auth.php';
 
           <label for="image">Image Product:</label>
           <input type="file" class="product_enter" name="image" id="image" accept="image/*" required>
-          <label for="is_visible">Hiển thị sản phẩm:</label>
+          <label for="is_visible">Show products:</label>
 <select name="is_visible" id="is_visible" class="product_enter" required>
-    <option value="1" selected>Hiện</option>
-    <option value="0">Ẩn</option>
+    <option value="1" selected>Show</option>
+    <option value="0">Hidden</option>
 </select>
 
 
