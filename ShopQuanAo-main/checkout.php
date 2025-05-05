@@ -193,10 +193,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $payment_status = 'Unpaid'; // Default status
             if ($payment_method === 'Cash') {
                 $payment_status = 'Unpaid';
-            } elseif ($payment_method === 'Transfer') {
-                $payment_status = 'pending_transfer';
-            } elseif ($payment_method === 'Card') {
-                $payment_status = 'processing';
+            } elseif ($payment_method === 'transfer') {
+                $payment_status = 'Paid';
+            } elseif ($payment_method === 'card') {
+                $payment_status = 'Paid';
             }
 
             $create_invoice = "INSERT INTO invoices (order_id, invoice_number, payment_status, total_amount, invoice_date) 

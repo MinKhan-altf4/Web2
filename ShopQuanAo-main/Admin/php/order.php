@@ -220,10 +220,7 @@ $additional_styles = "
         font-weight: bold;
     }
     
-    .status.pending { background-color: #f39c12; }
-    .status.confirmed { background-color: #3498db; }
-    .status.delivered { background-color: #27ae60; }
-    .status.cancelled { background-color: #e74c3c; }
+   
     
     td {
         vertical-align: middle;

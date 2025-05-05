@@ -338,12 +338,37 @@ tfoot td {
     background: none;
     cursor: pointer;
 }
-.status-pending { background-color: #f39c12; color: white; }
+/* Thay thế các class status trong dashboard.css */
+.status-pending {
+    background-color: #fff0c2;
+    color: #a68b00;
+}
 
-.status-confirmed { background-color: #3498db; color: white; }
-.status-shipped { background-color: #2ecc71; color: white; }
-.status-delivered { background-color: #27ae60; color: white; }
-.status-cancelled { background-color: #e74c3c; color: white; }
+.status-confirmed {
+    background-color: #c2f5ff;
+    color: #0077a6;
+}
+
+.status-shipped {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.status-delivered {
+    background-color: #c2ffc2;
+    color: #007a00;
+}
+
+.status-cancelled {
+    background-color: #ffc2c2;
+    color: #a60000;
+}
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: capitalize;
+}
 
 /* Mobile Menu Button */
 .mobile-menu {
@@ -480,3 +505,4 @@ tfoot td {
         font-size: 13px;
     }
 }
+
