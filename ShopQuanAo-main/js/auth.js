@@ -104,7 +104,7 @@ async function checkLoginStatus() {
     });
     const data = await response.json();
 
-    // --- HEADER USER-MENU (giữ nguyên) ---
+    // --- HEADER USER-MENU (chính) ---
     const loginButton = document.querySelector("#userMenu");
     if (data.isLoggedIn && data.username && loginButton) {
       loginButton.innerHTML = `
@@ -122,12 +122,13 @@ async function checkLoginStatus() {
       loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
     }
 
-    // --- OFFCANVAS MENU (mới) ---
+    // --- OFFCANVAS MENU (mb) ---
     const offcanvasLinks = document.getElementById("offcanvasLinks");
     if (offcanvasLinks) {
       if (data.isLoggedIn && data.username) {
         offcanvasLinks.innerHTML = `
           <a href="profile.php">Profile</a>
+          <li><a href="orders.php">Orders</a></li>
           <a href="#" onclick="logout(); return false;">Logout</a>
           <a href="contact.php">Support</a>
         `;
@@ -193,50 +194,27 @@ function addDropdownStyles() {
 
 // Đăng xuất
 function logout() {
-  Swal.fire({
-    title: 'Are you sure you want to log out?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Log out',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch("php/logout.php", {
-        method: "POST",
-        credentials: "include"
+  if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+      fetch('php/logout.php', {
+          method: 'POST', // Use POST for logout
+          credentials: 'include'
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            // Xóa session
-            sessionStorage.clear();
-            Swal.fire({
-              icon: 'success',
-              title: 'Logout successful',
-              text: 'You have logged out of the system!',
-              showConfirmButton: false,
-              timer: 2000
-            });
-
-            // Đợi một chút rồi chuyển hướng
-            setTimeout(() => {
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              // Clear session storage
+              sessionStorage.clear();
+              alert("Đã đăng xuất thành công!");
               window.location.href = "login.php";
-            }, 2000);
           } else {
-            throw new Error(data.message || "Logout failed");
+              throw new Error(data.message || 'Logout failed');
           }
-        })
-        .catch((error) => {
-          console.error("Logout error:", error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Logout failed',
-            text: error.message || 'Please try again later.',
-            confirmButtonText: 'OK'
-          });
-        });
-    }
-  });
+      })
+      .catch(error => {
+          console.error('Logout error:', error);
+          alert('Đăng xuất thất bại. Vui lòng thử lại.');
+      });
+  }
 }
 
 // Add auto-hide for success messages
@@ -263,10 +241,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   paymentMethodInputs.forEach((input) => {
     input.addEventListener("change", function () {
-      if (this.value === "transfer") {
+      if (this.value === "Transfer") {
         bankTransferForm.style.display = "block";
         cardPaymentForm.style.display = "none";
-      } else if (this.value === "card") {
+      } else if (this.value === "Card") {
         bankTransferForm.style.display = "none";
         cardPaymentForm.style.display = "block";
       } else {
