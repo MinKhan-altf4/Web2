@@ -157,11 +157,7 @@
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
                             <form action="#" onsubmit="return false;">
-                                <input type="text" 
-                                       id="searchInputHome" 
-                                       placeholder="Search..." 
-                                       autocomplete="off"
-                                />
+                                <input type="text" id="searchInputHome" placeholder="Search..." autocomplete="off" />
                                 <button type="button" onclick="searchProducts()">
                                     <span class="icon_search"></span>
                                 </button>
@@ -178,19 +174,24 @@
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
                                                     <li>
-                                                        <a href="#" data-category="all" onclick="filterByCategory('all')">All</a>
+                                                        <a href="#" data-category="all"
+                                                            onclick="filterByCategory('all')">All</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="Bags" onclick="filterByCategory('Bags')">Bags</a>
+                                                        <a href="#" data-category="Bags"
+                                                            onclick="filterByCategory('Bags')">Bags</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="Clothing" onclick="filterByCategory('Clothing')">Clothing</a>
+                                                        <a href="#" data-category="Clothing"
+                                                            onclick="filterByCategory('Clothing')">Clothing</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="Shoes" onclick="filterByCategory('Shoes')">Shoes</a>
+                                                        <a href="#" data-category="Shoes"
+                                                            onclick="filterByCategory('Shoes')">Shoes</a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-category="Accessories" onclick="filterByCategory('Accessories')">Accessories</a>
+                                                        <a href="#" data-category="Accessories"
+                                                            onclick="filterByCategory('Accessories')">Accessories</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -205,10 +206,14 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__price">
                                                 <ul>
-                                                    <li><a href="#" onclick="filterByPrice(0, 50)">$0.00 - $50.00</a></li>
-                                                    <li><a href="#" onclick="filterByPrice(50, 100)">$50.00 - $100.00</a></li>
-                                                    <li><a href="#" onclick="filterByPrice(100, 150)">$100.00 - $150.00</a></li>
-                                                    <li><a href="#" onclick="filterByPrice(150, 999999)">$150.00+</a></li>
+                                                    <li><a href="#" onclick="filterByPrice(0, 50)">$0.00 - $50.00</a>
+                                                    </li>
+                                                    <li><a href="#" onclick="filterByPrice(50, 100)">$50.00 -
+                                                            $100.00</a></li>
+                                                    <li><a href="#" onclick="filterByPrice(100, 150)">$100.00 -
+                                                            $150.00</a></li>
+                                                    <li><a href="#" onclick="filterByPrice(150, 999999)">$150.00+</a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                             <!-- Custom price range input -->
@@ -224,7 +229,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Product Grid -->
                 <div class="col-lg-9 col-md-9">
                     <div class="row" id="product-container">
@@ -347,139 +352,139 @@
     <script src="js/thanhtimkiemotren.js"></script>
 
     <script>
-let currentProducts = []; // Thêm biến global để lưu danh sách sản phẩm hiện tại
+    let currentProducts = []; // Thêm biến global để lưu danh sách sản phẩm hiện tại
 
-// Hàm tìm kiếm sản phẩm
-function searchProducts() {
-    const searchQuery = document.getElementById('searchInputHome').value;
-    
-    if (!searchQuery.trim()) {
-        filterByCategory('all');
-        return;
+    // Hàm tìm kiếm sản phẩm
+    function searchProducts() {
+        const searchQuery = document.getElementById('searchInputHome').value;
+
+        if (!searchQuery.trim()) {
+            filterByCategory('all');
+            return;
+        }
+
+        fetch(`search-products.php?query=${encodeURIComponent(searchQuery)}`)
+            .then(response => response.json())
+            .then(products => {
+                currentProducts = products; // Store filtered products
+                displayProducts(products, 1); // Always start at page 1 when searching
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    fetch(`search-products.php?query=${encodeURIComponent(searchQuery)}`)
-        .then(response => response.json())
-        .then(products => {
-            currentProducts = products; // Store filtered products
-            displayProducts(products, 1); // Always start at page 1 when searching
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-// Thêm debounce để tránh gọi API quá nhiều
-let searchTimeout;
-document.getElementById('searchInputHome').addEventListener('input', function() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(searchProducts, 300);
-});
-
-// Xử lý khi nhấn nút tìm kiếm
-document.querySelector('.shop__sidebar__search button').addEventListener('click', searchProducts);
-
-// Xử lý khi nhấn Enter trong ô tìm kiếm
-document.getElementById('searchInputHome').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        searchProducts();
-    }
-});
-
-// Tự động hiện tất cả sản phẩm khi trang được load
-document.addEventListener('DOMContentLoaded', function() {
-    filterByCategory('all'); // Gọi hàm để hiển thị tất cả sản phẩm
-});
-
-function filterByCategory(category) {
-    fetch(`get-products.php${category !== 'all' ? '?category=' + category : ''}`)
-        .then(response => response.json())
-        .then(products => {
-            currentProducts = products; // Lưu sản phẩm vào biến global
-            displayProducts(products, 1);
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function filterByPrice(minPrice, maxPrice) {
-    event.preventDefault();
-    
-    const activeCategory = document.querySelector('.shop__sidebar__categories a.active');
-    const category = activeCategory ? activeCategory.dataset.category : 'all';
-
-    fetch(`filter-products.php?min=${minPrice}&max=${maxPrice}&category=${category}`)
-        .then(response => response.json())
-        .then(products => {
-            currentProducts = products; // Store filtered products
-            displayProducts(products, 1); // Always start at page 1 when filtering
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error filtering products. Please try again.');
-        });
-}
-
-function filterByCustomPrice() {
-    const minPrice = document.getElementById('minPrice').value;
-    const maxPrice = document.getElementById('maxPrice').value;
-
-    if (!minPrice || !maxPrice) {
-        alert('Please enter both minimum and maximum prices');
-        return;
-    }
-
-    if (parseFloat(minPrice) > parseFloat(maxPrice)) {
-        alert('Minimum price cannot be greater than maximum price');
-        return;
-    }
-
-    // Remove highlight from predefined ranges
-    document.querySelectorAll('.shop__sidebar__price a').forEach(link => {
-        link.classList.remove('active');
+    // Thêm debounce để tránh gọi API quá nhiều
+    let searchTimeout;
+    document.getElementById('searchInputHome').addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(searchProducts, 300);
     });
 
-    const activeCategory = document.querySelector('.shop__sidebar__categories a.active');
-    const category = activeCategory ? activeCategory.dataset.category : 'all';
+    // Xử lý khi nhấn nút tìm kiếm
+    document.querySelector('.shop__sidebar__search button').addEventListener('click', searchProducts);
 
-    fetch(`filter-products.php?min=${minPrice}&max=${maxPrice}&category=${category}`)
-        .then(response => response.json())
-        .then(products => {
-            currentProducts = products; // Store filtered products
-            displayProducts(products, 1); // Always start at page 1 when filtering
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error filtering products. Please try again.');
-        });
-}
+    // Xử lý khi nhấn Enter trong ô tìm kiếm
+    document.getElementById('searchInputHome').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchProducts();
+        }
+    });
 
-function displayProducts(products, page = 1) {
-    const productContainer = document.getElementById("product-container");
-    productContainer.innerHTML = "";
+    // Tự động hiện tất cả sản phẩm khi trang được load
+    document.addEventListener('DOMContentLoaded', function() {
+        filterByCategory('all'); // Gọi hàm để hiển thị tất cả sản phẩm
+    });
 
-    // Remove existing pagination
-    const existingPagination = document.querySelector('.pagination-wrapper');
-    if (existingPagination) {
-        existingPagination.remove();
+    function filterByCategory(category) {
+        fetch(`get-products.php${category !== 'all' ? '?category=' + category : ''}`)
+            .then(response => response.json())
+            .then(products => {
+                currentProducts = products; // Lưu sản phẩm vào biến global
+                displayProducts(products, 1);
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    if (products.length === 0) {
-        productContainer.innerHTML = `
+    function filterByPrice(minPrice, maxPrice) {
+        event.preventDefault();
+
+        const activeCategory = document.querySelector('.shop__sidebar__categories a.active');
+        const category = activeCategory ? activeCategory.dataset.category : 'all';
+
+        fetch(`filter-products.php?min=${minPrice}&max=${maxPrice}&category=${category}`)
+            .then(response => response.json())
+            .then(products => {
+                currentProducts = products; // Store filtered products
+                displayProducts(products, 1); // Always start at page 1 when filtering
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error filtering products. Please try again.');
+            });
+    }
+
+    function filterByCustomPrice() {
+        const minPrice = document.getElementById('minPrice').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+
+        if (!minPrice || !maxPrice) {
+            alert('Please enter both minimum and maximum prices');
+            return;
+        }
+
+        if (parseFloat(minPrice) > parseFloat(maxPrice)) {
+            alert('Minimum price cannot be greater than maximum price');
+            return;
+        }
+
+        // Remove highlight from predefined ranges
+        document.querySelectorAll('.shop__sidebar__price a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        const activeCategory = document.querySelector('.shop__sidebar__categories a.active');
+        const category = activeCategory ? activeCategory.dataset.category : 'all';
+
+        fetch(`filter-products.php?min=${minPrice}&max=${maxPrice}&category=${category}`)
+            .then(response => response.json())
+            .then(products => {
+                currentProducts = products; // Store filtered products
+                displayProducts(products, 1); // Always start at page 1 when filtering
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error filtering products. Please try again.');
+            });
+    }
+
+    function displayProducts(products, page = 1) {
+        const productContainer = document.getElementById("product-container");
+        productContainer.innerHTML = "";
+
+        // Remove existing pagination
+        const existingPagination = document.querySelector('.pagination-wrapper');
+        if (existingPagination) {
+            existingPagination.remove();
+        }
+
+        if (products.length === 0) {
+            productContainer.innerHTML = `
             <div class="col-12 text-center">
                 <p>No products found.</p>
             </div>`;
-        return;
-    }
+            return;
+        }
 
-    // Pagination logic
-    const productsPerPage = 9;
-    const totalPages = Math.ceil(products.length / productsPerPage);
-    const start = (page - 1) * productsPerPage;
-    const end = start + productsPerPage;
-    const paginatedProducts = products.slice(start, end);
+        // Pagination logic
+        const productsPerPage = 9;
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        const start = (page - 1) * productsPerPage;
+        const end = start + productsPerPage;
+        const paginatedProducts = products.slice(start, end);
 
-    // Display products for current page
-    paginatedProducts.forEach(product => {
-        const productHTML = `
+        // Display products for current page
+        paginatedProducts.forEach(product => {
+            const productHTML = `
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" 
@@ -497,16 +502,16 @@ function displayProducts(products, page = 1) {
                     </div>
                 </div>
             </div>`;
-        productContainer.innerHTML += productHTML;
-    });
+            productContainer.innerHTML += productHTML;
+        });
 
-    // Create pagination wrapper
-    const paginationWrapper = document.createElement('div');
-    paginationWrapper.className = 'pagination-wrapper';
-    
-    // Create pagination HTML
-    if (totalPages > 1) {
-        paginationWrapper.innerHTML = `
+        // Create pagination wrapper
+        const paginationWrapper = document.createElement('div');
+        paginationWrapper.className = 'pagination-wrapper';
+
+        // Create pagination HTML
+        if (totalPages > 1) {
+            paginationWrapper.innerHTML = `
             <div class="pagination">
                 ${page > 1 ? `<a href="#" onclick="changePage(${page - 1})">&laquo;</a>` : ''}
                 ${[...Array(totalPages)].map((_, i) => 
@@ -515,26 +520,32 @@ function displayProducts(products, page = 1) {
                 ).join('')}
                 ${page < totalPages ? `<a href="#" onclick="changePage(${page + 1})">&raquo;</a>` : ''}
             </div>`;
+        }
+
+        // Add pagination after product container
+        productContainer.parentNode.appendChild(paginationWrapper);
     }
 
-    // Add pagination after product container
-    productContainer.parentNode.appendChild(paginationWrapper);
-}
+    // Sửa lại hàm changePage
+    function changePage(page) {
+        if (!currentProducts) return; // Kiểm tra nếu không có sản phẩm
+        displayProducts(currentProducts, page);
 
-// Sửa lại hàm changePage
-function changePage(page) {
-    if (!currentProducts) return; // Kiểm tra nếu không có sản phẩm
-    displayProducts(currentProducts, page);
-    
-    // Scroll to top of product container
-    document.getElementById('product-container').scrollIntoView({
-        behavior: 'smooth'
+        // Scroll to top of product container
+        document.getElementById('product-container').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
     });
-}
-</script>
-<script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    </script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </body>
+
 </html>

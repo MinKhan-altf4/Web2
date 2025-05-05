@@ -32,221 +32,242 @@ if (!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css" />
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
+
     <style>
-        /* Quantity Controls - Updated Design */
-        .pro-qty {
-            display: inline-flex;
-            align-items: center;
-            border: 1px solid #e5e5e5;
-            border-radius: 25px;
-            width: 120px;
-            height: 40px;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
+    /* Style cho nút Proceed to Checkout */
+    .proceed-checkout-btn {
+        display: block;
+        width: 100%;
+        padding: 15px 0;
+        background-color: #000;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-        .pro-qty input {
-            width: 40px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            font-size: 15px;
-            font-weight: 600;
-            color: #333;
-        }
+    .proceed-checkout-btn:hover {
+        background-color: #333;
+    }
+    </style>
+    <style>
+    /* Quantity Controls - Updated Design */
+    .pro-qty {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #e5e5e5;
+        border-radius: 25px;
+        width: 120px;
+        height: 40px;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
 
-        .pro-qty .qtybtn {
-            width: 40px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            color: #333;
-            transition: all 0.3s ease;
-            background: transparent;
-        }
+    .pro-qty input {
+        width: 40px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+    }
 
-        .pro-qty .dec {
-            border-right: 1px solid #eee;
-            border-top-left-radius: 25px;
-            border-bottom-left-radius: 25px;
-        }
+    .pro-qty .qtybtn {
+        width: 40px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        color: #333;
+        transition: all 0.3s ease;
+        background: transparent;
+    }
 
-        .pro-qty .inc {
-            border-left: 1px solid #eee;
-            border-top-right-radius: 25px;
-            border-bottom-right-radius: 25px;
-        }
+    .pro-qty .dec {
+        border-right: 1px solid #eee;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+    }
 
-        .pro-qty .qtybtn:hover {
-            background-color: #f8f9fa;
-            color: #000;
-        }
+    .pro-qty .inc {
+        border-left: 1px solid #eee;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+    }
 
-        .pro-qty .qtybtn:active {
-            background-color: #e9ecef;
-            transform: translateY(1px);
-        }
+    .pro-qty .qtybtn:hover {
+        background-color: #f8f9fa;
+        color: #000;
+    }
 
-        /* Delete Button */
-        .cart__close {
-            text-align: center;
-        }
+    .pro-qty .qtybtn:active {
+        background-color: #e9ecef;
+        transform: translateY(1px);
+    }
 
-        .cart__close i {
-            font-size: 18px;
-            padding: 8px;
-            border-radius: 50%;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    /* Delete Button */
+    .cart__close {
+        text-align: center;
+    }
 
-        .cart__close i:hover {
-            background-color: #ff0000;
-            color: #fff;
-            transform: rotate(90deg);
-        }
+    .cart__close i {
+        font-size: 18px;
+        padding: 8px;
+        border-radius: 50%;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        /* Table Styles */
+    .cart__close i:hover {
+        background-color: #ff0000;
+        color: #fff;
+        transform: rotate(90deg);
+    }
+
+    /* Table Styles */
+    .shopping__cart__table {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .shopping__cart__table table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .shopping__cart__table th,
+    .shopping__cart__table td {
+        padding: 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    /* Column Widths and Alignment */
+    .shopping__cart__table th {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .shopping__cart__table th:first-child {
+        width: 50%;
+        text-align: left;
+    }
+
+    .shopping__cart__table th:nth-child(2) {
+        width: 25%;
+        text-align: center;
+    }
+
+    .shopping__cart__table th:nth-child(3) {
+        width: 15%;
+        text-align: right;
+    }
+
+    .shopping__cart__table th:last-child {
+        width: 10%;
+        text-align: center;
+    }
+
+    /* Product Column */
+    .product__cart__item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-right: 15px;
+    }
+
+    .product__cart__item__pic img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .product__cart__item__text {
+        flex: 1;
+    }
+
+    .product__cart__item__text h6 {
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    /* Quantity Column */
+    .quantity__item {
+        text-align: center;
+    }
+
+    .pro-qty {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        width: 120px;
+        height: 40px;
+        margin: 0 auto;
+    }
+
+    /* Price Column */
+    .cart__price {
+        text-align: right;
+        font-weight: 600;
+        padding-right: 15px;
+    }
+
+    /* Delete Button Column */
+    .cart__close {
+        text-align: center;
+        width: 40px;
+    }
+
+    .cart__close i {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border-radius: 50%;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .cart__close i:hover {
+        background-color: #ff0000;
+        color: #fff;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .shopping__cart__table {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .shopping__cart__table table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .shopping__cart__table th,
-        .shopping__cart__table td {
             padding: 15px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e5e5e5;
         }
 
-        /* Column Widths and Alignment */
-        .shopping__cart__table th {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .shopping__cart__table th:first-child {
-            width: 50%;
-            text-align: left;
-        }
-
-        .shopping__cart__table th:nth-child(2) {
-            width: 25%;
-            text-align: center;
-        }
-
-        .shopping__cart__table th:nth-child(3) {
-            width: 15%;
-            text-align: right;
-        }
-
-        .shopping__cart__table th:last-child {
-            width: 10%;
-            text-align: center;
-        }
-
-        /* Product Column */
         .product__cart__item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding-right: 15px;
+            gap: 10px;
         }
 
         .product__cart__item__pic img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .product__cart__item__text {
-            flex: 1;
-        }
-
-        .product__cart__item__text h6 {
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        /* Quantity Column */
-        .quantity__item {
-            text-align: center;
+            width: 60px;
+            height: 60px;
         }
 
         .pro-qty {
-            display: inline-flex;
-            align-items: center;
-            border: 1px solid #e5e5e5;
-            border-radius: 5px;
-            width: 120px;
-            height: 40px;
-            margin: 0 auto;
+            width: 100px;
         }
-
-        /* Price Column */
-        .cart__price {
-            text-align: right;
-            font-weight: 600;
-            padding-right: 15px;
-        }
-
-        /* Delete Button Column */
-        .cart__close {
-            text-align: center;
-            width: 40px;
-        }
-
-        .cart__close i {
-            width: 32px;
-            height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            border-radius: 50%;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .cart__close i:hover {
-            background-color: #ff0000;
-            color: #fff;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .shopping__cart__table {
-                padding: 15px;
-            }
-
-            .product__cart__item {
-                gap: 10px;
-            }
-
-            .product__cart__item__pic img {
-                width: 60px;
-                height: 60px;
-            }
-
-            .pro-qty {
-                width: 100px;
-            }
-        }
+    }
     </style>
 </head>
 
@@ -386,10 +407,6 @@ if (!isset($_SESSION['id'])) {
                                 </tr>
                             </thead>
                             <tbody id="cartItems">
-                                <!-- Dữ liệu giỏ hàng sẽ được JavaScript thêm vào đây -->
-                                <td class="cart__close">
-                                    <i class="fa fa-trash" onclick="removeFromCart(<?php echo $productId; ?>)"></i>
-                                </td>
                             </tbody>
                         </table>
                     </div>
@@ -403,14 +420,16 @@ if (!isset($_SESSION['id'])) {
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    
+
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
                             <li>Subtotal <span id="subtotal">$ </span></li>
                             <li>Total <span id="total">$ </span></li>
                         </ul>
-                        <a href="./checkout.php" class="primary-btn">Proceed to checkout</a>
+                        <button id="checkoutBtn" class="proceed-checkout-btn" type="button">
+                            Proceed to Checkout
+                        </button>
                     </div>
                 </div>
             </div>
@@ -517,11 +536,15 @@ if (!isset($_SESSION['id'])) {
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
 
 </html>

@@ -267,19 +267,20 @@ if(isset($error)) {
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="text" name="phone_number" id="phone_number" 
-                                   placeholder="Enter your number" 
-                                   required />
+                            <input type="text" name="phone_number" id="phone_number" placeholder="Enter your number"
+                                required />
                             <span id="phone-message" class="message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
-                            <input type="password" name="password" placeholder="Enter your password" required style="width: 95%" />
+                            <input type="password" name="password" placeholder="Enter your password" required
+                                style="width: 95%" />
                             <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
                         </div>
                         <div class="input-box">
                             <span class="details">Confirm Password</span>
-                            <input type="password" name="confirm_password" placeholder="Confirm your password" required style="width: 95%" />
+                            <input type="password" name="confirm_password" placeholder="Confirm your password" required
+                                style="width: 95%" />
                             <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer"></i>
                         </div>
                         <div class="input-box">
@@ -320,15 +321,15 @@ if(isset($error)) {
                     </div>
                 </form>
                 <?php if(isset($error)): ?>
-                    <div class="message error-message">
-                        <?php echo $error; ?>
-                    </div>
+                <div class="message error-message">
+                    <?php echo $error; ?>
+                </div>
                 <?php endif; ?>
 
                 <?php if(isset($_GET['message']) && $_GET['message'] == 'register_success'): ?>
-                    <div class="message success-message">
-                        Đăng ký thành công! Vui lòng đăng nhập.
-                    </div>
+                <div class="message success-message">
+                    Đăng ký thành công! Vui lòng đăng nhập.
+                </div>
                 <?php endif; ?>
             </div>
         </div>
@@ -437,21 +438,22 @@ if(isset($error)) {
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-document.querySelector('form').addEventListener('submit', function(e) {
-    const phoneNumber = document.getElementById('phone_number').value;
-    
-    // Check phone number length
-    if (phoneNumber.length > 10) {
-        e.preventDefault(); // Prevent form submission
-        alert('Vui lòng điền đúng số điện thoại!');
-        document.getElementById('phone_number').focus();
-        return false;
-    }
-    
-    // Remove any non-numeric characters for server-side validation
-    document.getElementById('phone_number').value = phoneNumber.replace(/[^0-9]/g, '');
-});
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const phoneNumber = document.getElementById('phone_number').value;
+
+        // Check phone number length
+        if (phoneNumber.length > 10) {
+            e.preventDefault(); // Prevent form submission
+            alert('Vui lòng điền đúng số điện thoại!');
+            document.getElementById('phone_number').focus();
+            return false;
+        }
+
+        // Remove any non-numeric characters for server-side validation
+        document.getElementById('phone_number').value = phoneNumber.replace(/[^0-9]/g, '');
+    });
     </script>
 </body>
 

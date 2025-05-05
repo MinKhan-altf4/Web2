@@ -90,6 +90,7 @@ while ($item = $items_result->fetch_assoc()) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Male_Fashion Template" />
@@ -99,7 +100,8 @@ while ($item = $items_result->fetch_assoc()) {
     <title>Hóa đơn #<?php echo $invoice['invoice_number']; ?></title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet" />
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
@@ -111,88 +113,100 @@ while ($item = $items_result->fetch_assoc()) {
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <style>
-        .invoice-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .invoice-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .invoice-header {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .invoice-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .invoice-details {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .print-btn {
+        margin-top: 20px;
+    }
+
+    @media print {
+        .no-print {
+            display: none;
         }
-        .invoice-header {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-        .invoice-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-        .invoice-details {
-            display: flex;
-            justify-content: space-between;
-        }
-        .print-btn {
-            margin-top: 20px;
-        }
-        @media print {
-            .no-print {
-                display: none;
-            }
-        }
-        
+    }
+
+    .product-image {
+        width: 120px;
+        /* Increased from 80px */
+        height: 120px;
+        /* Increased from 80px */
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+        transform: scale(1.1);
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 1.5rem;
+        /* Increased from 1rem */
+    }
+
+    @media print {
         .product-image {
-            width: 120px;            /* Increased from 80px */
-            height: 120px;           /* Increased from 80px */
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            width: 100px;
+            /* Increased from 60px */
+            height: 100px;
+            /* Increased from 60px */
         }
-        
-        .product-image:hover {
-            transform: scale(1.1);
-        }
-        
-        .table td {
-            vertical-align: middle;
-            padding: 1.5rem;        /* Increased from 1rem */
-        }
-        
-        @media print {
-            .product-image {
-                width: 100px;        /* Increased from 60px */
-                height: 100px;       /* Increased from 60px */
-            }
-        }
+    }
 
-        .customer-info h4,
-        .order-info h4 {
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;  /* Increased spacing below headers */
-            color: #333;
-            border-bottom: 2px solid #f5f5f5;
-            padding-bottom: 0.8rem;
-        }
+    .customer-info h4,
+    .order-info h4 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        /* Increased spacing below headers */
+        color: #333;
+        border-bottom: 2px solid #f5f5f5;
+        padding-bottom: 0.8rem;
+    }
 
-        .invoice-number {
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 2rem;
-        }
+    .invoice-number {
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: #333;
+        margin-bottom: 2rem;
+    }
 
-        .customer-info p,
-        .order-info p {
-            margin-bottom: 0.8rem;  /* Spacing between info lines */
-            line-height: 1.6;
-        }
+    .customer-info p,
+    .order-info p {
+        margin-bottom: 0.8rem;
+        /* Spacing between info lines */
+        line-height: 1.6;
+    }
 
-        .customer-info strong,
-        .order-info strong {
-            font-weight: 600;
-            color: #444;
-        }
+    .customer-info strong,
+    .order-info strong {
+        font-weight: 600;
+        color: #444;
+    }
     </style>
 </head>
 
@@ -204,7 +218,7 @@ while ($item = $items_result->fetch_assoc()) {
 
     <!-- Header Section Begin -->
     <!-- Thêm phần header từ file checkout.php (class="no-print") -->
-    
+
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option no-print">
         <div class="container">
@@ -238,19 +252,23 @@ while ($item = $items_result->fetch_assoc()) {
                     <div class="customer-info">
                         <h4>Thông tin khách hàng</h4>
                         <p><strong>Họ tên:</strong> <?php echo htmlspecialchars($invoice['shipping_fullname']); ?></p>
-                        <p><strong>Số điện thoại:</strong> <?php echo htmlspecialchars($invoice['shipping_phone']); ?></p>
+                        <p><strong>Số điện thoại:</strong> <?php echo htmlspecialchars($invoice['shipping_phone']); ?>
+                        </p>
                         <p><strong>Địa chỉ:</strong> <?php echo htmlspecialchars($invoice['shipping_address']); ?></p>
                         <p><strong>Thành phố:</strong> <?php echo htmlspecialchars($invoice['shipping_city']); ?></p>
-                        <p><strong>Phương thức thanh toán:</strong> <?php echo htmlspecialchars($invoice['payment_method']); ?></p>
+                        <p><strong>Phương thức thanh toán:</strong>
+                            <?php echo htmlspecialchars($invoice['payment_method']); ?></p>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="order-info">
                         <h4>Thông tin hóa đơn</h4>
-                        <p><strong>Ngày đặt hàng:</strong> <?php echo date('d/m/Y H:i', strtotime($invoice['order_date'])); ?></p>
+                        <p><strong>Ngày đặt hàng:</strong>
+                            <?php echo date('d/m/Y H:i', strtotime($invoice['order_date'])); ?></p>
                         <p><strong>Số hóa đơn:</strong> <?php echo $invoice['invoice_number']; ?></p>
-                        <p><strong>Trạng thái thanh toán:</strong> <?php echo htmlspecialchars($invoice['payment_status']); ?></p>
+                        <p><strong>Trạng thái thanh toán:</strong>
+                            <?php echo htmlspecialchars($invoice['payment_status']); ?></p>
                     </div>
                 </div>
             </div>
@@ -280,11 +298,11 @@ while ($item = $items_result->fetch_assoc()) {
                                     <tr>
                                         <td>
                                             <?php if(!empty($item['image'])): ?>
-                                                <img src="Admin/img/<?php echo htmlspecialchars($item['image']); ?>" 
-                                                     alt="<?php echo htmlspecialchars($item['name']); ?>" 
-                                                     class="product-image">
+                                            <img src="Admin/img/<?php echo htmlspecialchars($item['image']); ?>"
+                                                alt="<?php echo htmlspecialchars($item['name']); ?>"
+                                                class="product-image">
                                             <?php else: ?>
-                                                <img src="img/product/no-image.jpg" alt="No image" class="product-image">
+                                            <img src="img/product/no-image.jpg" alt="No image" class="product-image">
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo htmlspecialchars($item['name']); ?></td>
@@ -369,11 +387,13 @@ while ($item = $items_result->fetch_assoc()) {
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="footer__copyright__text">
-                            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 2.5. -->
+                            <p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 2.5. -->
                                 Copyright &copy;<script>
-                                    document.write(new Date().getFullYear());
+                                document.write(new Date().getFullYear());
                                 </script> All rights reserved | This template is made with <i class="fa fa-heart"
-                                    aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                    aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                    target="_blank">Colorlib</a>
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 2.5. -->
                             </p>
                         </div>
@@ -397,9 +417,12 @@ while ($item = $items_result->fetch_assoc()) {
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
+
 </html>
-``` 
+```

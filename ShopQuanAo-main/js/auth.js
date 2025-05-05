@@ -42,7 +42,13 @@ function loginUser() {
   const password = document.getElementById('password').value;
 
   if (!username || !password) {
-    alert('Vui lòng nhập đầy đủ thông tin!');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Thiếu thông tin',
+      text: 'Vui lòng nhập đầy đủ thông tin!',
+      confirmButtonText: 'OK'
+    });
+    
     return;
   }
 
@@ -70,10 +76,10 @@ function loginUser() {
       document.getElementById('loginForm').prepend(errorDiv);
     }
   })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Có lỗi xảy ra, vui lòng thử lại sau!');
-  });
+  Swal.fire({ icon: 'success', title: data.message, timer: 2000, showConfirmButton: false });
+// …
+Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Có lỗi xảy ra, vui lòng thử lại sau!', confirmButtonText: 'OK' });
+
 }
 
 // Kiểm tra đăng nhập không đồng bộ
@@ -97,30 +103,47 @@ async function checkLoginStatus() {
       credentials: "include",
     });
     const data = await response.json();
-    const loginButton = document.querySelector("#userMenu");
 
+    // --- HEADER USER-MENU (giữ nguyên) ---
+    const loginButton = document.querySelector("#userMenu");
     if (data.isLoggedIn && data.username && loginButton) {
-      // Thêm preventDefault() để ngăn chặn hành vi mặc định của thẻ a
       loginButton.innerHTML = `
-                <div class="user-menu">
-                    <span style="cursor: default;">${data.username}</span>
-                    <ul class="user-options">
-                        <li><a href="profile.php" onclick="event.preventDefault(); window.location.href='profile.php'">Profile</a></li>
-                        <li><a href="orders.php" onclick="event.preventDefault(); window.location.href='orders.php'">Orders</a></li>
-                        <li><button onclick="event.preventDefault(); logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
-                    </ul>
-                </div>
-            `;
+        <div class="user-menu">
+          <span style="cursor: default;">${data.username}</span>
+          <ul class="user-options">
+            <li><a href="profile.php" onclick="event.preventDefault(); window.location.href='profile.php'">Profile</a></li>
+            <li><a href="orders.php" onclick="event.preventDefault(); window.location.href='orders.php'">Orders</a></li>
+            <li><button onclick="logout()" style="border:none; background:none; color:white; cursor:pointer;">LOG OUT</button></li>
+          </ul>
+        </div>
+      `;
       addDropdownStyles();
     } else if (loginButton) {
-      // Không tự động redirect về login nếu chưa đăng nhập
       loginButton.innerHTML = `<a href="login.php">Sign in</a>`;
+    }
+
+    // --- OFFCANVAS MENU (mới) ---
+    const offcanvasLinks = document.getElementById("offcanvasLinks");
+    if (offcanvasLinks) {
+      if (data.isLoggedIn && data.username) {
+        offcanvasLinks.innerHTML = `
+          <a href="profile.php">Profile</a>
+          <a href="#" onclick="logout(); return false;">Logout</a>
+          <a href="contact.php">Support</a>
+        `;
+      } else {
+        offcanvasLinks.innerHTML = `
+          <a href="login.php">Sign in</a>
+          <a href="contact.php">Support</a>
+        `;
+      }
     }
   } catch (error) {
     console.error("Error checking login status:", error);
     // Không redirect khi có lỗi
   }
 }
+
 
 // Thêm style cho dropdown
 function addDropdownStyles() {
@@ -170,46 +193,50 @@ function addDropdownStyles() {
 
 // Đăng xuất
 function logout() {
-  if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
-    fetch("php/logout.php", {
-      method: "POST", // Use POST for logout
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          // Clear session storage
-          sessionStorage.clear();
-          alert("Đã đăng xuất thành công!");
-          window.location.href = "login.php";
-        } else {
-          throw new Error(data.message || "Logout failed");
-        }
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn đăng xuất?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Đăng xuất',
+    cancelButtonText: 'Hủy'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch("php/logout.php", {
+        method: "POST",
+        credentials: "include"
       })
-      .catch((error) => {
-        console.error("Logout error:", error);
-        alert("Đăng xuất thất bại. Vui lòng thử lại.");
-      });
-  }
-}
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            // Xóa session
+            sessionStorage.clear();
+            Swal.fire({
+              icon: 'success',
+              title: 'Đăng xuất thành công',
+              text: 'Bạn đã đăng xuất khỏi hệ thống!',
+              showConfirmButton: false,
+              timer: 2000
+            });
 
-// Cập nhật offcanvas menu
-const offcanvasLinks = document.getElementById("offcanvasLinks");
-const loggedInUser = localStorage.getItem("loggedInUser");
-
-if (offcanvasLinks) {
-  if (loggedInUser) {
-    offcanvasLinks.innerHTML = `
-                <a href="profile.php">Profile</a>
-                <a href="logout.php">Logout</a>
-                <a href="contact.php">SUPPORT</a>
-            `;
-  } else {
-    offcanvasLinks.innerHTML = `
-                <a href="login.php">Sign in</a>
-                <a href="contact.php">SUPPORT</a>
-            `;
-  }
+            // Đợi một chút rồi chuyển hướng
+            setTimeout(() => {
+              window.location.href = "login.php";
+            }, 2000);
+          } else {
+            throw new Error(data.message || "Logout failed");
+          }
+        })
+        .catch((error) => {
+          console.error("Logout error:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Đăng xuất thất bại',
+            text: error.message || 'Vui lòng thử lại sau.',
+            confirmButtonText: 'OK'
+          });
+        });
+    }
+  });
 }
 
 // Add auto-hide for success messages
@@ -263,3 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkLoginStatus();
+});
+

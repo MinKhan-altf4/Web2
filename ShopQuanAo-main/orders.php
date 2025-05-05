@@ -339,9 +339,10 @@ $styles = "
                                 <td>$<?php echo number_format($row['total_amount'], 2); ?></td>
                                 <td>
                                     <?php if ($row['invoice_id']): ?>
-                                        <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>" class="btn btn-sm btn-info">View Invoice</a>
+                                    <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>"
+                                        class="btn btn-sm btn-info">View Invoice</a>
                                     <?php else: ?>
-                                        <span class="text-muted">Not Available</span>
+                                    <span class="text-muted">Not Available</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -357,7 +358,7 @@ $styles = "
             </div>
         </div>
     </div>
-    
+
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container">
@@ -445,7 +446,7 @@ $styles = "
         </div>
     </div>
     <!-- Search End -->
-    
+
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -459,9 +460,13 @@ $styles = "
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </script>
-<script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 </body>
+
 </html>

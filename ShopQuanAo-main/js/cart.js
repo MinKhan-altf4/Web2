@@ -110,8 +110,16 @@ async function addToCart(product) {
     const loggedIn = await isUserLoggedIn();
     
     if (!loggedIn) {
-      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-      window.location.href = 'login.php';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Yêu cầu đăng nhập',
+        text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!',
+        confirmButtonText: 'Đăng nhập'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'login.php'; // hoặc URL trang đăng nhập của bạn
+        }
+      });
       return false;
     }
     
@@ -122,7 +130,13 @@ async function addToCart(product) {
     });
     
     if (response.success) {
-      alert(`${product.name} đã được thêm vào giỏ hàng!`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: `Đã được thêm vào giỏ hàng!`,
+        showConfirmButton: false,
+        timer: 2000
+      });
       await updateCartUI(); // Cập nhật UI giỏ hàng
       return true;
     } else {
@@ -130,7 +144,12 @@ async function addToCart(product) {
     }
   } catch (error) {
     console.error('Lỗi khi thêm vào giỏ hàng:', error);
-    alert(error.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng');
+    Swal.fire({
+      icon: 'error',
+      title: 'Đã xảy ra lỗi',
+      text: error.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng',
+      confirmButtonText: 'OK'
+    });
     return false;
   }
 }
@@ -169,7 +188,7 @@ async function updateQuantity(productId, newQuantity) {
     alert('Có lỗi xảy ra khi cập nhật số lượng');
     return false;
   }
-}
+} 
 
 /**
  * Debounce function để tránh gọi API liên tục
@@ -201,32 +220,61 @@ async function removeFromCart(productId) {
   try {
     if (isNaN(productId)) {
       console.error('ID sản phẩm không hợp lệ:', productId);
+      await Swal.fire({
+        icon: 'warning',
+        title: 'ID không hợp lệ',
+        text: 'Không tìm thấy sản phẩm để xóa.'
+      });
       return false;
     }
-    
-    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-      return false;
-    }
-    
-    const response = await callCartAPI('remove', {
-      product_id: parseInt(productId)
+
+    // Dùng SweetAlert2 để hỏi xác nhận
+    const { isConfirmed } = await Swal.fire({
+      title: 'Xác nhận xóa',
+      text: 'Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Có',
+      cancelButtonText: 'Hủy'
     });
-    
+    if (!isConfirmed) return false;
+
+    // Gọi API xóa
+    const response = await callCartAPI('remove', {
+      product_id: parseInt(productId, 10)
+    });
+
     if (response.success) {
       await updateCartUI();
+
+      // Toast thông báo thành công
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Đã xóa sản phẩm',
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true
+      });
       return true;
     } else {
-      throw new Error(response.message || 'Có lỗi xảy ra');
+      throw new Error(response.message || 'Xóa thất bại');
     }
   } catch (error) {
     console.error('Lỗi khi xóa sản phẩm:', error);
-    alert('Có lỗi xảy ra khi xóa sản phẩm');
+    await Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: error.message || 'Có lỗi xảy ra khi xóa sản phẩm'
+    });
     return false;
   }
 }
 
-// Alias cho removeFromCart để tương thích ngược với mã cũ
+// Alias cho mã cũ nếu cần
 const removeCartItem = removeFromCart;
+
 
 /**
  * Cập nhật giao diện giỏ hàng
@@ -454,29 +502,26 @@ async function retryOperation(operation, maxRetries = 3) {
 
 // Hàm thanh toán giỏ hàng
 async function checkoutCart() {
-  try {
-    // Kiểm tra đăng nhập
-    const loggedIn = await isUserLoggedIn();
-    
-    if (!loggedIn) {
-      alert("Vui lòng đăng nhập để thanh toán!");
-      window.location.href = 'login.php';
-      return false;
-    }
-    
-    // Kiểm tra giỏ hàng có trống không
-    const cart = await getCart();
-    if (!Array.isArray(cart) || cart.length === 0) {
-      alert("Giỏ hàng trống, vui lòng thêm sản phẩm trước khi thanh toán!");
-      return false;
-    }
-    
-    // Chuyển hướng đến trang thanh toán
-    window.location.href = 'checkout.php';
-    return true;
-  } catch (error) {
-    console.error('Lỗi khi thanh toán:', error);
-    alert('Có lỗi xảy ra khi xử lý thanh toán');
-    return false;
+  const response = await callCartAPI('get');
+  const cart = response.success && Array.isArray(response.cart) ? response.cart : [];
+  if (cart.length === 0) {
+    return Swal.fire({
+      icon: 'info',
+      title: 'Giỏ hàng trống',
+      text: 'Bạn sẽ được chuyển đến trang sản phẩm.',
+      timer: 2000,
+      showConfirmButton: false,
+      willClose: () => { window.location.href = 'shop.php'; }
+    });
   }
+  window.location.href = 'checkout.php';
 }
+
+// Gắn handler khi DOM sẵn sàng
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Load SweetAlert2 trước
+  // 2) <script src="js/cart.js"></script> sau đó
+  const btn = document.getElementById('checkoutBtn');
+  if (btn) btn.addEventListener('click', checkoutCart);
+});
+

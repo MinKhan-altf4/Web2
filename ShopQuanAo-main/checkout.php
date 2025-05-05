@@ -73,11 +73,8 @@ while ($row = $result->fetch_assoc()) {
 
 // Thêm kiểm tra giỏ hàng trống 
 if (empty($cart_items)) {
-    echo '<script>
-        alert("Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.");
-        window.location.href = "shopping-cart.php";
-    </script>';
-    exit;
+    // đặt cờ để hiện popup trống giỏ hàng
+    $cartEmpty = true;
 }
 
 // Process form submission
@@ -215,12 +212,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $clear_stmt     = $conn->prepare($clear_cart_sql);
         $clear_stmt->bind_param("i", $user_id);
         $clear_stmt->execute();
-        // Chuyển hướng đến trang cảm ơn
-        echo '<script>
-            alert("Đặt hàng thành công!");
-            window.location.href = "orders.php";
-        </script>';
-        exit;
+        $orderSuccess = true;
     } else {
         echo '<script>alert("Lỗi khi lưu đơn hàng: ' . $conn->error . '");</script>';
     }
@@ -240,6 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
         rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
@@ -746,7 +739,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     (function() {
         const form = document.getElementById('checkout-form');
@@ -926,6 +919,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     });
     </script>
+
+    <?php if (!empty($cartEmpty)): ?>
+    <script>
+    Swal.fire({
+        icon: 'info',
+        title: 'Giỏ hàng trống',
+        text: 'Bạn sẽ được chuyển về trang giỏ hàng',
+        showConfirmButton: false,
+        timer: 2000
+    }).then(() => {
+        window.location.href = 'shopping-cart.php';
+    });
+    </script>
+    <?php endif; ?>
+
+    <?php if (!empty($orderSuccess)): ?>
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Đặt hàng thành công!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    }).then(() => {
+        window.location.href = 'orders.php';
+    });
+    </script>
+    <?php endif; ?>
+
 
 </body>
 

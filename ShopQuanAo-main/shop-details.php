@@ -386,11 +386,10 @@ if (isset($_GET['id'])) {
                 <!-- Product Image Column -->
                 <div class="col-lg-5">
                     <div class="product__details__pic__main mb-4">
-                        <img src="Admin/img/<?php echo $product['image']; ?>" 
-                             alt="<?php echo $product['name']; ?>"
-                             class="img-fluid rounded shadow-lg w-100">
+                        <img src="Admin/img/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>"
+                            class="img-fluid rounded shadow-lg w-100">
                     </div>
-                    
+
                     <!-- Product Features -->
                     <div class="product__features p-4 bg-white rounded shadow mb-4">
                         <div class="row text-center">
@@ -477,10 +476,10 @@ if (isset($_GET['id'])) {
                         <!-- Add to Cart Button -->
                         <div class="product__details__actions">
                             <button class="btn btn-primary btn-lg w-100 add-cart"
-                                    data-id="<?php echo $product['product_id']; ?>"
-                                    data-name="<?php echo $product['name']; ?>"
-                                    data-price="<?php echo $product['price']; ?>"
-                                    data-image="Admin/img/<?php echo $product['image']; ?>">
+                                data-id="<?php echo $product['product_id']; ?>"
+                                data-name="<?php echo $product['name']; ?>"
+                                data-price="<?php echo $product['price']; ?>"
+                                data-image="Admin/img/<?php echo $product['image']; ?>">
                                 <i class="fa fa-shopping-cart me-2"></i>
                                 Add To Cart
                             </button>
@@ -493,7 +492,7 @@ if (isset($_GET['id'])) {
     <!-- Shop Details Section End -->
 
     <!-- Related Section Begin -->
-    
+
     <!-- Related Section End -->
 
     <!-- Footer Section Begin -->
@@ -585,11 +584,15 @@ if (isset($_GET['id'])) {
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});  </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    </script>
 
 </body>
 

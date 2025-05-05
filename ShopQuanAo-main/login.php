@@ -125,9 +125,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-10px); }
-        75% { transform: translateX(10px); }
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-10px);
+        }
+
+        75% {
+            transform: translateX(10px);
+        }
     }
     </style>
 </head>
@@ -249,23 +259,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <form id="loginForm">
-    <div class="field">
-        <input type="text" id="loginUsername" name="username" required />
-        <label>Username</label>
-    </div>
-    <div class="field">
-        <input type="password" id="password" name="password" required style="width: 95%" />
-        <label>Password</label>
-        <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
-    </div>
-    
-    <div class="field">
-        <input type="button" onclick="loginUser()" value="Login" />
-    </div>
-    <div class="signup-link">
-        Not a member? <a href="register.php">Sign up now</a>
-    </div>
-</form>
+                <div class="field">
+                    <input type="text" id="loginUsername" name="username" required />
+                    <label>Username</label>
+                </div>
+                <div class="field">
+                    <input type="password" id="password" name="password" required style="width: 95%" />
+                    <label>Password</label>
+                    <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
+                </div>
+
+                <div class="field">
+                    <input type="button" onclick="loginUser()" value="Login" />
+                </div>
+                <div class="signup-link">
+                    Not a member? <a href="register.php">Sign up now</a>
+                </div>
+            </form>
         </div>
     </div>
     <!-- About Section Begin -->
@@ -372,6 +382,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
     const togglePassword = document.querySelector("#togglePassword");
