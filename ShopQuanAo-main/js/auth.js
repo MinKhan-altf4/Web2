@@ -241,10 +241,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   paymentMethodInputs.forEach((input) => {
     input.addEventListener("change", function () {
-      if (this.value === "Transfer") {
+      if (this.value === "transfer") {
         bankTransferForm.style.display = "block";
         cardPaymentForm.style.display = "none";
-      } else if (this.value === "Card") {
+      } else if (this.value === "card") {
         bankTransferForm.style.display = "none";
         cardPaymentForm.style.display = "block";
       } else {
