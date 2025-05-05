@@ -97,7 +97,7 @@ while ($item = $items_result->fetch_assoc()) {
     <meta name="keywords" content="Male_Fashion, unica, creative, html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Hóa đơn #<?php echo $invoice['invoice_number']; ?></title>
+    <title>Bill #<?php echo $invoice['invoice_number']; ?></title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -113,101 +113,280 @@ while ($item = $items_result->fetch_assoc()) {
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <style>
-    .invoice-container {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+    @media print {
 
-    .invoice-header {
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-    }
+        .no-print,
+        .no-print * {
+            display: none !important;
+        }
 
-    .invoice-title {
-        font-size: 24px;
+        .container {
+            max-width: 100%;
+        }
+
+        .product-image {
+            max-width: 80px;
+        }
+    }
+    </style>
+    <style>
+    .order__table h4 {
         font-weight: 700;
-        color: #333;
+        /* Đậm hơn */
+        font-size: 24px;
+        /* To hơn */
+        color: #111;
+        /* Màu đậm, dễ đọc */
+        margin-bottom: 25px;
+        border-left: 4px solid #ff4d4f;
+        /* Vạch nhấn ở bên trái */
+        padding-left: 12px;
+        text-transform: uppercase;
+        /* Viết hoa hết nếu bạn thích phong cách mạnh mẽ */
+        letter-spacing: 1px;
     }
 
-    .invoice-details {
+    .order__table h3 {
+        font-weight: 700;
+        /* Đậm hơn */
+        font-size: 24px;
+        /* To hơn */
+        color: #111;
+        /* Màu đậm, dễ đọc */
+        margin-bottom: 25px;
+        border-left: 4px solid #ff4d4f;
+        /* Vạch nhấn ở bên trái */
+        padding-left: 12px;
+        text-transform: uppercase;
+        /* Viết hoa hết nếu bạn thích phong cách mạnh mẽ */
+        letter-spacing: 1px;
+    }
+
+
+    .order__table {
+        font-weight: 800;
+        padding: 20px;
+        /* tạo khoảng cách giữa phần này với phần xung quanh */
+    }
+    </style>
+    <style>
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        font-size: 17px;
+        /* tăng cỡ chữ */
+    }
+
+
+    .order-table thead {
+        background-color: #000;
+        background: #2c2c2c;
+
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 16px;
+        letter-spacing: 0.8px;
+    }
+
+    .order-table th,
+    .order-table td {
+        padding: 15px 20px;
+        /* Giảm padding cho gọn */
+        text-align: left;
+        /* Mặc định căn trái */
+
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .order-table th:nth-child(1),
+    .order-table td:nth-child(1) {
+        width: 15%;
+        /* Cột hình ảnh */
+        text-align: center;
+    }
+
+    .order-table th:nth-child(3),
+    .order-table th:nth-child(4),
+    .order-table th:nth-child(5),
+    .order-table td:nth-child(3),
+    .order-table td:nth-child(4),
+    .order-table td:nth-child(5) {
+        text-align: right;
+        /* Căn phải cho cột số */
+    }
+
+    .order-table tbody tr:nth-child(even) {
+        background: #f8f9fa;
+        /* Màu nền xen kẽ */
+    }
+
+    .order-table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .order-table img {
+        border-radius: 6px;
+        width: 120px;
+        /* tăng kích thước ảnh */
+        height: auto;
+        object-fit: cover;
+    }
+
+    .order-table td {
+        color: #2c2c2c;
+        font-weight: 500;
+    }
+
+    .order-table th {
+        font-weight: 700;
+    }
+
+    .order-table tfoot td {
+        padding-top: 15px;
+        border-top: 2px solid #ddd;
+    }
+
+    .order-table tfoot strong {
+        font-size: 18px;
+        font-weight: 700;
+    }
+    </style>
+    <style>
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -15px;
+    }
+
+    .col-lg-6 {
+        padding: 15px;
+    }
+
+    .invoice-info-box {
+        height: 100%;
+        /* Chiều cao bằng nhau */
+        padding: 20px 25px;
+        /* Giảm padding trên/dưới */
+
+    }
+
+    .invoice-info-box {
+        border: 1px solid #e0e0e0;
+        /* Viền màu xám nhạt */
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #ffffff;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        /* Bóng mềm hơn */
+        transition: transform 0.2s ease;
+        /* Hiệu ứng hover */
+        position: relative;
+        overflow: hidden;
+    }
+
+    .invoice-info-box:hover {
+        transform: translateY(-2px);
+        /* Hiệu ứng nổi khi hover */
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .invoice-info-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #d3824f;
+        /* Thanh accent màu đen */
+    }
+
+    .invoice-info-box h4 {
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: #2c2c2c;
+        font-weight: 600;
+        position: relative;
+        padding-left: 15px;
+    }
+
+    .invoice-info-box h4::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 60%;
+        background: #d3824f;
+        /* Thanh accent màu cam */
+    }
+
+    .invoice-info-box p {
+        margin: 8px 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: #555;
+        line-height: 1.6;
         display: flex;
         justify-content: space-between;
     }
 
-    .print-btn {
-        margin-top: 20px;
-    }
-
-    @media print {
-        .no-print {
-            display: none;
-        }
-    }
-
-    .product-image {
-        width: 120px;
-        /* Increased from 80px */
-        height: 120px;
-        /* Increased from 80px */
-        object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
-
-    .product-image:hover {
-        transform: scale(1.1);
-    }
-
-    .table td {
-        vertical-align: middle;
-        padding: 1.5rem;
-        /* Increased from 1rem */
-    }
-
-    @media print {
-        .product-image {
-            width: 100px;
-            /* Increased from 60px */
-            height: 100px;
-            /* Increased from 60px */
-        }
-    }
-
-    .customer-info h4,
-    .order-info h4 {
+    .invoice-info-box strong {
+        color: #1a1a1a;
         font-weight: 700;
-        font-size: 1.3rem;
-        margin-bottom: 1.5rem;
-        /* Increased spacing below headers */
-        color: #333;
-        border-bottom: 2px solid #f5f5f5;
-        padding-bottom: 0.8rem;
+        min-width: 45%;
+        margin-right: 10px;
+        display: inline-block;
     }
 
-    .invoice-number {
-        font-weight: 700;
-        font-size: 1.4rem;
-        color: #333;
-        margin-bottom: 2rem;
-    }
-
-    .customer-info p,
-    .order-info p {
-        margin-bottom: 0.8rem;
-        /* Spacing between info lines */
-        line-height: 1.6;
-    }
-
-    .customer-info strong,
-    .order-info strong {
+    .invoice-info-box span.badge {
+        font-size: 14px;
         font-weight: 600;
-        color: #444;
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+
+    /* Thêm khoảng cách giữa các nút */
+    .btn {
+        margin: 0 8px;
+        padding: 10px 25px;
+    }
+
+    /* Làm nổi bật nút in */
+    .btn-secondary {
+        background: #2c2c2c;
+        border-color: #2c2c2c;
+    }
+
+    @media (max-width: 768px) {
+        .col-lg-6 {
+            flex: 0 0 100%;
+            /* Hiển thị full width trên mobile */
+            max-width: 100%;
+        }
+
+        .invoice-info-box p {
+            flex-direction: column;
+            /* Xếp dọc trên mobile */
+        }
+
+        .invoice-info-box strong {
+            min-width: 100%;
+            margin-bottom: 4px;
+        }
     }
     </style>
+
 </head>
 
 <body>
@@ -218,8 +397,8 @@ while ($item = $items_result->fetch_assoc()) {
 
     <!-- Header Section Begin -->
     <!-- Thêm phần header từ file checkout.php (class="no-print") -->
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links" id="offcanvaslinks">
@@ -316,12 +495,12 @@ while ($item = $items_result->fetch_assoc()) {
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="breadcrumb__text">
-                        <h4>Hóa đơn</h4>
+                    <div class="order__table">
+                        <h4>Bills</h4>
                         <div class="breadcrumb__links">
-                            <a href="./index.php">Trang chủ</a>
-                            <a href="./orders.php">Đơn hàng</a>
-                            <span>Hóa đơn</span>
+                            <a href="./index.php">Home</a>
+                            <a href="./orders.php">Orders</a>
+                            <span>Bill</span>
                         </div>
                     </div>
                 </div>
@@ -334,59 +513,69 @@ while ($item = $items_result->fetch_assoc()) {
     <section class="invoice spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="mb-4">Hóa đơn #<?php echo $invoice['invoice_number']; ?></h3>
+                <div class="order__table">
+                    <h3 class="mb-4">Bill #<?php echo $invoice['invoice_number']; ?></h3>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="customer-info">
-                        <h4>Thông tin khách hàng</h4>
-                        <p><strong>Họ tên:</strong> <?php echo htmlspecialchars($invoice['shipping_fullname']); ?></p>
-                        <p><strong>Số điện thoại:</strong> <?php echo htmlspecialchars($invoice['shipping_phone']); ?>
+                    <div class="invoice-info-box">
+                        <h4>Customer information</h4>
+                        <p><strong>Full Name:</strong> <?php echo htmlspecialchars($invoice['shipping_fullname']); ?>
                         </p>
-                        <p><strong>Địa chỉ:</strong> <?php echo htmlspecialchars($invoice['shipping_address']); ?></p>
-                        <p><strong>Thành phố:</strong> <?php echo htmlspecialchars($invoice['shipping_city']); ?></p>
-                        <p><strong>Phương thức thanh toán:</strong>
+                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($invoice['shipping_phone']); ?>
+                        </p>
+                        <p><strong>Address:</strong> <?php echo htmlspecialchars($invoice['shipping_address']); ?></p>
+                        <p><strong>City:</strong> <?php echo htmlspecialchars($invoice['shipping_city']); ?></p>
+                        <p><strong>Payment method:</strong>
                             <?php echo htmlspecialchars($invoice['payment_method']); ?></p>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="order-info">
-                        <h4>Thông tin hóa đơn</h4>
-                        <p><strong>Ngày đặt hàng:</strong>
+                    <div class="invoice-info-box">
+                        <h4>Billing information</h4>
+                        <p><strong>Order date:</strong>
                             <?php echo date('d/m/Y H:i', strtotime($invoice['order_date'])); ?></p>
-                        <p><strong>Số hóa đơn:</strong> <?php echo $invoice['invoice_number']; ?></p>
-                        <p><strong>Trạng thái thanh toán:</strong>
-                            <?php echo htmlspecialchars($invoice['payment_status']); ?></p>
+                        <p><strong>Invoice number:</strong> <?php echo $invoice['invoice_number']; ?></p>
+                        <p><strong>Payment Status:</strong>
+                            <?php if ($invoice['payment_status'] === 'Đã thanh toán'): ?>
+                            <span class="badge badge-success">Paid</span>
+                            <?php elseif ($invoice['payment_status'] === 'Đang xử lý'): ?>
+                            <span class="badge badge-warning">Processing</span>
+                            <?php else: ?>
+                            <span class="badge badge-danger">Unpaid</span>
+                            <?php endif; ?>
+                        </p>
+
                     </div>
                 </div>
             </div>
 
             <div class="row mt-4">
                 <div class="col-lg-12">
-                    <div class="order-items">
-                        <h4>Sản phẩm đã mua</h4>
+                    <div class="order__table">
+                        <h4>Products purchased</h4>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="order-table">
                                 <thead>
                                     <tr>
-                                        <th>Hình ảnh</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Đơn giá</th>
-                                        <th>Số lượng</th>
-                                        <th>Thành tiền</th>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Product Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php 
-                                    $total = 0;
-                                    foreach ($order_items as $item): 
-                                        $subtotal = $item['quantity'] * $item['unit_price'];
-                                        $total += $subtotal;
-                                    ?>
+    $total = 0;
+    if (!empty($order_items)):
+        foreach ($order_items as $item): 
+            $subtotal = $item['quantity'] * $item['unit_price'];
+            $total += $subtotal;
+    ?>
                                     <tr>
                                         <td>
                                             <?php if(!empty($item['image'])): ?>
@@ -402,14 +591,23 @@ while ($item = $items_result->fetch_assoc()) {
                                         <td><?php echo $item['quantity']; ?></td>
                                         <td>$<?php echo number_format($subtotal, 2); ?></td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                    <?php 
+        endforeach;
+    else: 
+    ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-danger">There are no products in the
+                                            order.</td>
+                                    </tr>
+                                    <?php endif; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="4" class="text-right"><strong>Tổng cộng:</strong></td>
+                                        <td colspan="4" class="text-right"><strong>Total:</strong></td>
                                         <td><strong>$<?php echo number_format($total, 2); ?></strong></td>
                                     </tr>
                                 </tfoot>
+
                             </table>
                         </div>
                     </div>
@@ -418,8 +616,9 @@ while ($item = $items_result->fetch_assoc()) {
 
             <div class="row mt-4">
                 <div class="col-lg-12 text-center">
-                    <a href="orders.php" class="btn btn-primary no-print">Quay lại danh sách đơn hàng</a>
-                    <button onclick="window.print()" class="btn btn-secondary no-print">In hóa đơn</button>
+                    <a href="orders.php" class="btn btn-primary no-print">Back to order list</a>
+                    <button onclick="window.print()" class="btn btn-secondary no-print">Print invoice</button>
+
                 </div>
             </div>
         </div>
@@ -517,4 +716,3 @@ while ($item = $items_result->fetch_assoc()) {
 </body>
 
 </html>
-```
