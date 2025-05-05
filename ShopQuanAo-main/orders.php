@@ -77,6 +77,7 @@ $result = $stmt->get_result();
 // CSS styles cho badges và buttons
 $styles = "
 <style>
+
 .badge {
     padding: 8px 12px;
     border-radius: 4px;
@@ -120,6 +121,7 @@ $styles = "
 [class*='status-'] {
     text-transform: capitalize;
 }
+    
 </style>
 ";
 ?>
@@ -187,8 +189,8 @@ $styles = "
     </div>
     <!-- Offcanvas Menu End -->
 
-    <!-- Header Section Begin -->
-    <header class="header">
+     <!-- Header Section Begin -->
+     <header class="header">
         <div class="header__top">
             <div class="container">
                 <div class="row">
@@ -227,7 +229,7 @@ $styles = "
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li><a href="./index.php">Home</a></li>
-                            <li><a href="./shop.php">Shop</a></li>
+                            <li class="active"><a href="./orders.php">Orders</a></li>
                             <li>
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
@@ -237,7 +239,7 @@ $styles = "
                                     <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li class="actives"><a href="./blog.php">Blog</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
                             <li><a href="./contact.php">Contacts</a></li>
                         </ul>
                     </nav>
@@ -252,6 +254,24 @@ $styles = "
         </div>
     </header>
     <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Orders</h4>
+                        <div class="breadcrumb__links">
+                            <a href="./index.php">Home</a>
+                            <span>Orders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
 
     <!-- your cart -->
     <div class="container">
@@ -339,10 +359,9 @@ $styles = "
                                 <td>$<?php echo number_format($row['total_amount'], 2); ?></td>
                                 <td>
                                     <?php if ($row['invoice_id']): ?>
-                                    <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>"
-                                        class="btn btn-sm btn-info">View Invoice</a>
+                                        <a href="invoice.php?id=<?php echo $row['invoice_id']; ?>" class="btn btn-sm btn-info">View Invoice</a>
                                     <?php else: ?>
-                                    <span class="text-muted">Not Available</span>
+                                        <span class="text-muted">Not Available</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -358,7 +377,7 @@ $styles = "
             </div>
         </div>
     </div>
-
+    
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container">
@@ -446,7 +465,7 @@ $styles = "
         </div>
     </div>
     <!-- Search End -->
-
+    
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -460,13 +479,9 @@ $styles = "
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        checkLoginStatus();
-    });
-    </script>
+<script> document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});  </script>
 </body>
-
 </html>
