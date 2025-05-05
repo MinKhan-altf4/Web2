@@ -86,8 +86,15 @@ require_once 'auth.php';
 
           <label for="image">Image Product:</label>
           <input type="file" class="product_enter" name="image" id="image" accept="image/*" required>
+          <label for="is_visible">Hiển thị sản phẩm:</label>
+<select name="is_visible" id="is_visible" class="product_enter" required>
+    <option value="1" selected>Hiện</option>
+    <option value="0">Ẩn</option>
+</select>
+
 
           <button type="submit" class="submit-btn">ADD PRODUCT</button>
+          
         </div>
       </form>
     </div>
@@ -101,14 +108,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
+    $is_visible = $_POST['is_visible'];
+
 
     $image_name = $_FILES['image']['name'];
     $image_tmp = $_FILES['image']['tmp_name'];
     $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
-    $sql = "INSERT INTO products (name, price, description, category, tag, image)
-            VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name')";
+    $sql = "INSERT INTO products (name, price, description, category, tag, image, is_visible)
+        VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name', $is_visible)";
+
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
     exit();
