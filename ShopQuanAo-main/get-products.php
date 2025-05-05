@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 
-$sql = "SELECT product_id, name, price, category, image FROM products WHERE is_deleted = 0";
+$sql = "SELECT product_id, name, price, category, image FROM products WHERE is_deleted = 0 AND is_visible = 1";
 if ($category !== 'all') {
     $sql .= " AND category = '$category'";
 }

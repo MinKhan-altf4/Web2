@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'];
     $category = $_POST['category_product'];
     $tag = $_POST['tag_product'];
+    $is_visible = $_POST['is_visible'];
+
 
     if ($_FILES['image']['name']) {
         $image_name = $_FILES['image']['name'];
@@ -20,13 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $sql = "UPDATE products SET 
-            name='$name', 
-            price='$price', 
-            description='$description',
-            category='$category', 
-            tag='$tag', 
-            image='$image_name'
-            WHERE product_id=$id";
+        name='$name', 
+        price='$price', 
+        description='$description',
+        category='$category', 
+        tag='$tag', 
+        image='$image_name',
+        is_visible=$is_visible
+        WHERE product_id=$id";
+
     mysqli_query($conn, $sql);
     header("Location: addproduct.php");
 }
@@ -115,6 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <input type="text" name="tag_product" id="tag_product" class="product_enter" value="<?= htmlspecialchars($product['tag'] ?? '') ?>" required>
 
           <label for="image">Image Product:</label>
+          <label for="is_visible">Hiển thị sản phẩm:</label>
+<select name="is_visible" id="is_visible" class="product_enter" required>
+    <option value="1" <?= ($product['is_visible'] == 1 ? 'selected' : '') ?>>Hiện</option>
+    <option value="0" <?= ($product['is_visible'] == 0 ? 'selected' : '') ?>>Ẩn</option>
+</select>
+
           <input type="file" name="image" id="image" class="product_enter" accept="image/*">
           <?php if (!empty($product['image'])): ?>
             <div class="current-image">
