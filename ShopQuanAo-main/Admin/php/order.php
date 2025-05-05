@@ -110,14 +110,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_order'])) {
 }
 
 // Sửa lại phần xử lý filter
+
 $where_clause = "1=1";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
     if (!empty($_POST['from_date'])) {
-        $where_clause .= " AND o.order_date >= '" . $_POST['from_date'] . "'";
+        $from_date = $_POST['from_date'] . ' 00:00:00';
+        $where_clause .= " AND o.order_date >= '" . $conn->real_escape_string($from_date) . "'";
     }
     if (!empty($_POST['to_date'])) {
-        $where_clause .= " AND o.order_date <= '" . $_POST['to_date'] . "'";
+        $to_date = $_POST['to_date'] . ' 23:59:59';
+        $where_clause .= " AND o.order_date <= '" . $conn->real_escape_string($to_date) . "'";
     }
+   
+}
     if (!empty($_POST['status'])) {
         $where_clause .= " AND o.order_status = '" . $_POST['status'] . "'";
     }
@@ -127,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_order'])) {
     if (!empty($_POST['payment_status'])) {
         $where_clause .= " AND i.payment_status = '" . $_POST['payment_status'] . "'";
     }
-}
+
 
 // Cập nhật phần query để lấy thêm thông tin cần thiết
 $sql = "SELECT o.*, u.fullname as customer_name, i.invoice_number, i.payment_status, i.total_amount,
