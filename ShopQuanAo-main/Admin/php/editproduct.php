@@ -119,10 +119,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <input type="text" name="tag_product" id="tag_product" class="product_enter" value="<?= htmlspecialchars($product['tag'] ?? '') ?>" required>
 
           <label for="image">Image Product:</label>
-          <label for="is_visible">Hiển thị sản phẩm:</label>
+          <label for="is_visible">Show products</label>
 <select name="is_visible" id="is_visible" class="product_enter" required>
-    <option value="1" <?= ($product['is_visible'] == 1 ? 'selected' : '') ?>>Hiện</option>
-    <option value="0" <?= ($product['is_visible'] == 0 ? 'selected' : '') ?>>Ẩn</option>
+    <option value="1" <?= ($product['is_visible'] == 1 ? 'selected' : '') ?>>Show</option>
+    <option value="0" <?= ($product['is_visible'] == 0 ? 'selected' : '') ?>>Hidden</option>
 </select>
 
           <input type="file" name="image" id="image" class="product_enter" accept="image/*">
