@@ -1,5 +1,5 @@
 <?php
-require_once './admin/php/db.php';
+require_once 'Admin/php/db.php'; // Sử dụng db.php từ thư mục Admin
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
