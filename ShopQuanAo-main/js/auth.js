@@ -257,6 +257,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Thêm vào cuối file
 document.addEventListener('DOMContentLoaded', function() {
+    // Prevent body scroll when touching form elements on mobile
+    const formElements = document.querySelectorAll('.register-form input, .register-form select');
+    
+    formElements.forEach(element => {
+        element.addEventListener('focus', () => {
+            document.body.style.overflow = 'hidden';
+        });
+        
+        element.addEventListener('blur', () => {
+            document.body.style.overflow = 'auto';
+        });
+    });
+
     // Ngăn chặn hành vi mặc định của dropdown menu
     document.addEventListener('click', function(e) {
         if(e.target.closest('.user-menu')) {
@@ -271,5 +284,140 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener("DOMContentLoaded", () => {
   checkLoginStatus();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.register-form form');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get all required fields
+        const fullname = document.querySelector('input[name="fullname"]').value.trim();
+        const username = document.querySelector('input[name="username"]').value.trim();
+        const email = document.querySelector('input[name="email"]').value.trim();
+        const phone = document.querySelector('input[name="phone_number"]').value.trim();
+        const password = document.querySelector('input[name="password"]').value;
+        const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+        const address = document.querySelector('input[name="address"]').value.trim();
+        const gender = document.querySelector('input[name="gender"]:checked');
+        const city = document.querySelector('select[name="city"]').value;
+
+        // Validation checks
+        if (!fullname) {
+            showError('Please enter your full name');
+            return;
+        }
+        if (!username) {
+            showError('Please enter your username');
+            return;
+        }
+        if (!email) {
+            showError('Please enter your email');
+            return;
+        }
+        if (!phone) {
+            showError('Please enter your phone number');
+            return;
+        }
+        if (!password) {
+            showError('Please enter your password');
+            return;
+        }
+        if (!confirmPassword) {
+            showError('Please confirm your password');
+            return;
+        }
+        if (!address) {
+            showError('Please enter your address');
+            return;
+        }
+        if (!city) {
+            showError('Please select your city');
+            return;
+        }
+        if (!gender) {
+            showError('Please select your gender');
+            return;
+        }
+
+        // If all validations pass
+        form.submit();
+    });
+
+    function showError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            confirmButtonColor: '#3085d6'
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const phoneInput = document.getElementById('phone_number');
+    
+    // Phone number validation
+    phoneInput.addEventListener('input', function(e) {
+        const phoneMessage = document.getElementById('phone-message');
+        if (this.value.length > 10) {
+            phoneMessage.textContent = 'Phone number cannot exceed 10 digits';
+            phoneMessage.style.color = 'red';
+        } else {
+            phoneMessage.textContent = '';
+        }
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get all required fields
+        const fullname = form.querySelector('[name="fullname"]').value.trim();
+        const username = form.querySelector('[name="username"]').value.trim();
+        const email = form.querySelector('[name="email"]').value.trim();
+        const phone = form.querySelector('[name="phone_number"]').value.trim();
+        const password = form.querySelector('[name="password"]').value;
+        const confirmPassword = form.querySelector('[name="confirm_password"]').value;
+        const address = form.querySelector('[name="address"]').value.trim();
+        const city = form.querySelector('[name="city"]').value;
+        const gender = form.querySelector('input[name="gender"]:checked');
+
+        // Validation checks
+        if (!fullname || !username || !email || !phone || !password || !confirmPassword || !address || !city || !gender) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all required fields'
+            });
+            return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Email',
+                text: 'Please enter a valid email address'
+            });
+            return;
+        }
+
+        // Phone validation
+        if (phone.length > 10) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Phone Number',
+                text: 'Phone number cannot exceed 10 digits'
+            });
+            return;
+        }
+
+        // If all validations pass, submit the form
+        form.submit();
+    });
 });
 

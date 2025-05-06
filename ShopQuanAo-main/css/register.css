@@ -41,6 +41,7 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     border-radius: 10px;
     background: #fff;
+                                                                                                                              height: auto; /* Thay đổi từ fixed height sang auto */
 }
 
 .register-form .title {
@@ -65,6 +66,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 20px 0 12px 0;
+  max-height: none; /* Xóa max-height */
+  overflow: visible; /* Đổi overflow thành visible */
 }
 
 form .user-details .input-box {
@@ -93,6 +96,22 @@ form .input-box span.details {
 .user-details .input-box input:focus,
 .user-details .input-box input:valid {
   border-color: #9b59b6;
+}
+
+/* Add validation styles */
+.user-details .input-box input:invalid:not(:placeholder-shown),
+.user-details .input-box select:invalid:not(:placeholder-shown) {
+    border-color: #ff4444;
+}
+
+.user-details .input-box input:valid:not(:placeholder-shown) {
+    border-color: #00C851;
+}
+
+/* Style for required fields */
+.details::after {
+    content: " *";
+    color: #ff4444;
 }
 
 form .gender-details .gender-title {
@@ -157,36 +176,73 @@ form .button input:hover {
   background: linear-gradient(-135deg, #008000, #008000);
 }
 
-/* Responsive media query code for mobile devices */
-@media (max-width: 584px) {
-  .register-form {
-    max-width: 100%;
-  }
-
-  form .user-details .input-box {
-    margin-bottom: 15px;
-    width: 100%;
-  }
-
-  form .category {
-    width: 100%;
-  }
-
-  .content form .user-details {
-    max-height: 300px;
-    overflow-y: scroll;
-  }
-
-  .user-details::-webkit-scrollbar {
-    width: 5px;
-  }
+/* Cập nhật media queries cho mobile */
+@media (max-width: 768px) {
+    .register-form {
+        max-width: 100%;
+        padding: 15px;
+        margin: 10px;
+        height: auto;
+    }
+    
+    .content {
+        padding: 15px;
+        height: auto;
+    }
+    
+    .content form .user-details {
+        flex-direction: column;
+        padding: 0;
+        max-height: none;
+        overflow: visible;
+    }
+    
+    form .user-details .input-box {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .user-details .input-box input {
+        height: 45px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .gender-details .category {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .gender-details .category label {
+        margin: 5px 0;
+    }
 }
 
-/* Responsive media query code for mobile devices */
-@media (max-width: 459px) {
-  .register-form .content .category {
-    flex-direction: column;
-  }
+@media (max-width: 480px) {
+    .register-form {
+        margin: 5px;
+        padding: 10px;
+    }
+    
+    .content {
+        padding: 10px;
+    }
+    
+    .register-form .title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    form .user-details .input-box {
+        margin-bottom: 10px;
+    }
+}
+
+/* Xóa scrollbar styles không cần thiết */
+.user-details::-webkit-scrollbar {
+    display: none;
 }
 
 .popup-message {

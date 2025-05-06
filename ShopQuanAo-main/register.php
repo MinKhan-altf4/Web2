@@ -36,15 +36,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gender = isset($_POST['gender']) ? mysqli_real_escape_string($conn, $_POST['gender']) : '';
     $city = mysqli_real_escape_string($conn, $_POST['city']);
 
-    // Validate required fields
-    if(empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $error = "Please fill in all information!";
+    // Enhanced validation
+    if(empty($username) || empty($email) || empty($password) || empty($confirm_password) || 
+       empty($fullname) || empty($phone) || empty($address) || empty($city) || empty($gender)) {
+        $error = "Please fill in all required fields!";
     }
-    // Validate phone number length
-    else if(strlen($phone) > 10) {
-        $error = "Please enter correct phone number!";
+    // Validate email format
+    else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Please enter a valid email address!";
     }
-    // Kiểm tra password khớp nhau
+    // Validate phone number
+    else if(strlen($phone) > 10 || !preg_match("/^[0-9]+$/", $phone)) {
+        $error = "Please enter a valid phone number (maximum 10 digits)!";
+    }
+    // Password validation
+    else if(strlen($password) < 6) {
+        $error = "Password must be at least 6 characters long!";
+    }
     else if($password !== $confirm_password) {
         $error = "Passwords do not match!";
     } 
@@ -251,41 +259,35 @@ if(isset($error)) {
             <div class="title">Registration</div>
             <div class="content">
                 <!-- Registration form -->
-                <form method="POST" action="">
+                <form method="POST" action="" novalidate>
                     <div class="user-details">
                         <div class="input-box">
                             <span class="details">Full Name</span>
-                            <input type="text" name="fullname" placeholder="Enter your name" required />
+                            <input type="text" name="fullname" placeholder="Enter your name" required>
                         </div>
                         <div class="input-box">
                             <span class="details">Username</span>
-                            <input type="text" name="username" placeholder="Enter your username" required />
+                            <input type="text" name="username" placeholder="Enter your username" required>
                         </div>
                         <div class="input-box">
                             <span class="details">Email</span>
-                            <input type="email" name="email" placeholder="Enter your email" required />
+                            <input type="email" name="email" placeholder="Enter your email" required>
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="text" name="phone_number" id="phone_number" placeholder="Enter your number"
-                                required />
-                            <span id="phone-message" class="message"></span>
+                            <input type="tel" name="phone_number" placeholder="Enter your number" required maxlength="10">
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
-                            <input type="password" name="password" placeholder="Enter your password" required
-                                style="width: 95%" />
-                            <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
+                            <input type="password" name="password" placeholder="Enter your password" required>
                         </div>
                         <div class="input-box">
                             <span class="details">Confirm Password</span>
-                            <input type="password" name="confirm_password" placeholder="Confirm your password" required
-                                style="width: 95%" />
-                            <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer"></i>
+                            <input type="password" name="confirm_password" placeholder="Confirm your password" required>
                         </div>
                         <div class="input-box">
                             <span class="details">Address</span>
-                            <input type="text" name="address" placeholder="Enter your address" required />
+                            <input type="text" name="address" placeholder="Enter your address" required>
                         </div>
                         <div class="input-box">
                             <span class="details">City</span>
@@ -297,9 +299,8 @@ if(isset($error)) {
                         </div>
                     </div>
                     <div class="gender-details">
-                        <input type="radio" name="gender" value="Male" id="dot-1" required />
-                        <input type="radio" name="gender" value="Female" id="dot-2" />
-                        <input type="radio" name="gender" value="Prefer not to say" id="dot-3" />
+                        <input type="radio" name="gender" id="dot-1" value="male" required>
+                        <input type="radio" name="gender" id="dot-2" value="female" required>
                         <span class="gender-title">Gender</span>
                         <div class="category">
                             <label for="dot-1">
@@ -310,14 +311,10 @@ if(isset($error)) {
                                 <span class="dot two"></span>
                                 <span class="gender">Female</span>
                             </label>
-                            <label for="dot-3">
-                                <span class="dot three"></span>
-                                <span class="gender">Prefer not to say</span>
-                            </label>
                         </div>
                     </div>
                     <div class="button">
-                        <input type="submit" value="Register" />
+                        <input type="submit" value="Register">
                     </div>
                 </form>
                 <?php if(isset($error)): ?>
