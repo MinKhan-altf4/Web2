@@ -1,40 +1,53 @@
 <?php
-session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Kiểm tra đăng nhập
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit;
-}
-
 require_once './admin/php/db.php';
 
-// Kiểm tra và thêm cột card_number và card_holder vào bảng checkout
-$check_columns_query = "
-    SELECT COUNT(*) as count 
-    FROM information_schema.COLUMNS 
-    WHERE TABLE_SCHEMA = '$dbname' 
-    AND TABLE_NAME = 'checkout' 
-    AND COLUMN_NAME IN ('card_number', 'card_holder')
-";
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-$check_result = $conn->query($check_columns_query);
-$column_exists = $check_result->fetch_assoc()['count'];
-
-if ($column_exists == 0) {
-    $alter_table_query = "
-        ALTER TABLE checkout
-        ADD COLUMN card_number VARCHAR(16),
-        ADD COLUMN card_holder VARCHAR(100)
-    ";
-    if ($conn->query($alter_table_query) === FALSE) {
-        die("Error adding column to checkout table: " . $conn->error);
-    }
+if (!isset($_SESSION['id'])) {
+    die("Bạn chưa đăng nhập!");
 }
 
 $user_id = $_SESSION['id'];
+
+// Kiểm tra kết nối và lấy tên database
+if (!isset($conn)) {
+    die("Kết nối database thất bại!");
+}
+
+$db_result = $conn->query("SELECT DATABASE()");
+if ($db_result) {
+    $dbname = $db_result->fetch_row()[0];
+} else {
+    die("Không thể lấy tên database.");
+}
+function columnExists($conn, $dbname, $table, $column): bool {
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) FROM information_schema.COLUMNS 
+        WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?
+    ");
+    $stmt->bind_param("sss", $dbname, $table, $column);
+    $stmt->execute();
+
+    // Khai báo biến trước khi bind
+    $count = 0;
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+
+    return $count > 0;
+}
+
+
+// Thêm từng cột nếu chưa có
+if (!columnExists($conn, $dbname, 'checkout', 'card_number')) {
+    $conn->query("ALTER TABLE checkout ADD COLUMN card_number VARCHAR(16)");
+}
+
+if (!columnExists($conn, $dbname, 'checkout', 'card_holder')) {
+    $conn->query("ALTER TABLE checkout ADD COLUMN card_holder VARCHAR(100)");
+}
 
 // Lấy danh sách đơn hàng và hóa đơn của người dùng
 $orders_query = "
