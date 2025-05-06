@@ -1,5 +1,6 @@
 <?php
-require_once './admin/php/db.php';
+require_once 'Admin/php/db.php'; // Sử dụng db.php từ thư mục Admin
+
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
