@@ -38,7 +38,8 @@ try {
         $products[] = array(
             'id' => $row['product_id'],
             'name' => $row['name'],
-            'price' => $row['price'],
+            'price' => '$' . number_format($row['price'], 2),
+
             'image' => $imagePath,
             'category' => $row['category']
         );

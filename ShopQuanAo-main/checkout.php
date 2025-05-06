@@ -544,12 +544,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
 
                                 <!-- Ghi chú cho đơn hàng -->
-                                <div class="checkout__input">
-                                    <p>Order Notes (If Any)</p>
-                                    <textarea name="order_note" id="order-note"
-                                        placeholder="Nhập ghi chú của bạn tại đây" rows="1"
-                                        class="form-control"></textarea>
-                                </div>
+                               
 
                                 <!-- Payment Methods -->
                                 <div class="checkout__payment">
