@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Content-Type: application/json');
             echo json_encode([
                 'status' => 'success',
-                'message' => 'Đăng nhập thành công!',
+                'message' => 'Log in successfully!',
                 'username' => $user['username'],
                 'role' => $user['role']
             ]);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Content-Type: application/json');
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Sai mật khẩu!'
+                'message' => 'Wrong password!'
             ]);
             exit();
         }
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'error',
-            'message' => 'Tài khoản không tồn tại!'
+            'message' => 'Account does not exist!'
         ]);
         exit();
     }
