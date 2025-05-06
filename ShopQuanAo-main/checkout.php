@@ -1,5 +1,5 @@
 <?php
-require_once './admin/php/db.php';
+require_once __DIR__ . '/../admin/php/db.php'; // sửa lại cho đúng cấp thư mục
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
