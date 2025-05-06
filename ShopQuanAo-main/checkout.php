@@ -954,8 +954,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
     Swal.fire({
         icon: 'info',
-        title: 'Giỏ hàng trống',
-        text: 'Bạn sẽ được chuyển về trang shop',
+        title: 'Empty goods',
+        text: 'You will be redirected to the shop page.',
         showConfirmButton: false,
         timer: 2000
     }).then(() => {
