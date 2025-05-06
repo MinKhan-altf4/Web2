@@ -351,16 +351,17 @@ $styles = "
                                     }
                                     ?>
                                 </td>
-<td><?php echo htmlspecialchars($row['payment_method']); ?></td>
+                                <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
 <td>$<?php echo number_format($row['total_amount'], 2); ?></td>
 <td>
 <?php if ($row['invoice_id']): ?>
-<a class="btn btn-sm btn-info" href="invoice.php?id=&lt;?php echo $row['invoice_id']; ?>&amp;source=orders">View Invoice</a>
+    <a class="btn btn-sm btn-info" href="invoice.php?id=<?php echo $row['invoice_id']; ?>&source=orders">View Invoice</a>
 <?php else: ?>
-<span class="text-muted">Not Available</span>
+    <span class="text-muted">Not Available</span>
 <?php endif; ?>
 </td>
 </tr>
+
 <?php
                                 }
                             } else {
