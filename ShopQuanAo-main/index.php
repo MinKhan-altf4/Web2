@@ -149,7 +149,7 @@
                         <div class="col-xl-5 col-lg-7 col-md-8">
                             <div class="hero__text">
                                 <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
+                                
                                 
 
                                 <a href="shop.php" class="primary-btn">Shop now <span class="arrow_right"></span></a>

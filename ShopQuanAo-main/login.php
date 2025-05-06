@@ -151,30 +151,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__option">
-            <div class="offcanvas__links" id="offcanvaslinks">
-                <a href="login.php">Sign in</a>
-                <a href="contact.php">SUPPORT</a>
-            </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
-                </ul>
-            </div>
-        </div>
-        <div class="offcanvas__nav__option">
-
-
-            <a href="shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__text">
-            <p>Free shipping, 30-day return or refund guarantee.</p>
-        </div>
+  <div class="offcanvas__option">
+    <div class="offcanvas__links" id="offcanvasLinks">
+      <a href="login.php">Sign in</a>
+      <a href="contact.php">SUPPORT</a>
     </div>
+    <div class="offcanvas__top__hover">
+      <span>Usd <i class="arrow_carrot-down"></i></span>
+      <ul>
+        <li>USD</li>
+        <li>EUR</li>
+        <li>USD</li>
+      </ul>
+    </div>
+  </div>
+  <div class="offcanvas__nav__option">
+    <a href="./shopping-cart.php"><img alt="" src="img/icon/cart.png"/></a>
+  </div>
+  <div id="mobile-menu-wrap"></div>
+  <div class="offcanvas__text">
+    <p>Free shipping, 30-day return or refund guarantee.</p>
+  </div>
+</div>
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
@@ -264,16 +262,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label>Username</label>
                 </div>
                 <div class="field">
-                    <input type="password" id="password" name="password" required style="width: 95%" />
+                    <input type="password" id="password" name="password" required style="width: 100%" />
                     <label>Password</label>
-                    <i class="fa fa-eye" id="togglePassword" style="cursor: pointer"></i>
+                    <i class="fa fa-eye" id="togglePassword" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
                 </div>
 
                 <div class="field">
                     <input type="button" onclick="loginUser()" value="Login" />
                 </div>
                 <div class="signup-link">
-                    Not a member? <a href="register.php">Sign up now</a>
+                    Not a member? <a href="register.php">Sign up </a>
                 </div>
             </form>
         </div>

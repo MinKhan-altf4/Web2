@@ -128,7 +128,7 @@ async function checkLoginStatus() {
       if (data.isLoggedIn && data.username) {
         offcanvasLinks.innerHTML = `
           <a href="profile.php">Profile</a>
-          <li><a href="orders.php">Orders</a></li>
+          <a href="orders.php">Orders</a>
           <a href="#" onclick="logout(); return false;">Logout</a>
           <a href="contact.php">Support</a>
         `;
