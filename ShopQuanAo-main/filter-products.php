@@ -8,12 +8,15 @@ $category = isset($_GET['category']) && $_GET['category'] != 'all' ? $_GET['cate
 
 try {
     // Build the base query
-    $sql = "SELECT product_id, name, price, image, category FROM products WHERE is_deleted = 0 AND price >= ? AND price <= ?";
+    $sql = "SELECT p.product_id, p.name, p.price, p.image, pt.type_name as category 
+            FROM products p
+            JOIN product_types pt ON p.type_id = pt.type_id 
+            WHERE p.is_deleted = 0 AND p.price >= ? AND p.price <= ?";
     $params = array($minPrice, $maxPrice);
 
     // Add category filter if specified
     if ($category) {
-        $sql .= " AND category = ?";
+        $sql .= " AND pt.type_name = ?";
         $params[] = $category;
     }
 
@@ -32,15 +35,11 @@ try {
     // Fetch all products
     $products = array();
     while ($row = mysqli_fetch_assoc($result)) {
-        // Thêm đường dẫn img/product vào trước tên file ảnh
-        $imagePath = 'img/product/' . basename($row['image']);
-        
         $products[] = array(
             'id' => $row['product_id'],
             'name' => $row['name'],
-            'price' => '$' . number_format($row['price'], 2),
-
-            'image' => $imagePath,
+            'price' => '$' . $row['price'],
+            'image' => 'Admin/img/' . $row['image'],
             'category' => $row['category']
         );
     }

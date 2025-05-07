@@ -3,9 +3,22 @@ include("Admin/php/db.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM products WHERE product_id = $id AND is_deleted = 0";
-    $result = mysqli_query($conn, $sql);
+    // Sử dụng JOIN để lấy thông tin sản phẩm và loại sản phẩm
+    $sql = "SELECT p.*, pt.type_name 
+            FROM products p
+            JOIN product_types pt ON p.type_id = pt.type_id 
+            WHERE p.product_id = ? AND p.is_deleted = 0";
+            
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     $product = mysqli_fetch_assoc($result);
+    
+    if (!$product) {
+        header("Location: shop.php");
+        exit();
+    }
 } else {
     header("Location: shop.php");
     exit();
@@ -451,7 +464,7 @@ if (isset($_GET['id'])) {
                                             </li>
                                             <li class="d-flex justify-content-between py-2">
                                                 <span class="text-muted">Category:</span>
-                                                <span class="fw-bold"><?php echo $product['category']; ?></span>
+                                                <span class="fw-bold"><?php echo $product['type_name']; ?></span>
                                             </li>
                                         </ul>
                                     </div>

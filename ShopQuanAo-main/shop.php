@@ -353,40 +353,55 @@
     <script>
     let currentProducts = []; // Thêm biến global để lưu danh sách sản phẩm hiện tại
 
-    // Hàm tìm kiếm sản phẩm
     function searchProducts() {
         const searchQuery = document.getElementById('searchInputHome').value;
 
+        // Nếu ô tìm kiếm trống, hiển thị tất cả sản phẩm
         if (!searchQuery.trim()) {
             filterByCategory('all');
             return;
         }
 
+        // Gửi request tới backend để tìm kiếm sản phẩm
         fetch(`search-products.php?query=${encodeURIComponent(searchQuery)}`)
-            .then(response => response.json())
-            .then(products => {
-                currentProducts = products; // Store filtered products
-                displayProducts(products, 1); // Always start at page 1 when searching
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
             })
-            .catch(error => console.error('Error:', error));
+            .then(products => {
+                currentProducts = products;
+                displayProducts(products, 1);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error searching products. Please try again.');
+            });
     }
 
     // Thêm debounce để tránh gọi API quá nhiều
     let searchTimeout;
-    document.getElementById('searchInputHome').addEventListener('input', function() {
+    const searchInput = document.getElementById('searchInputHome');
+
+    searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(searchProducts, 300);
+    });
+
+    // Xử lý khi nhấn Enter trong ô tìm kiếm
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchProducts();
+        }
     });
 
     // Xử lý khi nhấn nút tìm kiếm
     document.querySelector('.shop__sidebar__search button').addEventListener('click', searchProducts);
 
-    // Xử lý khi nhấn Enter trong ô tìm kiếm
-    document.getElementById('searchInputHome').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            searchProducts();
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
     });
 
     // Tự động hiện tất cả sản phẩm khi trang được load
@@ -395,10 +410,11 @@
     });
 
     function filterByCategory(category) {
+        // Fetch products
         fetch(`get-products.php${category !== 'all' ? '?category=' + category : ''}`)
             .then(response => response.json())
             .then(products => {
-                currentProducts = products; // Lưu sản phẩm vào biến global
+                currentProducts = products;
                 displayProducts(products, 1);
             })
             .catch(error => console.error('Error:', error));
@@ -535,11 +551,6 @@
             behavior: 'smooth'
         });
     }
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        checkLoginStatus();
-    });
     </script>
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

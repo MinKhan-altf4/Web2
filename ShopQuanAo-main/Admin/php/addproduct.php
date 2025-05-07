@@ -79,10 +79,14 @@ require_once 'auth.php';
           <label for="category_product">Category Product:</label>
           <select name="category_product" id="category_product" class="product_enter" required>
             <option value="">-- Select Category --</option>
-            <option value="Bags">Bags</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Shoes">Shoes</option>
-            <option value="Accessories">Accessories</option>
+            <?php
+            // Lấy danh sách loại sản phẩm từ bảng product_types
+            $type_query = "SELECT type_id, type_name FROM product_types ORDER BY type_name";
+            $type_result = mysqli_query($conn, $type_query);
+            while($type = mysqli_fetch_assoc($type_result)) {
+                echo "<option value='{$type['type_id']}'>{$type['type_name']}</option>";
+            }
+            ?>
           </select>
 
           <label for="tag_product">Tag Product:</label>
@@ -110,20 +114,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name_product'];
     $price = $_POST['price_product'];
     $description = $_POST['description'];
-    $category = $_POST['category_product'];
+    $type_id = $_POST['category_product']; // Thay đổi từ category sang type_id
     $tag = $_POST['tag_product'];
     $is_visible = $_POST['is_visible'];
-
 
     $image_name = $_FILES['image']['name'];
     $image_tmp = $_FILES['image']['tmp_name'];
     $upload_dir = "../img/";
     move_uploaded_file($image_tmp, $upload_dir . $image_name);
 
-    $sql = "INSERT INTO products (name, price, description, category, tag, image, is_visible)
-        VALUES ('$name', '$price', '$description', '$category', '$tag', '$image_name', $is_visible)";
-
-    mysqli_query($conn, $sql);
+    // Sử dụng prepared statement để tránh SQL injection
+    $sql = "INSERT INTO products (name, price, description, type_id, tag, image, is_visible)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+            
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sdsissi", $name, $price, $description, $type_id, $tag, $image_name, $is_visible);
+    mysqli_stmt_execute($stmt);
+    
     header("Location: addproduct.php");
     exit();
 }
@@ -146,7 +153,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <tbody>
         <?php
         include("db.php");
-        $result = mysqli_query($conn, "SELECT product_id, name, price, category, tag, image FROM products WHERE is_deleted = 0");
+        // Sử dụng JOIN để lấy tên loại sản phẩm
+        $result = mysqli_query($conn, 
+            "SELECT p.product_id, p.name, p.price, pt.type_name as category, 
+                    p.tag, p.image 
+             FROM products p
+             JOIN product_types pt ON p.type_id = pt.type_id 
+             WHERE p.is_deleted = 0");
 
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>

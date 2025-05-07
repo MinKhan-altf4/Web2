@@ -2,16 +2,23 @@
 include("db.php");
 
 $id = $_GET['id'];
-$product = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM products WHERE product_id = $id"));
+// Sử dụng JOIN để lấy thông tin sản phẩm và loại sản phẩm
+$sql = "SELECT p.*, pt.type_name 
+        FROM products p
+        JOIN product_types pt ON p.type_id = pt.type_id 
+        WHERE p.product_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$product = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name_product'];
     $price = $_POST['price_product'];
     $description = $_POST['description'];
-    $category = $_POST['category_product'];
+    $type_id = $_POST['category_product']; // Thay đổi từ category sang type_id
     $tag = $_POST['tag_product'];
     $is_visible = $_POST['is_visible'];
-
 
     if ($_FILES['image']['name']) {
         $image_name = $_FILES['image']['name'];
@@ -21,18 +28,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image_name = $product['image'];
     }
 
-    $sql = "UPDATE products SET 
-        name='$name', 
-        price='$price', 
-        description='$description',
-        category='$category', 
-        tag='$tag', 
-        image='$image_name',
-        is_visible=$is_visible
-        WHERE product_id=$id";
+    // Sử dụng prepared statement để cập nhật
+    $update_sql = "UPDATE products SET 
+        name = ?, 
+        price = ?, 
+        description = ?,
+        type_id = ?, 
+        tag = ?, 
+        image = ?,
+        is_visible = ?
+        WHERE product_id = ?";
 
-    mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, $update_sql);
+    mysqli_stmt_bind_param($stmt, "sdsissii", 
+        $name, 
+        $price, 
+        $description,
+        $type_id, 
+        $tag, 
+        $image_name,
+        $is_visible,
+        $id
+    );
+    
+    mysqli_stmt_execute($stmt);
     header("Location: addproduct.php");
+    exit();
 }
 ?>
 
@@ -107,10 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <select name="category_product" id="category_product" class="product_enter" required>
             <option value="">-- Select Category --</option>
             <?php
-            $categories = ['Bags', 'Clothing', 'Shoes', 'Accessories'];
-            foreach ($categories as $cat) {
-                $selected = ($product['category'] ?? '') === $cat ? 'selected' : '';
-                echo "<option value='$cat' $selected>$cat</option>";
+            $type_query = "SELECT type_id, type_name FROM product_types ORDER BY type_name";
+            $type_result = mysqli_query($conn, $type_query);
+            while($type = mysqli_fetch_assoc($type_result)) {
+                $selected = ($type['type_id'] == $product['type_id']) ? 'selected' : '';
+                echo "<option value='{$type['type_id']}' {$selected}>{$type['type_name']}</option>";
             }
             ?>
           </select>
