@@ -343,28 +343,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
-  <div class="offcanvas__option">
-    <div class="offcanvas__links" id="offcanvasLinks">
-      <a href="login.php">Sign in</a>
-      <a href="contact.php">SUPPORT</a>
+        <div class="offcanvas__option">
+            <div class="offcanvas__links" id="offcanvasLinks">
+                <a href="login.php">Sign in</a>
+                <a href="contact.php">SUPPORT</a>
+            </div>
+            <div class="offcanvas__top__hover">
+                <span>Usd <i class="arrow_carrot-down"></i></span>
+                <ul>
+                    <li>USD</li>
+                    <li>EUR</li>
+                    <li>USD</li>
+                </ul>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href="./shopping-cart.php"><img alt="" src="img/icon/cart.png" /></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>Free shipping, 30-day return or refund guarantee.</p>
+        </div>
     </div>
-    <div class="offcanvas__top__hover">
-      <span>Usd <i class="arrow_carrot-down"></i></span>
-      <ul>
-        <li>USD</li>
-        <li>EUR</li>
-        <li>USD</li>
-      </ul>
-    </div>
-  </div>
-  <div class="offcanvas__nav__option">
-    <a href="./shopping-cart.php"><img alt="" src="img/icon/cart.png"/></a>
-  </div>
-  <div id="mobile-menu-wrap"></div>
-  <div class="offcanvas__text">
-    <p>Free shipping, 30-day return or refund guarantee.</p>
-  </div>
-</div>
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
@@ -461,7 +461,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="checkout__form">
                 <form id="checkout-form" action="checkout.php" method="POST" novalidate>
                     <div class="row">
-                        <div class="col-lg-8 col-md-6">
+                        <div class="order__table">
                             <h4>Billing Details</h4>
                             <div class="checkout__input__checkbox">
                             </div>
@@ -544,7 +544,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
 
                                 <!-- Ghi chú cho đơn hàng -->
-                               
+
 
                                 <!-- Payment Methods -->
                                 <div class="checkout__payment">
