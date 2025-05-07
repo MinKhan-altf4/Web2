@@ -146,6 +146,40 @@ if(isset($error)) {
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <link rel="stylesheet" href="css/register.css" type="text/css" />
+    <style>
+    .error-message {
+        display: none;
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    /* Bỏ style cho invalid mặc định */
+    .input-box input:invalid {
+        border-color: initial;
+    }
+
+    /* Chỉ hiển thị border đỏ khi input đã được touched và invalid */
+    .input-box input.touched:invalid {
+        border-color: red;
+    }
+
+    .input-box input.touched:invalid + .error-message {
+        display: block;
+    }
+
+    /* Thêm style cho focus */
+    .input-box input:focus {
+        border-color: #4CAF50;
+        outline: none;
+    }
+
+    /* Style cho input hợp lệ sau khi touched */
+    .input-box input.touched:valid {
+        border-color: #4CAF50;
+    }
+    </style>
 </head>
 
 <body>
@@ -263,11 +297,19 @@ if(isset($error)) {
                     <div class="user-details">
                         <div class="input-box">
                             <span class="details">Full Name</span>
-                            <input type="text" name="fullname" placeholder="Enter your name" required>
+                            <input type="text" name="fullname" placeholder="Enter your name" 
+                                   maxlength="30" 
+                                   oninput="checkFullname(this)"
+                                   required>
+                            <span id="fullname-message" class="error-message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Username</span>
-                            <input type="text" name="username" placeholder="Enter your username" required>
+                            <input type="text" name="username" placeholder="Enter your username" 
+                                   maxlength="25"
+                                   oninput="checkUsername(this)"
+                                   required>
+                            <span id="username-message" class="error-message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Email</span>
@@ -275,7 +317,11 @@ if(isset($error)) {
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="tel" name="phone_number" placeholder="Enter your number" required maxlength="10">
+                            <input type="tel" name="phone_number" placeholder="Enter your number" 
+                                   maxlength="10"
+                                   oninput="checkPhone(this)"
+                                   required>
+                            <span id="phone-message" class="error-message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
@@ -451,6 +497,136 @@ if(isset($error)) {
         // Remove any non-numeric characters for server-side validation
         document.getElementById('phone_number').value = phoneNumber.replace(/[^0-9]/g, '');
     });
+
+    function checkFullname(input) {
+        const messageElement = document.getElementById('fullname-message');
+        if (input.value.length > 50) {
+            input.value = input.value.slice(0, 50);
+            messageElement.textContent = 'Full name cannot exceed 30 characters!';
+        } else if (input.value.length === 50) {
+            messageElement.textContent = 'Full name has reached maximum length!';
+        } else {
+            messageElement.textContent = '';
+        }
+    }
+    </script>
+    <script>
+    function checkUsername(input) {
+        const messageElement = document.getElementById('username-message');
+        const maxLength = 25;
+        
+        // Nếu độ dài vượt quá giới hạn
+        if (input.value.length > maxLength) {
+            // Cắt bớt phần thừa
+            input.value = input.value.slice(0, maxLength);
+            // Hiển thị thông báo
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username cannot exceed 25 characters';
+        } else {
+            // Ẩn thông báo
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkFullname(input) {
+        const messageElement = document.getElementById('fullname-message');
+        const maxLength = 30;
+        
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Full name cannot exceed 30 characters!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkPhone(input) {
+        const messageElement = document.getElementById('phone-message');
+        const maxLength = 10;
+        
+        // Chỉ cho phép nhập số
+        input.value = input.value.replace(/\D/g, '');
+        
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+    </script>
+    <script>
+    // Khởi tạo event listeners cho tất cả input
+    document.querySelectorAll('.input-box input').forEach(input => {
+        // Chỉ thêm class touched khi người dùng rời khỏi input
+        input.addEventListener('blur', function() {
+            if (this.value !== '') {
+                this.classList.add('touched');
+            }
+        });
+
+        // Xóa class touched khi focus lại vào input
+        input.addEventListener('focus', function() {
+            this.classList.remove('touched');
+        });
+    });
+
+    // Cập nhật các hàm check
+    function checkUsername(input) {
+        const messageElement = document.getElementById('username-message');
+        const maxLength = 25;
+        
+        if (input.value !== '') {
+            input.classList.add('touched');
+        }
+        
+        if (input.value.length >= maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username cannot exceed 25 characters!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkFullname(input) {
+        const messageElement = document.getElementById('fullname-message');
+        const maxLength = 30;
+        
+        if (input.value !== '') {
+            input.classList.add('touched');
+        }
+        
+        if (input.value.length >= maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Full name cannot exceed 30 characters!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkPhone(input) {
+        const messageElement = document.getElementById('phone-message');
+        const maxLength = 10;
+        
+        // Chỉ cho phép nhập số
+        input.value = input.value.replace(/\D/g, '');
+        
+        if (input.value !== '') {
+            input.classList.add('touched');
+        }
+        
+        if (input.value.length >= maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
     </script>
 </body>
 

@@ -93,14 +93,31 @@ if(isset($_GET['edit'])) {
             background-color: #f9f9f9;
             border-radius: 4px;
             display: flex;
-            align-items: center;
+            flex-wrap: wrap; /* Cho phép nội dung xuống hàng */
+            align-items: flex-start; /* Căn đầu dòng */
+            min-height: 40px; /* Đảm bảo chiều cao tối thiểu */
+            word-break: break-word; /* Cho phép từ dài tự động xuống hàng */
         }
 
         #userInfo strong {
             display: inline-block;
-            width: 150px;
+            width: 120px; /* Giảm độ rộng của label */
             color: #333;
             font-weight: 600;
+            flex-shrink: 0; /* Không co label lại */
+        }
+
+        #userInfo p span {
+            flex: 1; /* Cho phép nội dung mở rộng */
+            padding-left: 10px; /* Tạo khoảng cách với label */
+            max-width: calc(100% - 130px); /* Đảm bảo không bị tràn container */
+        }
+
+        .modal-content {
+            width: 80%; /* Tăng độ rộng của modal */
+            max-width: 800px; /* Giới hạn độ rộng tối đa */
+            margin: 2% auto;
+            max-height: 95vh; /* Tăng chiều cao tối đa */
         }
 
         .modal h2 {
@@ -191,6 +208,45 @@ if(isset($_GET['edit'])) {
                 padding: 0 10px;
             }
         }
+
+        .error-message {
+            display: block;
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            font-style: italic;
+            display: none; /* Ẩn message ban đầu */
+        }
+
+        /* Chỉ hiển thị border đỏ khi input đã được focus và invalid */
+        .form_group input:focus:invalid {
+            border-color: red;
+        }
+
+        /* Hiển thị error message khi input đã được touched */
+        .form_group input.touched:invalid {
+            border-color: red;
+        }
+
+        .form_group input.touched:invalid + .error-message {
+            display: block;
+        }
+
+        .form_group textarea.touched:invalid {
+            border-color: red;
+        }
+
+        .form_group textarea.touched:invalid + .error-message {
+            display: block;
+        }
+
+        /* Thêm style cho remaining characters counter nếu muốn */
+        .remaining-chars {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -273,21 +329,29 @@ if(isset($_GET['edit'])) {
                     <label for="fullname">Full Name:</label>
                     <input type="text" id="fullname" name="fullname" 
                            value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['fullname']) : ''; ?>"
+                           maxlength="30"
+                           oninput="checkFullname(this)"
                            required>
+                    <span id="fullname-message" class="error-message"></span>
                 </div>
 
                 <div class="form_group">
                     <label for="phone">Phone:</label>
                     <input type="tel" id="phone" name="phone" 
                            value="<?php echo isset($edit_user) ? htmlspecialchars($edit_user['phone']) : ''; ?>"
-                           pattern="[0-9]{10}" 
-                           title="Please enter a valid 10-digit phone number"
+                           maxlength="10"
+                           oninput="checkPhone(this)"
                            required>
+                    <span id="phone-message" class="error-message"></span>
                 </div>
 
                 <div class="form_group">
                     <label for="address">Address:</label>
-                    <textarea id="address" name="address" rows="3"><?php echo isset($edit_user) ? htmlspecialchars($edit_user['address']) : ''; ?></textarea>
+                    <textarea id="address" name="address" 
+                              rows="3" 
+                              maxlength="255"
+                              oninput="checkAddress(this)"><?php echo isset($edit_user) ? htmlspecialchars($edit_user['address']) : ''; ?></textarea>
+                    <span id="address-message" class="error-message"></span>
                 </div>
 
                 <div class="form_group">
@@ -402,34 +466,91 @@ if(isset($_GET['edit'])) {
     <script>
     function checkUsername(input) {
         const messageElement = document.getElementById('username-message');
-        if (input.value.length > 25) {
-            input.value = input.value.slice(0, 25); // Cắt bớt nếu dài quá 12 ký tự
-            messageElement.textContent = 'Username không được vượt quá 25 ký tự!';
-        } else if (input.value.length === 25) {
-            messageElement.textContent = 'Username đã đạt độ dài tối đa!';
+        const maxLength = 25;
+        
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username cannot exceed 25 characters!';
+        } else if (input.value.length === maxLength) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username has reached maximum length!';
         } else {
-            messageElement.textContent = '';
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkFullname(input) {
+        const messageElement = document.getElementById('fullname-message');
+        const maxLength = 30;
+        
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Full name cannot exceed 30 characters!';
+        } else if (input.value.length === maxLength) {
+            messageElement.style.display = 'block'; 
+            messageElement.textContent = 'Full name has reached maximum length!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkPhone(input) {
+        const messageElement = document.getElementById('phone-message');
+        const maxLength = 10;
+        
+        // Only allow numbers
+        input.value = input.value.replace(/\D/g, '');
+        
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
+        } else if (input.value.length === maxLength) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone number has reached maximum length!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkAddress(textarea) {
+        const messageElement = document.getElementById('address-message');
+        const maxLength = 255;
+        
+        if (textarea.value.length > maxLength) {
+            textarea.value = textarea.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Address cannot exceed 255 characters!';
+        } else if (textarea.value.length === maxLength) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Address has reached maximum length!';
+        } else {
+            messageElement.style.display = 'none';
         }
     }
 
     const modal = document.getElementById("userModal");
     const span = document.getElementsByClassName("close")[0];
 
+    // Cập nhật hàm viewUser
+
     function viewUser(userId) {
         fetch(`get_user_info.php?id=${userId}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById("userInfo").innerHTML = `
-                    <p><strong>Username:</strong> ${data.username || 'N/A'}</p>
-                    <p><strong>Full Name:</strong> ${data.fullname || 'N/A'}</p>
-                    <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
-                    <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
-                    <p><strong>Address:</strong> ${data.address || 'N/A'}</p>
-                    <p><strong>City:</strong> ${data.city || 'N/A'}</p>
-                    <p><strong>Gender:</strong> ${data.gender || 'N/A'}</p>
-                    <p><strong>Role:</strong> ${data.role || 'N/A'}</p>
-                    <p><strong>Status:</strong> ${data.status == 1 ? 'Active' : 'Locked'}</p>
-                    <p><strong>Password:</strong> ${data.original_password || 'N/A'}</p>
+                    <p><strong>Username:</strong> <span>${data.username || 'N/A'}</span></p>
+                    <p><strong>Full Name:</strong> <span>${data.fullname || 'N/A'}</span></p>
+                    <p><strong>Email:</strong> <span>${data.email || 'N/A'}</span></p>
+                    <p><strong>Phone:</strong> <span>${data.phone || 'N/A'}</span></p>
+                    <p><strong>Address:</strong> <span>${data.address || 'N/A'}</span></p>
+                    <p><strong>City:</strong> <span>${data.city || 'N/A'}</span></p>
+                    <p><strong>Gender:</strong> <span>${data.gender || 'N/A'}</span></p>
+                    <p><strong>Role:</strong> <span>${data.role || 'N/A'}</span></p>
+                    <p><strong>Status:</strong> <span>${data.status == 1 ? 'Active' : 'Locked'}</span></p>
+                    <p><strong>Password:</strong> <span>${data.original_password || 'N/A'}</span></p>
                 `;
                 modal.style.display = "block";
             });
@@ -444,6 +565,124 @@ if(isset($_GET['edit'])) {
             modal.style.display = "none";
         }
     }
+
+    // Đánh dấu input đã được tương tác
+    document.querySelectorAll('.form_group input').forEach(input => {
+        input.addEventListener('blur', function() {
+            this.classList.add('touched');
+        });
+    });
+
+    // Cập nhật hàm checkFullname
+    function checkFullname(input) {
+        const messageElement = document.getElementById('fullname-message');
+        const maxLength = 30;
+        
+        // Thêm class touched khi bắt đầu nhập
+        input.classList.add('touched');
+        
+        if (input.value.length >= maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Full name has reached its maximum length!';
+            messageElement.style.color = 'red';
+            
+            input.addEventListener('keypress', function(e) {
+                e.preventDefault();
+            }, {once: true});
+            
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+            }, {once: true});
+        } else {
+            messageElement.style.display = 'none';
+            input.removeEventListener('keypress', function(){});
+            input.removeEventListener('paste', function(){});
+        }
+    }
+
+    // Cập nhật hàm checkUsername tương tự
+    function checkUsername(input) {
+        const messageElement = document.getElementById('username-message');
+        
+        // Thêm class touched khi bắt đầu nhập
+        input.classList.add('touched');
+        
+        if (input.value.length > 25) {
+            input.value = input.value.slice(0, 25);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username has reached its maximum length!';
+        } else if (input.value.length === 25) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Username has reached its maximum length!';
+        } else {
+            messageElement.style.display = 'none';
+        }
+    }
+
+    function checkPhone(input) {
+        const messageElement = document.getElementById('phone-message');
+        const maxLength = 10;
+        
+        // Chỉ cho phép nhập số
+        input.value = input.value.replace(/\D/g, '');
+        
+        // Thêm class touched khi bắt đầu nhập
+        input.classList.add('touched');
+        
+        if (input.value.length >= maxLength) {
+            input.value = input.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone has reached its maximum length';
+            messageElement.style.color = 'red';
+            
+            input.addEventListener('keypress', function(e) {
+                e.prevent.preventDefault();
+            }, {once: true});
+            
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+            }, {once: true});
+        } else {
+            messageElement.style.display = 'none';
+            input.removeEventListener('keypress', function(){});
+            input.removeEventListener('paste', function(){});
+        }
+    }
+
+    function checkAddress(textarea) {
+        const messageElement = document.getElementById('address-message');
+        const maxLength = 255;
+        
+        // Thêm class touched khi bắt đầu nhập
+        textarea.classList.add('touched');
+        
+        if (textarea.value.length >= maxLength) {
+            textarea.value = textarea.value.slice(0, maxLength);
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Address has reached its maximum length';
+            messageElement.style.color = 'red';
+            
+            textarea.addEventListener('keypress', function(e) {
+                e.preventDefault();
+            }, {once: true});
+            
+            textarea.addEventListener('paste', function(e) {
+                e.preventDefault();
+            }, {once: true});
+        } else {
+            messageElement.style.display = 'none';
+            textarea.removeEventListener('keypress', function(){});
+            textarea.removeEventListener('paste', function(){});
+        }
+    }
+
+    // Cập nhật phần khởi tạo event listeners
+    document.querySelectorAll('.form_group input, .form_group textarea').forEach(element => {
+        element.addEventListener('blur', function() {
+            this.classList.add('touched');
+        });
+    });
     </script>
     <script src="../js/main.js"></script>
 </body>
