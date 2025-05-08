@@ -2,6 +2,33 @@
 require_once 'auth.php';
 require_once 'db.php';
 
+function checkDuplicates($conn, $username, $email, $id = null) {
+    $where = $id ? "AND id != ?" : "";
+    $sql = "SELECT username, email FROM user WHERE (username = ? OR email = ?) $where";
+    
+    $stmt = $conn->prepare($sql);
+    if($id) {
+        $stmt->bind_param("ssi", $username, $email, $id);
+    } else {
+        $stmt->bind_param("ss", $username, $email);
+    }
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $duplicates = [];
+    
+    while($row = $result->fetch_assoc()) {
+        if($row['username'] === $username) {
+            $duplicates[] = 'username';
+        }
+        if($row['email'] === $email) {
+            $duplicates[] = 'email';
+        }
+    }
+    
+    return $duplicates;
+}
+
 if(isset($_POST['save'])) {
     $username = $_POST['username'];
     $fullname = $_POST['fullname'];
@@ -47,6 +74,22 @@ if(isset($_POST['save'])) {
     // If updating and password is provided, validate it
     if(isset($_POST['id']) && !empty($_POST['password']) && strlen($_POST['password']) < 6) {
         header("Location: user.php?error=password_too_short");
+        exit();
+    }
+    
+    // Check for duplicates before insert/update
+    $id = isset($_POST['id']) ? $_POST['id'] : null;
+    $duplicates = checkDuplicates($conn, $username, $email, $id);
+    
+    if(!empty($duplicates)) {
+        $errors = [];
+        if(in_array('username', $duplicates)) {
+            $errors[] = "Username already exists";
+        }
+        if(in_array('email', $duplicates)) {
+            $errors[] = "Email already exists";
+        }
+        header("Location: user.php?error=" . urlencode(implode(", ", $errors)));
         exit();
     }
     

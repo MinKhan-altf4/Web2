@@ -247,6 +247,40 @@ if(isset($_GET['edit'])) {
             margin-top: 5px;
             text-align: right;
         }
+
+        /* Thêm vào phần style hiện có */
+        .error-message {
+            display: none;
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 3px;
+        }
+
+        .form_group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .form_group input.error {
+            border-color: red;
+        }
+
+        .form_group input.valid {
+            border-color: #4CAF50;
+        }
+
+        /* Style cho thông báo lỗi */
+        .error-alert {
+            background-color: #fff;
+            color: red;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid red;
+        }
     </style>
 </head>
 <body>
@@ -307,6 +341,20 @@ if(isset($_GET['edit'])) {
                 </form>
             </div>
         </div>
+
+        <?php if(isset($_GET['error'])): ?>
+            <div class="error-alert">
+                <?php echo htmlspecialchars($_GET['error']); ?>
+            </div>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '<?php echo htmlspecialchars($_GET['error']); ?>',
+                    confirmButtonText: 'OK'
+                });
+            </script>
+        <?php endif; ?>
 
         <div class="add_user">
             <h3><?php echo isset($_GET['edit']) ? 'EDIT USER' : 'ADD USER'; ?></h3>
@@ -466,6 +514,7 @@ if(isset($_GET['edit'])) {
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 document.querySelector('form').addEventListener('submit', function(e) {
     const passwordInput = document.querySelector('input[name="password"]');
@@ -652,6 +701,72 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+// Add these functions to your existing JavaScript
+async function checkDuplicate(field, value) {
+    const id = document.querySelector('input[name="id"]')?.value;
+    const response = await fetch(`check_duplicates.php?field=${field}&value=${value}${id ? '&id=' + id : ''}`);
+    const data = await response.json();
+    return data.exists;
+}
+
+// Thay thế đoạn code validateField cũ bằng:
+async function validateField(input, field) {
+    const messageElement = document.getElementById(`${field}-message`);
+    const value = input.value.trim();
+    
+    if(value) {
+        const isDuplicate = await checkDuplicate(field, value);
+        if(isDuplicate) {
+            messageElement.style.display = 'block';
+            messageElement.style.color = 'red';
+            messageElement.textContent = `This ${field} already exists!`;
+            input.style.borderColor = 'red';
+            return false;
+        } else {
+            messageElement.style.display = 'none';
+            input.style.borderColor = '#4CAF50';
+            return true;
+        }
+    }
+    return true;
+}
+
+// Cập nhật form submit handler
+document.querySelector('form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username');
+    const email = document.getElementById('email');
+    
+    const isUsernameValid = await validateField(username, 'username');
+    const isEmailValid = await validateField(email, 'email');
+    
+    if(!isUsernameValid || !isEmailValid) {
+        const errors = [];
+        if(!isUsernameValid) errors.push('Username');
+        if(!isEmailValid) errors.push('Email');
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: `${errors.join(' and ')} already exists!`,
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+    
+    this.submit();
+});
+
+// Add blur event listeners for real-time validation
+document.getElementById('username').addEventListener('blur', function() {
+    validateField(this, 'username');
+});
+
+document.getElementById('email').addEventListener('blur', function() {
+    validateField(this, 'email');
+});
     </script>
     <script src="../js/main.js"></script>
 </body>
