@@ -163,81 +163,86 @@ $styles = "
 <!-- Offcanvas Menu Begin -->
 
 <div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-<div class="offcanvas__option">
-<div class="offcanvas__links" id="offcanvasLinks">
-<a href="login.php">Sign in</a>
-<a href="contact.php">SUPPORT</a>
-</div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links" id="offcanvasLinks">
+                <a href="login.php">Sign in</a>
 
-</div>
-</div>
-<div class="offcanvas__nav__option">
-<a href="./shopping-cart.php"><img alt="" src="img/icon/cart.png"/></a>
-</div>
-<div id="mobile-menu-wrap"></div>
-<div class="offcanvas__text">
-<p>Free shipping, 30-day return or refund guarantee.</p>
-</div>
-</div>
+                <a href="contact.php">SUPPORT</a>
+            </div>
+            
+        </div>
+        <div class="offcanvas__nav__option">
+
+
+            <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>Free shipping, 30-day return or refund guarantee.</p>
+        </div>
+    </div>
 <!-- Offcanvas Menu End -->
 <!-- Header Section Begin -->
 <header class="header">
-<div class="header__top">
-<div class="container">
-<div class="row">
-<div class="col-lg-6 col-md-7">
-<div class="header__top__left">
-<p>Free shipping, 30-day return or refund guarantee.</p>
-</div>
-</div>
-<div class="col-lg-6 col-md-5">
-<div class="header__top__right">
-<div class="header__top__links">
-<a href="login.php" id="userMenu">Sign in</a>
-<a href="contact.php">SUPPORT</a>
-</div>
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>Free shipping, 30-day return or refund guarantee.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+                                <a href="login.php" id="userMenu">Sign in</a>
 
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="container">
-<div class="row">
-<div class="col-lg-3 col-md-3">
-<div class="header__logo">
-<a href="./index.php"><img alt="" src="img/logo.png"/></a>
-</div>
-</div>
-<div class="col-lg-6 col-md-6">
-<nav class="header__menu mobile-menu">
-<ul>
-<li><a href="./index.php">Home</a></li>
-<li class="active"><a href="./shop.php">Shop</a></li>
-<li>
-<a href="#">Pages</a>
-<ul class="dropdown">
-<li><a href="./about.php">About Us</a></li>
-<li><a href="./shopping-cart.php">Shopping Cart</a></li>
-<li><a href="./checkout.php">Check Out</a></li>
-<li><a href="./blog-details.php">Blog Details</a></li>
-</ul>
-</li>
-<li><a href="./blog.php">Blog</a></li>
-<li><a href="./contact.php">Contacts</a></li>
-</ul>
-</nav>
-</div>
-<div class="col-lg-3 col-md-3">
-<div class="header__nav__option">
-<a href="./shopping-cart.php"><img alt="" src="img/icon/cart.png"/> </a>
-</div>
-</div>
-</div>
-<div class="canvas__open"><i class="fa fa-bars"></i></div>
-</div>
-</header>
+                                <a href="contact.php">SUPPORT</a>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <a href="./index.php"><img src="img/logo.png" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="./index.php">Home</a></li>
+
+                            <li><a href="./shop.php">Shop</a></li>
+                            <li>
+                                <a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="./about.php">About Us</a></li>
+                                    <li><a href="./shopping-cart.php">Shopping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contacts</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+
+                        <a href="./shopping-cart.php"><img src="img/icon/cart.png" alt="" /> </a>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
 <!-- Header Section End -->
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
