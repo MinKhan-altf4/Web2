@@ -196,14 +196,7 @@ if(isset($error)) {
                 <a href="login.php">Sign in</a>
                 <a href="contact.php">SUPPORT</a>
             </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
-                </ul>
-            </div>
+            
         </div>
         <div class="offcanvas__nav__option">
 
@@ -232,14 +225,7 @@ if(isset($error)) {
                                 <a href="#">Sign in</a>
                                 <a href="contact.php">SUPPORT</a>
                             </div>
-                            <div class="header__top__hover">
-                                <span>Usd <i class="arrow_carrot-down"></i></span>
-                                <ul>
-                                    <li>USD</li>
-                                    <li>EUR</li>
-                                    <li>USD</li>
-                                </ul>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>
