@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address!";
     }
-    // Validate phone number
-    else if(strlen($phone) > 10 || !preg_match("/^[0-9]+$/", $phone)) {
-        $error = "Please enter a valid phone number (maximum 10 digits)!";
+    // Validate phone number more strictly
+    else if(!preg_match("/^[0-9]{10}$/", $phone)) {
+        $error = "Please enter a valid 10-digit phone number!";
     }
     // Password validation
     else if(strlen($password) < 6) {
@@ -317,9 +317,12 @@ if(isset($error)) {
                         </div>
                         <div class="input-box">
                             <span class="details">Phone Number</span>
-                            <input type="tel" name="phone_number" placeholder="Enter your number" 
-                                   maxlength="10"
+                            <input type="tel" 
+                                   name="phone_number" 
+                                   placeholder="Enter your number" 
+                                   pattern="[0-9]{10}"
                                    oninput="checkPhone(this)"
+                                   onblur="checkPhone(this)"
                                    required>
                             <span id="phone-message" class="error-message"></span>
                         </div>
@@ -327,9 +330,15 @@ if(isset($error)) {
                             <span class="details">Password</span>
                             <input type="password" name="password" placeholder="Enter your password" required>
                         </div>
+                       
                         <div class="input-box">
                             <span class="details">Confirm Password</span>
-                            <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+                            <input type="password" 
+                                   name="confirm_password" 
+                                   placeholder="Confirm your password" 
+                                   oninput="checkConfirmPassword(this)"
+                                   required>
+                            <span id="confirm-password-message" class="error-message"></span>
                         </div>
                         <div class="input-box">
                             <span class="details">Address</span>
@@ -484,20 +493,79 @@ if(isset($error)) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     document.querySelector('form').addEventListener('submit', function(e) {
-        const phoneNumber = document.getElementById('phone_number').value;
+        const phoneInput = document.querySelector('input[name="phone_number"]');
+        const phoneNumber = phoneInput.value.replace(/\D/g, '');
+        const phoneRegex = /^[0-9]{10}$/;
+        const messageElement = document.getElementById('phone-message');
 
-        // Check phone number length
-        if (phoneNumber.length > 10) {
+        // Validate phone number before submit
+        if (!phoneRegex.test(phoneNumber)) {
             e.preventDefault(); // Prevent form submission
-            alert('Vui lòng điền đúng số điện thoại!');
-            document.getElementById('phone_number').focus();
+            messageElement.style.display = 'block';
+            
+            if (phoneNumber.length === 0) {
+                messageElement.textContent = 'Phone number is required!';
+            } else if (phoneNumber.length !== 10) {
+                messageElement.textContent = 'Phone number must be exactly 10 digits!';
+            } else {
+                messageElement.textContent = 'Please enter a valid 10-digit phone number!';
+            }
+            
+            phoneInput.classList.add('touched');
+            phoneInput.focus();
             return false;
         }
 
-        // Remove any non-numeric characters for server-side validation
-        document.getElementById('phone_number').value = phoneNumber.replace(/[^0-9]/g, '');
+        // Additional validation for the entire form
+        const form = this;
+        const inputs = form.querySelectorAll('input[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value || input.validationMessage) {
+                isValid = false;
+                input.classList.add('touched');
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
     });
 
+    function checkPhone(input) {
+        const messageElement = document.getElementById('phone-message');
+        const phoneRegex = /^[0-9]{10}$/;
+        
+        // Only allow numbers
+        input.value = input.value.replace(/\D/g, '');
+        
+        if (input.value.length > 10) {
+            input.value = input.value.slice(0, 10);
+        }
+
+        if (input.value.length > 0 && input.value.length < 10) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Phone number must be exactly 10 digits!';
+            input.classList.add('touched');
+            input.setCustomValidity('Phone number must be exactly 10 digits');
+            return false;
+        } else if (!phoneRegex.test(input.value) && input.value.length > 0) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Please enter a valid 10-digit phone number!';
+            input.classList.add('touched');
+            input.setCustomValidity('Please enter a valid 10-digit phone number');
+            return false;
+        } else {
+            messageElement.style.display = 'none';
+            input.classList.remove('touched');
+            input.setCustomValidity('');
+            return true;
+        }
+    }
+    </script>
+    <script>
     function checkFullname(input) {
         const messageElement = document.getElementById('fullname-message');
         if (input.value.length > 50) {
@@ -543,17 +611,31 @@ if(isset($error)) {
 
     function checkPhone(input) {
         const messageElement = document.getElementById('phone-message');
-        const maxLength = 10;
+        const phoneRegex = /^[0-9]{10}$/;
         
         // Chỉ cho phép nhập số
         input.value = input.value.replace(/\D/g, '');
         
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
+        if (input.value.length > 10) {
+            // Cắt bớt nếu nhiều hơn 10 số
+            input.value = input.value.slice(0, 10);
+        }
+
+        // Hiển thị thông báo nếu số điện thoại không hợp lệ
+        if (input.value.length > 0 && input.value.length < 10) {
             messageElement.style.display = 'block';
-            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
+            messageElement.textContent = 'Phone number must be exactly 10 digits!';
+            input.classList.add('touched');
+            input.setCustomValidity('Phone number must be exactly 10 digits');
+        } else if (!phoneRegex.test(input.value) && input.value.length > 0) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Please enter a valid 10-digit phone number!';
+            input.classList.add('touched');
+            input.setCustomValidity('Please enter a valid 10-digit phone number');
         } else {
             messageElement.style.display = 'none';
+            input.classList.remove('touched');
+            input.setCustomValidity('');
         }
     }
     </script>
@@ -610,7 +692,7 @@ if(isset($error)) {
 
     function checkPhone(input) {
         const messageElement = document.getElementById('phone-message');
-        const maxLength = 10;
+        const phoneRegex = /^[0-9]{10}$/;
         
         // Chỉ cho phép nhập số
         input.value = input.value.replace(/\D/g, '');
@@ -619,14 +701,48 @@ if(isset($error)) {
             input.classList.add('touched');
         }
         
-        if (input.value.length >= maxLength) {
-            input.value = input.value.slice(0, maxLength);
+        if (input.value.length > 10) {
+            input.value = input.value.slice(0, 10);
+        }
+
+        // Hiển thị thông báo nếu số điện thoại không hợp lệ
+        if (input.value.length > 0 && input.value.length < 10) {
             messageElement.style.display = 'block';
-            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
+            messageElement.textContent = 'Phone number must be exactly 10 digits!';
+            input.setCustomValidity('Phone number must be exactly 10 digits');
+        } else if (!phoneRegex.test(input.value) && input.value.length > 0) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Please enter a valid 10-digit phone number!';
+            input.setCustomValidity('Please enter a valid 10-digit phone number');
         } else {
             messageElement.style.display = 'none';
+            input.setCustomValidity('');
         }
     }
+    </script>
+    <script>
+    function checkConfirmPassword(input) {
+        const password = document.querySelector('input[name="password"]').value;
+        const messageElement = document.getElementById('confirm-password-message');
+        
+        if (input.value !== password) {
+            messageElement.style.display = 'block';
+            messageElement.textContent = 'Passwords do not match!';
+            input.classList.add('touched');
+            input.setCustomValidity('Passwords do not match!');
+        } else {
+            messageElement.style.display = 'none';
+            input.classList.remove('touched');
+            input.setCustomValidity('');
+        }
+    }
+
+    document.querySelector('input[name="password"]').addEventListener('input', function() {
+        const confirmPassword = document.querySelector('input[name="confirm_password"]');
+        if (confirmPassword.value) {
+            checkConfirmPassword(confirmPassword);
+        }
+    });
     </script>
 </body>
 

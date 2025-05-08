@@ -373,7 +373,10 @@ if(isset($_GET['edit'])) {
                 <div class="form_group">
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" 
-                           <?php echo !isset($edit_user) ? 'required' : ''; ?>>
+                           <?php echo !isset($edit_user) ? 'required' : ''; ?>
+                           oninput="checkPassword(this)"
+                           minlength="6">
+                    <span id="password-message" class="error-message"></span>
                 </div>
                 
                 <div class="form_group">
@@ -464,225 +467,191 @@ if(isset($_GET['edit'])) {
     </div>
 
     <script>
-    function checkUsername(input) {
-        const messageElement = document.getElementById('username-message');
-        const maxLength = 25;
-        
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Username cannot exceed 25 characters!';
-        } else if (input.value.length === maxLength) {
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Username has reached maximum length!';
-        } else {
-            messageElement.style.display = 'none';
-        }
+document.querySelector('form').addEventListener('submit', function(e) {
+    const passwordInput = document.querySelector('input[name="password"]');
+    const isNewUser = !document.querySelector('input[name="id"]'); // Check if adding new user
+    
+    if (isNewUser && passwordInput.value.length < 6) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Password',
+            text: 'Password must be at least 6 characters!',
+            confirmButtonText: 'OK'
+        });
+        passwordInput.focus();
+        return false;
     }
-
-    function checkFullname(input) {
-        const messageElement = document.getElementById('fullname-message');
-        const maxLength = 30;
-        
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Full name cannot exceed 30 characters!';
-        } else if (input.value.length === maxLength) {
-            messageElement.style.display = 'block'; 
-            messageElement.textContent = 'Full name has reached maximum length!';
-        } else {
-            messageElement.style.display = 'none';
-        }
+    
+    // Existing phone validation
+    const phoneInput = document.querySelector('input[name="phone"]');
+    const phoneNumber = phoneInput.value.replace(/\D/g, '');
+    if (phoneNumber.length !== 10) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Phone Number',
+            text: 'Phone number must be exactly 10 digits!',
+            confirmButtonText: 'OK'
+        });
+        phoneInput.focus();
+        return false;
     }
+});
 
-    function checkPhone(input) {
-        const messageElement = document.getElementById('phone-message');
-        const maxLength = 10;
-        
-        // Only allow numbers
-        input.value = input.value.replace(/\D/g, '');
-        
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Phone number cannot exceed 10 digits!';
-        } else if (input.value.length === maxLength) {
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Phone number has reached maximum length!';
-        } else {
-            messageElement.style.display = 'none';
-        }
+function checkPhone(input) {
+    const messageElement = document.getElementById('phone-message');
+    const value = input.value.replace(/\D/g, ''); // Remove non-digits
+    
+    if (input.value !== '') {
+        input.classList.add('touched');
     }
+    
+    if (value.length > 10) {
+        input.value = value.slice(0, 10);
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Phone number must be exactly 10 digits!';
+    } else if (value.length < 10 && value.length > 0) {
+        messageElement.style.display = 'block';
+        messageElement.textContent = `Please enter ${10 - value.length} more digit(s)`;
+    } else if (value.length === 10) {
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Valid phone number';
+        messageElement.style.color = 'green';
+    } else {
+        messageElement.style.display = 'none';
+    }
+}
 
-    function checkAddress(textarea) {
-        const messageElement = document.getElementById('address-message');
-        const maxLength = 255;
+function checkUsername(input) {
+    const messageElement = document.getElementById('username-message');
+    const maxLength = 25;
+    
+    if (input.value !== '') {
+        input.classList.add('touched');
+    }
+    
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Username cannot exceed 25 characters!';
+    } else if (input.value.length === maxLength) {
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Username has reached maximum length!';
+    } else {
+        messageElement.style.display = 'none';
+    }
+}
+
+function checkFullname(input) {
+    const messageElement = document.getElementById('fullname-message');
+    const maxLength = 30;
+    
+    if (input.value !== '') {
+        input.classList.add('touched');
+    }
+    
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Full name cannot exceed 30 characters!';
+    } else if (input.value.length === maxLength) {
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Full name has reached maximum length!';
+    } else {
+        messageElement.style.display = 'none';
+    }
+}
+
+function checkPassword(input) {
+    const messageElement = document.getElementById('password-message');
+    const minLength = 6;
+    
+    if (input.value !== '') {
+        input.classList.add('touched');
+    }
+    
+    if (input.value.length > 0 && input.value.length < minLength) {
+        messageElement.style.display = 'block';
+        messageElement.style.color = 'red';
+        messageElement.textContent = `Password must be at least ${minLength} characters!`;
+    } else if (input.value.length >= minLength) {
+        messageElement.style.display = 'block';
+        messageElement.style.color = 'green';
+        messageElement.textContent = 'Valid password';
+    } else {
+        messageElement.style.display = 'none';
+    }
+}
+
+// Add event listeners for all inputs
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('.form_group input, .form_group textarea');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value !== '') {
+                this.classList.add('touched');
+            }
+        });
         
-        if (textarea.value.length > maxLength) {
-            textarea.value = textarea.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Address cannot exceed 255 characters!';
-        } else if (textarea.value.length === maxLength) {
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Address has reached maximum length!';
-        } else {
-            messageElement.style.display = 'none';
-        }
-    }
+        input.addEventListener('focus', function() {
+            this.classList.remove('touched');
+        });
+    });
+});
 
-    const modal = document.getElementById("userModal");
-    const span = document.getElementsByClassName("close")[0];
+// Get modal
+var modal = document.getElementById("userModal");
+var span = document.getElementsByClassName("close")[0];
 
-    // Cập nhật hàm viewUser
+// Function to view user details
+function viewUser(id) {
+    fetch(`get_user_info.php?id=${id}`)
+        .then(response => response.json())
+        .then(user => {
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <p><strong>Username:</strong> <span>${escapeHtml(user.username)}</span></p>
+                <p><strong>Full Name:</strong> <span>${escapeHtml(user.fullname)}</span></p>
+                <p><strong>Email:</strong> <span>${escapeHtml(user.email)}</span></p>
+                <p><strong>Phone:</strong> <span>${escapeHtml(user.phone)}</span></p>
+                <p><strong>Address:</strong> <span>${escapeHtml(user.address)}</span></p>
+                <p><strong>City:</strong> <span>${escapeHtml(user.city)}</span></p>
+                <p><strong>Gender:</strong> <span>${escapeHtml(user.gender)}</span></p>
+                <p><strong>Role:</strong> <span>${escapeHtml(user.role)}</span></p>
+                <p><strong>Status:</strong> <span>${user.status == 1 ? 'Active' : 'Locked'}</span></p>
+                <p><strong>Password:</strong> <span>${escapeHtml(user.original_password)}</span></p>
+            `;
+            modal.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading user information');
+        });
+}
 
-    function viewUser(userId) {
-        fetch(`get_user_info.php?id=${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("userInfo").innerHTML = `
-                    <p><strong>Username:</strong> <span>${data.username || 'N/A'}</span></p>
-                    <p><strong>Full Name:</strong> <span>${data.fullname || 'N/A'}</span></p>
-                    <p><strong>Email:</strong> <span>${data.email || 'N/A'}</span></p>
-                    <p><strong>Phone:</strong> <span>${data.phone || 'N/A'}</span></p>
-                    <p><strong>Address:</strong> <span>${data.address || 'N/A'}</span></p>
-                    <p><strong>City:</strong> <span>${data.city || 'N/A'}</span></p>
-                    <p><strong>Gender:</strong> <span>${data.gender || 'N/A'}</span></p>
-                    <p><strong>Role:</strong> <span>${data.role || 'N/A'}</span></p>
-                    <p><strong>Status:</strong> <span>${data.status == 1 ? 'Active' : 'Locked'}</span></p>
-                    <p><strong>Password:</strong> <span>${data.original_password || 'N/A'}</span></p>
-                `;
-                modal.style.display = "block";
-            });
-    }
+// Function to escape HTML special characters
+function escapeHtml(unsafe) {
+    return unsafe
+        ? unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")
+        : '';
+}
 
-    span.onclick = function() {
+// Close modal when clicking (x)
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target == modal) {
         modal.style.display = "none";
     }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Đánh dấu input đã được tương tác
-    document.querySelectorAll('.form_group input').forEach(input => {
-        input.addEventListener('blur', function() {
-            this.classList.add('touched');
-        });
-    });
-
-    // Cập nhật hàm checkFullname
-    function checkFullname(input) {
-        const messageElement = document.getElementById('fullname-message');
-        const maxLength = 30;
-        
-        // Thêm class touched khi bắt đầu nhập
-        input.classList.add('touched');
-        
-        if (input.value.length >= maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Full name has reached its maximum length!';
-            messageElement.style.color = 'red';
-            
-            input.addEventListener('keypress', function(e) {
-                e.preventDefault();
-            }, {once: true});
-            
-            input.addEventListener('paste', function(e) {
-                e.preventDefault();
-            }, {once: true});
-        } else {
-            messageElement.style.display = 'none';
-            input.removeEventListener('keypress', function(){});
-            input.removeEventListener('paste', function(){});
-        }
-    }
-
-    // Cập nhật hàm checkUsername tương tự
-    function checkUsername(input) {
-        const messageElement = document.getElementById('username-message');
-        
-        // Thêm class touched khi bắt đầu nhập
-        input.classList.add('touched');
-        
-        if (input.value.length > 25) {
-            input.value = input.value.slice(0, 25);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Username has reached its maximum length!';
-        } else if (input.value.length === 25) {
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Username has reached its maximum length!';
-        } else {
-            messageElement.style.display = 'none';
-        }
-    }
-
-    function checkPhone(input) {
-        const messageElement = document.getElementById('phone-message');
-        const maxLength = 10;
-        
-        // Chỉ cho phép nhập số
-        input.value = input.value.replace(/\D/g, '');
-        
-        // Thêm class touched khi bắt đầu nhập
-        input.classList.add('touched');
-        
-        if (input.value.length >= maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Phone has reached its maximum length';
-            messageElement.style.color = 'red';
-            
-            input.addEventListener('keypress', function(e) {
-                e.prevent.preventDefault();
-            }, {once: true});
-            
-            input.addEventListener('paste', function(e) {
-                e.preventDefault();
-            }, {once: true});
-        } else {
-            messageElement.style.display = 'none';
-            input.removeEventListener('keypress', function(){});
-            input.removeEventListener('paste', function(){});
-        }
-    }
-
-    function checkAddress(textarea) {
-        const messageElement = document.getElementById('address-message');
-        const maxLength = 255;
-        
-        // Thêm class touched khi bắt đầu nhập
-        textarea.classList.add('touched');
-        
-        if (textarea.value.length >= maxLength) {
-            textarea.value = textarea.value.slice(0, maxLength);
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Address has reached its maximum length';
-            messageElement.style.color = 'red';
-            
-            textarea.addEventListener('keypress', function(e) {
-                e.preventDefault();
-            }, {once: true});
-            
-            textarea.addEventListener('paste', function(e) {
-                e.preventDefault();
-            }, {once: true});
-        } else {
-            messageElement.style.display = 'none';
-            textarea.removeEventListener('keypress', function(){});
-            textarea.removeEventListener('paste', function(){});
-        }
-    }
-
-    // Cập nhật phần khởi tạo event listeners
-    document.querySelectorAll('.form_group input, .form_group textarea').forEach(element => {
-        element.addEventListener('blur', function() {
-            this.classList.add('touched');
-        });
-    });
+}
     </script>
     <script src="../js/main.js"></script>
 </body>

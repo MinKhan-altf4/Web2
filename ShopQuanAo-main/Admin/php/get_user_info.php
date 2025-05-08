@@ -1,9 +1,11 @@
 <?php
 require_once 'auth.php';
+require_once 'db.php';
 
 if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
-    // Thêm city vào danh sách các trường cần select
+    
+    // Thêm original_password vào câu SELECT
     $sql = "SELECT id, username, fullname, email, phone, address, city, gender, role, status, original_password FROM user WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -14,3 +16,4 @@ if (isset($_GET['id'])) {
     header('Content-Type: application/json');
     echo json_encode($user);
 }
+?>

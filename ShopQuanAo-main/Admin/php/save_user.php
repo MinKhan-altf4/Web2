@@ -13,6 +13,43 @@ if(isset($_POST['save'])) {
     $role = $_POST['role'];
     $status = $_POST['status'];
     
+    // Validate data
+    if(empty($username) || empty($fullname) || empty($phone) || 
+       empty($address) || empty($city) || empty($gender) || empty($email)) {
+        header("Location: user.php?error=empty_fields");
+        exit();
+    }
+    
+    // Validate phone number
+    if(strlen($phone) !== 10 || !preg_match("/^[0-9]+$/", $phone)) {
+        header("Location: user.php?error=invalid_phone");
+        exit();
+    }
+    
+    // Validate username length
+    if(strlen($username) > 25) {
+        header("Location: user.php?error=username_too_long");
+        exit();
+    }
+    
+    // Validate fullname length
+    if(strlen($fullname) > 30) {
+        header("Location: user.php?error=fullname_too_long");
+        exit();
+    }
+    
+    // Validate password for new users
+    if(!isset($_POST['id']) && strlen($_POST['password']) < 6) {
+        header("Location: user.php?error=password_too_short");
+        exit();
+    }
+
+    // If updating and password is provided, validate it
+    if(isset($_POST['id']) && !empty($_POST['password']) && strlen($_POST['password']) < 6) {
+        header("Location: user.php?error=password_too_short");
+        exit();
+    }
+    
     // Nếu là thêm mới
     if(!isset($_POST['id'])) {
         $password = $_POST['password'];
@@ -49,3 +86,39 @@ if(isset($_POST['save'])) {
     }
     exit();
 }
+?>
+
+<!-- Thêm vào phần head của user.php -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+.error-message {
+    display: none;
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.form_group input.touched:invalid {
+    border-color: red;
+}
+
+.form_group input.touched:invalid + .error-message {
+    display: block;
+}
+
+.form_group input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.form_group input.touched:valid {
+    border-color: #4CAF50;
+}
+
+/* Thêm style cho SweetAlert2 */
+.swal2-popup {
+    font-size: 0.9rem !important;
+}
+</style>
