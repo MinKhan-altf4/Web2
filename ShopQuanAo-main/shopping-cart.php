@@ -15,7 +15,7 @@ if (!isset($_SESSION['id'])) {
     <meta charset="UTF-8" />
     <meta name="description" content="Male_Fashion Template" />
     <meta name="keywords" content="Male_Fashion, unica, creative, html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Male-Fashion | Nhóm 5TL</title>
 
@@ -267,6 +267,164 @@ if (!isset($_SESSION['id'])) {
         .pro-qty {
             width: 100px;
         }
+    }
+
+    /* Responsive Design Updates */
+    @media (max-width: 991px) {
+        .shopping__cart__table {
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .cart__total {
+            margin-top: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .shopping__cart__table table {
+            min-width: 600px;
+        }
+        
+        .product__cart__item {
+            padding-right: 0;
+        }
+        
+        .product__cart__item__pic img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .product__cart__item__text h6 {
+            font-size: 14px;
+        }
+        
+        .pro-qty {
+            width: 100px;
+            height: 35px;
+        }
+        
+        .pro-qty input {
+            width: 35px;
+            font-size: 14px;
+        }
+        
+        .pro-qty .qtybtn {
+            width: 32px;
+        }
+        
+        .cart__total {
+            padding: 20px;
+        }
+        
+        .cart__total ul li {
+            font-size: 14px;
+        }
+        
+        .proceed-checkout-btn {
+            padding: 12px 0;
+            font-size: 14px;
+        }
+        
+        .continue__btn a {
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .shopping-cart.spad {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        .breadcrumb__text h4 {
+            font-size: 24px;
+        }
+        
+        .breadcrumb__links a,
+        .breadcrumb__links span {
+            font-size: 13px;
+        }
+        
+        .shopping__cart__table {
+            padding: 10px;
+        }
+        
+        .cart__close i {
+            font-size: 16px;
+            width: 28px;
+            height: 28px;
+        }
+        
+        .cart__total h6 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Cải thiện hiển thị trên thiết bị di động cực nhỏ */
+    @media (max-width: 375px) {
+        .product__cart__item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .product__cart__item__text {
+            padding-left: 0;
+        }
+        
+        .cart__price {
+            font-size: 14px;
+        }
+        
+        .continue__btn {
+            margin-bottom: 15px;
+        }
+        
+        .continue__btn a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    /* Thêm smooth scrolling cho table container */
+    .shopping__cart__table {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+
+    /* Custom scrollbar styling */
+    .shopping__cart__table::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .shopping__cart__table::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .shopping__cart__table::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+
+    .shopping__cart__table::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    /* Thêm indicator cho scrollable table */
+    .shopping__cart__table::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(to left, rgba(0,0,0,0.05), transparent);
+        pointer-events: none;
     }
     </style>
 </head>
@@ -542,6 +700,34 @@ if (!isset($_SESSION['id'])) {
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         checkLoginStatus();
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Improve table scrolling on mobile
+        const cartTable = document.querySelector('.shopping__cart__table');
+        let isScrolling = false;
+        
+        cartTable.addEventListener('touchmove', function() {
+            if (!isScrolling) {
+                isScrolling = true;
+                cartTable.style.pointerEvents = 'none';
+            }
+        });
+        
+        cartTable.addEventListener('touchend', function() {
+            isScrolling = false;
+            setTimeout(() => {
+                cartTable.style.pointerEvents = 'auto';
+            }, 100);
+        });
+        
+        // Fix double tap zoom on mobile
+        document.addEventListener('touchend', function(event) {
+            if (event.target.classList.contains('qtybtn')) {
+                event.preventDefault();
+            }
+        });
     });
     </script>
 </body>
