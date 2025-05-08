@@ -2692,6 +2692,7 @@ ol {
 .checkout__order {
   background: #f3f2ee;
   padding: 30px;
+  width: 115%;
 }
 
 .checkout__order .order__title {
@@ -2730,21 +2731,25 @@ ol {
 }
 
 .checkout__total__products li {
-  font-size: 16px;
-  color: #444444;
-  list-style: none;
-  line-height: 26px;
-  overflow: hidden;
-  margin-bottom: 15px;
+  font-size: 15px;
+  color: #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ddd;
 }
 
 .checkout__total__products li:last-child {
-  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .checkout__total__products li span {
-  color: #111111;
-  float: right;
+  font-weight: 600;
+  color: #e53637;
+  min-width: 60px;
+  text-align: right;
 }
 
 .checkout__total__all {

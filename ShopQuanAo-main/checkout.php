@@ -461,7 +461,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="checkout__form">
                 <form id="checkout-form" action="checkout.php" method="POST" novalidate>
                     <div class="row">
-                        <div class="order__table">
+                        <div class="order__table col-lg-8 col-md-6">
                             <h4>Billing Details</h4>
                             <div class="checkout__input__checkbox">
                             </div>
